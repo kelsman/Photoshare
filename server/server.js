@@ -29,7 +29,8 @@ mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true }, (err) 
 });
 
 //defined routes
-
+app.use('/api/route/user', require('./api/routes/user'));
+// app.use('./api/route/post', require('./api/routes/post'));
 
 
 

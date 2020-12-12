@@ -1,7 +1,12 @@
 import React, { Fragment, useState } from 'react';
 import Logo from '../../../assets/images/logo.jpg'
 import './style.scss';
-function Login() {
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { signIn } from '../../../redux/actions/user/user.actions';
+
+function Login(props) {
 
     const [formData, setFormData] = useState({
         email: '',
@@ -16,6 +21,10 @@ function Login() {
     };
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const { signIn, history } = props;
+
+        await signIn(formData, history)
+        history.push('/signup')
 
     }
     return (
@@ -54,12 +63,14 @@ function Login() {
 
 
                 </form>
-                <p> Don't have an account? sign up</p>
+                <p> Don't have an account? <Link to="/signup"> sign up</Link></p>
 
             </div>
 
         </Fragment>
     )
 };
-
-export default Login
+const mapDispatchToProps = {
+    signIn
+}
+export default connect(null, mapDispatchToProps)(withRouter(Login));
