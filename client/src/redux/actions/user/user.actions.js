@@ -2,13 +2,13 @@ import { userTypes } from './user.types';
 import axios from 'axios';
 import setToken from '../../utils';
 
-// const url = "http://localhost:8000"
+const url = "http://localhost:8000"
 
 export const signUp = (formData, history) => {
     return async (dispatch) => {
 
         try {
-            const res = await axios.post('/api/route/user/signup', formData);
+            const res = await axios.post(url + '/api/route/user/signup', formData);
             console.log(res.data);
             dispatch({ type: userTypes.SIGN_UP_SUCCESS, payload: res.data });
             history.push('/')
@@ -23,14 +23,14 @@ export const signIn = (formData, history) => {
     return async (dispatch) => {
         try {
 
-            const res = await axios.post('/api/route/user/login', formData);
+            const res = await axios.post(url + '/api/route/user/login', formData);
 
             await localStorage.setItem("authToken", res.data.token);
             if (JSON.stringify(localStorage.getItem('authToken'))) {
-                return setToken(localStorage.getItem('authToken'))
+                setToken(localStorage.getItem('authToken'))
             }
-            await dispatch({ type: userTypes.SIGN_IN_SUCCESS });
-            history.push('/signup')
+            dispatch({ type: userTypes.SIGN_IN_SUCCESS });
+            history.push('/user/dashboard');
         } catch (err) {
             console.log(err);
             dispatch({ type: userTypes.SIGN_IN_FAIL, paylaod: err.message });

@@ -5,8 +5,10 @@ const Landing = () => {
 
     return (
         <Fragment>
-            <Login />
+            <div>
 
+                <Login />
+            </div>
         </Fragment>
     )
 };

@@ -1,8 +1,117 @@
-:root{
-    --background-color: #3c3f51;
-};
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lobster&family=Roboto:wght@300&display=swap');
+// define variables
+$background-color:  #3c3f51;
+$logo-font: 'Lobster', cursive;
+$text-font: 'Roboto', sans-serif;
+.login-container{
+    font-family: $text-font;
+    min-height: 100vh;
+    min-width: 100vw;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(to right, rgb(99, 128, 138), rgb(121, 49, 121) );
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    overflow: hidden;
+    color: white;
 
-img{
-    width:70px; 
-    height: 70px;
 }
+// .logo{
+//     flex: 1;
+
+// }
+// .login-form{
+//     flex: 1;
+// }
+.logo{
+ .logo-text{
+     font-family: $logo-font;
+     text-align: center;
+     
+ }
+ p{
+     font-size: 50px;
+     font-style:italic;
+     font-weight: 400;
+     font-family: $text-font;
+ }
+}
+     .logo-image{
+         width: 60px;
+         height: 80px;
+         img{
+             width: 100%;
+             height: 100%;
+         }
+     }
+
+     /* form styling */
+
+     .login-form{
+         width: 400px;
+         display: flex;
+        background-color: #595b83;
+        color: #ee6f57;
+         align-items: center;
+       justify-content: space-around;
+         flex-direction: column;
+         height: 400px;
+         margin: 0 10px;
+        h4{
+            font-size: 25px;
+            text-transform: uppercase;
+            margin-top: 10px;
+            padding: 0 10px;
+
+        }
+            .form-details{
+              
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+            }
+         input{
+             margin: 10px;
+             width: 200px;
+             display: inline-block;
+             height: 5vh;
+             border: 0;
+             border-radius: 10px;
+          
+            
+         }
+         input::placeholder{
+            
+             padding: 10px;
+             font-family: $text-font;
+             font-size: 16px;
+         }
+         input:focus{
+             outline: none;
+         }
+         input:value{
+             padding-left: 10px;
+         }
+        /*style login btn*/
+        input[type="submit"]{
+            font-family: sans-serif;
+            font-size: 16px;
+            padding: 5px;
+            background: orange;
+            color: white;
+            transition: all .3s, ease-in-out;
+            &:focus{
+                background: #111;
+                color: #fff;
+
+            }
+        }
+       
+
+          
+       
+     }
