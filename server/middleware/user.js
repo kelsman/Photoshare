@@ -14,7 +14,7 @@ module.exports = auth = async (req, res, next) => {
                 console.log(err.message)
                 return res.status(500).json("error in verifying token")
             };
-            console.log(decoded);
+
             req.user = decoded.user;
             next()
         })

@@ -66,7 +66,7 @@ function Login(props) {
                     </div>
 
 
-                    <p> Don't have an account? <Link to="/signup"> <span style={{ color: "orange" }}>sign up</span></Link></p>
+                    <p> Don't have an account? <Link to="/signup"> <span>sign up</span></Link></p>
                 </form>
 
 

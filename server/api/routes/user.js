@@ -131,18 +131,18 @@ router.delete('/', [auth], async (req, res) => {
 });
 
 // req Get
-// desc Get all users
+// desc Get user by id
 // access Private
-router.get('/', auth, async (req, params) => {
+router.get('/', auth, async (req, res) => {
     try {
-
-        const users = await User.find({});
-        res.json(users);
+        const user = await User.findOne({ _id: req.user }).select(["-password", "-password2"]);
+        if (!user) {
+            return res.status(404).json({ msg: "user isnt authenticated" });
+        }
+        res.json(user)
     } catch (err) {
-
         console.log(err.message);
-        return res.status(500).json({ msg: "server error" });
-
+        res.status(500).json({ msg: "server error" + ":" + err.message })
     }
 
 })

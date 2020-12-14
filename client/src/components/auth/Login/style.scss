@@ -75,6 +75,7 @@ $text-font: 'Roboto', sans-serif;
                 flex-direction: column;
             }
          input{
+             padding: 0px 10px;
              margin: 10px;
              width: 200px;
              display: inline-block;
@@ -110,8 +111,36 @@ $text-font: 'Roboto', sans-serif;
 
             }
         }
-       
-
+       a{
+           color: orange;
+           text-decoration: none;
+           cursor : pointer;
+           &:hover{
+               color: yellow;
+           }
+        
+       }
           
        
+     }
+     /* media queries */
+
+     @media only screen and (max-device-width: 480px  ), only screen and (max-width: 480px){
+
+        .login-container{
+            flex-direction: column;
+        }
+        .logo, .login-form{
+            flex:1;
+        }
+        .logo{
+            h1{
+                margin: 10px 0;
+            }
+        }
+     };
+     @media only screen and (min-device-width:768px ){
+         .login-form{
+             width: 680px;
+         }
      }

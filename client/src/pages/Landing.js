@@ -6,7 +6,6 @@ const Landing = () => {
     return (
         <Fragment>
             <div>
-
                 <Login />
             </div>
         </Fragment>
