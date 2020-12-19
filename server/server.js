@@ -19,7 +19,7 @@ const PORT = process.env.PORT || 8000;
 //database config 
 const db = process.env.mongoUrl;
 
-mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
+mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }, (err) => {
     if (err) {
         console.log('error connecting to databse')
     }
@@ -29,9 +29,10 @@ mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true }, (err) 
     }
 });
 
+
 //defined routes
 app.use('/api/route/user', require('./api/routes/user'));
-// app.use('./api/route/post', require('./api/routes/post'));
+app.use('/api/route/post', require('./api/routes/post'));
 
 
 

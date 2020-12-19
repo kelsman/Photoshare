@@ -16,6 +16,7 @@ const signUp = require('../../controllers/user/user')
 router.post('/signup', [[
     body('name', "name is required").not().isEmpty(),
     body('email', "please enter a valid email address").isEmail(),
+    body('username', "username is required").not().isEmpty(),
     // password must be at least 5 chars long
     body('password', "password must be at least 5 chars long").isLength({ min: 5 }),
     body('password2', "password must be at least 5 chars long").isLength({ min: 5 })
@@ -28,7 +29,7 @@ router.post('/signup', [[
             return res.status(400).json({ errors: errors.array() });
         }
 
-        const { name, email, password, password2 } = req.body;
+        const { name, username, email, password, password2 } = req.body;
 
         try {
             //check if user is already regusted
@@ -40,6 +41,7 @@ router.post('/signup', [[
             const newUser = await new User({
                 name,
                 email,
+                username,
                 password,
                 password2
             });

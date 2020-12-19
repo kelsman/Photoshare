@@ -12,7 +12,6 @@ const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: true,
-        lowercase: true,
         unique: true,
         minlength: 3,
     },
@@ -25,6 +24,16 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    followers: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"
+        },
+    ],
+    followedBy: [
+        { type: mongoose.Schema.Types.ObjectId, ref: "User" }
+    ]
+
 
 });
 

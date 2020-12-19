@@ -12,7 +12,7 @@ module.exports = auth = async (req, res, next) => {
         await jwt.verify(token, jwtSecret, (err, decoded) => {
             if (err) {
                 console.log(err.message)
-                return res.status(500).json("error in verifying token")
+                return res.status(500).json("error in verifying token" + ":" + err.message)
             };
 
             req.user = decoded.user;

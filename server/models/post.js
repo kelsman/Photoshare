@@ -2,31 +2,25 @@ const mongoose = require('mongoose');
 const nodemon = require('nodemon');
 const Schema = mongoose.Schema;
 const { ObjectId } = Schema.Types;
+
 const PostSchema = new Schema({
 
-    user: {
+    postedBy: {
         type: ObjectId,
         ref: "User"
     },
-    postedBy: {
-        type: string
-    },
     postImg: {
-        imgName: {
-            type: String,
-            default: "none",
-            required: true
 
-        },
-        imgData: {
-            type: String,
-            required: true
-        }
-
-    },
-    caption: {
         type: String,
         required: true
+    },
+    cloudinary_id: {
+        type: String,
+    },
+
+    caption: {
+        type: String
+
     },
     likes: [
         {
@@ -40,12 +34,17 @@ const PostSchema = new Schema({
             postedBy: {
                 type: ObjectId,
                 ref: "User"
+            },
+            date: {
+                type: Date,
+                default: Date.now
             }
         }
     ],
-    Date: {
+
+    createdAt: {
         type: Date,
-        Default: Date.now
+        default: Date.now
     }
 
 });
