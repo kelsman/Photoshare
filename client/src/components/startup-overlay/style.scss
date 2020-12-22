@@ -1,0 +1,53 @@
+@import "/Users/mac/Documents/mern stack/photoShare/client/src/components/auth/Login/style.scss";
+
+.startLogo-wrapper{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  h2{
+      font-family: $logo-font;
+      font-size: 40px;
+  }
+    .img-wrapper{
+        width: 100%;
+        height: 150px;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        
+        img{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+    }
+    .bottom-title{
+        p{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-transform: uppercase;
+            span{
+                display: block;
+                font-family: $logo-font;
+                background-image: linear-gradient(to right, yellow, orange ) ;
+            color:transparent;
+            -webkit-background-clip: text;
+                    background-clip: text;
+            font-weight: bold;
+            font-size: 40px;
+            }
+        }
+       
+    }
+}

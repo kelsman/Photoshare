@@ -76,124 +76,106 @@ router.post('/', [auth, parser.single("image")], async (req, res) => {
 // @desc     Get all posts
 // @access   Private
 
-
-router.get('/', auth, async (req, res) => {
-
+router.get('/allposts', auth, async (req, res) => {
     try {
-        const post = await Post.find({}).populate("postedBy", "email").sort({ createdAt: -1 });
-        if (!post) {
-            return res.status(404).json({ msg: 'Posts not found' });
+        const posts = await Post.find({}).populate("postedBy", "username").sort({ createdAt: -1 });
+        if (!posts) {
+            return res.status(400).json({ msg: "no posts found" })
         }
-        res.status(201).json(post)
-    } catch (err) {
-        console.log(err.message);
-        res.status(500).send({ msg: "server error" + ":" + err });
-    }
-
-});
-
-// @route    GET api/posts
-// @desc     Get  posts by a user
-// @access   Private
-
-router.get('/:postId', auth, async (req, res) => {
-    const postId = req.params.postId;
-    try {
-
-        //find post 
-        const post = await Post.findById(postId).sort({ createdAt: -1 });
-
-        if (!post) {
-            return res.json({ msg: "no post found" });
-        }
-        //check for authenticated user 
-        if (post.postedBy._id.toString() !== req.user) {
-            return res.status(401).json({ msg: "not authenticated" });
-
-        };
-        res.json(post);
+        res.json(posts)
     } catch (err) {
         console.log(err);
-        return res.status(500).json({
-            msg: "server error",
-            errro: err.message
-        })
+        res.status(500).json(err.message);
+
     }
 });
 
-// @route    GET api/posts/myposts
-// @desc     Get  posts by a user
+// @route    GET api/myposts
+// @desc     Get user posts
 // @access   Private
 
-router.get('/mypost/:id', auth, async (req, res) => {
-    const { id } = req.params
+router.get('/myposts', auth, async (req, res) => {
+
     try {
         //check if user is logged in 
-        const user = await User.findOne(req.user);
+        const user = await User.findOne({ _id: req.user });
         if (!user) {
-            return res.status(401).json({ msg: "user not found" });
-
-        };
-        //find the user posts 
-        const post = await Post.find({ id });
-        if (id.toString() !== req.user) {
-            return res.status(401).json({ msg: "user not authorised" });
-
+            return res.status(401).json({ msg: "not authenticated" });
         }
-        if (!post) {
-            return res.json({ msg: "no post found" });
+        const myposts = await Post.find({ postedBy: req.user }).sort({ createdAt: -1 });
+        if (!myposts) {
+            return res.status(400).json({ msg: "no posts found" })
         }
-        res.json("post deleted");
-
-
-
+        res.json(myposts)
     } catch (err) {
         console.log(err);
-        return res.status(500).json({
-            msg: "server error",
-            errro: err.message
-        })
+        res.status(500).json(err.message);
     }
+});
 
-})
-
-
-
-// @route    DELETE api/posts/myposts
-// @desc     delete a post 
+// @route    DELETE api/post
+// @desc    Delete user post
 // @access   Private
-router.delete('/mypost/:postId', auth, async (req, res) => {
 
-    const { postId } = req.params;
-
+router.delete('/:postId', auth, async (req, res) => {
+    const { postId } = req.params
     try {
         const post = await Post.findById(postId);
         if (!post) {
-            return res.status(404).json({ msg: 'Post not found' });
+            return res.status(422).json({ msg: "error no posts found" })
         };
-        //check if user is the owner of post to be deleted
-        if (post.postedBy.toString() !== req.user) {
-            return res.status(401).json({ msg: 'User not authorised' });
-        };
-        //delete picture from cloudinary 
-        await cloudinary.uploader.destroy(post.cloudinary_id);
-        //delete post from database 
+        if (post.postedBy.toString() !== req.user.toString()) {
+            return res.status(401).json({ msg: "not authorised" });
+        } else {
+            //delete picture from cloudinary
+            await cloudinary.uploader.destroy(post.cloudinary_id);
+            await post.remove((err) => {
+                if (!err) {
+                    return res.status(200).json("deleted successfully")
+                }
+            });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json(err.message);
 
-        await post.remove((err) => {
-            if (!err) {
-                return res.json({ msg: "post deleted" });
-            }
-        });
-    } catch (error) {
-        console.error(error.message);
-
-        res.status(500).send('Server Error');
     }
-
-
 });
 
+// @route    put api/post
+// @desc   like a user post
+// @access   Private
 
+router.put('/like/:likeId', auth, async (req, res) => {
 
+    try {
+        //find the post 
+        const post = await Post.findByIdAndUpdate(
+            req.params.likeId, {
+            $push: {
+                likes: req.user
+            }
 
+        }
+        ).populate("likes", "username");
+        //check if post has been liked before
+        const alreadyLiked = await post.likes.some((like) => {
+            return like.toString() === req.user.toString()
+        });
+        if (alreadyLiked) {
+            return res.status(400).json({ msg: 'Post already liked' });
+        } else {
+
+            await post.save((err) => {
+                if (err) {
+                    return res.json(err);
+                }
+                res.json(post)
+            })
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json(err.message);
+    }
+});
 module.exports = router

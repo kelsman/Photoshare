@@ -1,13 +1,14 @@
-import React, { Fragment } from 'react';
-import Login from '../components/auth/Login/Login';
+import React, { Fragment, useState } from 'react';
 
-const Landing = () => {
+
+const Landing = (props) => {
 
     return (
         <Fragment>
             <div>
-                <Login />
+
             </div>
+
         </Fragment>
     )
 };

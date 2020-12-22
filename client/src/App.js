@@ -1,18 +1,17 @@
+import React from 'react';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import Login from './components/auth/Login';
 
-import './App.css';
-import Landing from './pages/Landing';
-import { Switch, Route } from 'react-router-dom'
-import SignUp from './components/auth/signup/signup';
-import MainPage from './pages/MainPage';
+
 
 function App() {
+
   return (
     <div className="App">
 
+
       <Switch>
-        <Route exact path='/' component={Landing} />
-        <Route exact path='/signup' component={SignUp} />
-        <Route exact path="/user/dashboard" component={MainPage} />
+        <Route exact path="/" component={Login} />
       </Switch>
 
 

@@ -19,7 +19,7 @@ const PORT = process.env.PORT || 8000;
 //database config 
 const db = process.env.mongoUrl;
 
-mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }, (err) => {
+mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false }, (err) => {
     if (err) {
         console.log('error connecting to databse')
     }
