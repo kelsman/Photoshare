@@ -6,6 +6,7 @@ const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const multer = require('multer');
 const auth = require('../../middleware/user');
+const { body, validationResult } = require('express-validator');
 
 //configure cloudinary 
 
@@ -158,24 +159,104 @@ router.put('/like/:likeId', auth, async (req, res) => {
 
         }
         ).populate("likes", "username");
-        //check if post has been liked before
-        const alreadyLiked = await post.likes.some((like) => {
-            return like.toString() === req.user.toString()
-        });
-        if (alreadyLiked) {
-            return res.status(400).json({ msg: 'Post already liked' });
-        } else {
 
-            await post.save((err) => {
-                if (err) {
-                    return res.json(err);
-                }
-                res.json(post)
-            })
-        }
+
+        await post.save((err) => {
+            if (err) {
+                return res.json(err);
+            }
+            res.json(post);
+        });
+
     } catch (err) {
         console.log(err);
         res.status(500).json(err.message);
     }
 });
+// @route    put api/post/unlike/:likeId
+// @desc   unlike a user post
+// @access   Private
+router.put('/unlike/:unlikeId', auth, async (req, res) => {
+    try {
+        const post = await Post.findByIdAndUpdate(req.params.unlikeId, {
+            $pull: {
+                likes: req.user
+            }
+
+        }, { new: true });
+        await post.save((err) => {
+            if (err) {
+                return res.status(422).json({ msg: err })
+            }
+            res.json(post)
+
+        })
+    } catch (err) {
+        console.log(err);
+        res.status(500).json(err.message);
+    }
+});
+
+// @route    put api/post/comment
+// @desc   comment on a post
+// @access    private
+
+router.put('/comment/:id', [auth, [
+    body('text', "text is required").not().isEmpty()
+]], async (req, res) => {
+    // Finds the validation errors in this request and wraps them in an object with handy functions
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    const { text } = req.body;
+    const { id } = req.params
+    try {
+        const post = await Post.findByIdAndUpdate(id, {
+            $push: {
+                comments: {
+                    text: text,
+                    User: req.user
+                }
+            }
+
+        }, { new: true }).populate('User', 'username').sort({ createdAt: -1 });
+
+        await post.save((err) => {
+            if (err) {
+                return res.status(422).json({ msg: err })
+            }
+            res.json(post.comments);
+        })
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).json(err.message);
+    }
+});
+
+// @route    put api/post/comment/:id/:commentid
+// @desc   delete comment on a post
+// @access    private
+router.delete('/comment/:Id/:commentId', auth, async (req, res) => {
+    const { Id, commentId } = req.params
+    try {
+        const post = await Post.findByIdAndUpdate(Id, {
+            $pull: {
+                comments: {
+                    _id: commentId
+                }
+            }
+        }, { new: true });
+        await post.save((err) => {
+            if (!err) {
+                return res.json(post)
+            }
+
+        })
+    } catch (err) {
+        console.log(err);
+        res.status(500).json(err.message);
+    }
+})
 module.exports = router

@@ -31,7 +31,7 @@ const PostSchema = new Schema({
     comments: [
         {
             text: String,
-            postedBy: {
+            User: {
                 type: ObjectId,
                 ref: "User"
             },
