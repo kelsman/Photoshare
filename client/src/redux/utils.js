@@ -10,4 +10,4 @@ const setToken = async (token) => {
 
 };
 
-export default setToken
+export default setToken;

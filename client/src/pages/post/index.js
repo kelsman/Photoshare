@@ -6,6 +6,7 @@ import './style.scss'
 import Loader from 'react-loader-spinner'
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 import SideMenu from '../../components/sideMenu';
+import Main from '../../components/mainContent';
 
 const PostsPage = ({ loadUser, User }) => {
 
@@ -31,13 +32,17 @@ const PostsPage = ({ loadUser, User }) => {
 
                     userLoaded === true && User !== null ?
 
-                        <div>
+                        <div className="postPage-wrapper">
 
                             <SideMenu
                                 username={User.username}
                                 name={User.name}
                                 followers={User.followedBy}
-                                Following={User.followers} />
+                                Following={User.followers}
+                            />
+
+                            <Main />
+
                         </div>
 
                         :

@@ -56,7 +56,6 @@ router.post('/', [auth, parser.single("image")], async (req, res) => {
             postImg: secure_url,
             cloudinary_id: public_id,
             caption: req.body.caption
-
         });
 
         await post.save((err) => {
@@ -165,7 +164,7 @@ router.put('/like/:likeId', auth, async (req, res) => {
             if (err) {
                 return res.json(err);
             }
-            res.json(post);
+            res.json(post.likes);
         });
 
     } catch (err) {
@@ -188,7 +187,7 @@ router.put('/unlike/:unlikeId', auth, async (req, res) => {
             if (err) {
                 return res.status(422).json({ msg: err })
             }
-            res.json(post)
+            res.json(post.likes);
 
         })
     } catch (err) {
@@ -250,7 +249,7 @@ router.delete('/comment/:Id/:commentId', auth, async (req, res) => {
         }, { new: true });
         await post.save((err) => {
             if (!err) {
-                return res.json(post)
+                return res.json(post.comments);
             }
 
         })

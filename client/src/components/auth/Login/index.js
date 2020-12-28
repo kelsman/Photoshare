@@ -11,6 +11,10 @@ import LogInSvg from '../../../assets/images/Login.svg'
 import photoLogo from '../../../assets/images/camera.webp'
 import { Link, withRouter } from 'react-router-dom';
 
+//toastify
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 //redux
 import { connect } from 'react-redux';
 import { loadUser, signIn } from '../../../redux/actions/user/user.actions'
@@ -132,6 +136,7 @@ const LogIn = ({ loginError, history, loadUser, signIn }) => {
                 </div>
 
             </section>
+            <ToastContainer autoClose={2000} />
         </div>
 
     )

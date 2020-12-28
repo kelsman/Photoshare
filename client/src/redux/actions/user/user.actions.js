@@ -1,6 +1,7 @@
 import { userTypes } from './user.types';
 import axios from 'axios';
 import setToken from '../../utils';
+import { toast } from "react-toastify";
 
 
 
@@ -31,17 +32,24 @@ export const signIn = (formData, history) => {
 
             const res = await axios.post(url + '/api/route/user/login', formData);
 
-            await localStorage.setItem("authToken", res.data.token);
-            if (JSON.stringify(localStorage.getItem('authToken'))) {
-                setToken(localStorage.getItem('authToken'))
-            }
             await dispatch({ type: userTypes.SIGN_IN_SUCCESS });
+            await localStorage.setItem("authToken", res.data.token);
 
-            history.push('/user/feeds');
+            const { authToken } = localStorage;
+            if (authToken) {
+                setToken(authToken);
+            }
+
+            await toast.success("Log in Successful");
+
+            setTimeout(() => {
+                history.push('/user/feeds');
+            }, 2000)
 
         } catch (err) {
             console.log(err);
             dispatch({ type: userTypes.SIGN_IN_FAIL, paylaod: err.message });
+            toast.error(`${err.response.statusText}`);
         }
 
     }
@@ -64,22 +72,25 @@ export const logOut = () => {
 export const loadUser = (setUser) => {
     return async (dispatch) => {
         try {
-            // const token = JSON.parse(localStorage.getItem('authToken'));
+            const { authToken } = localStorage;
+            if (authToken) {
+                setToken(authToken);
+            }
 
-            const token = await localStorage.getItem("authToken")
-            const res = await axios.get(url + '/api/route/user/userInfo',
-                {
-                    headers: {
-                        "x-auth-token": token
-                    }
-                }
+            const res = await axios.get(url + '/api/route/user/userInfo'
+                // {
+                //     headers: {
+                //         "x-auth-token": token
+                //     }
+                // }
             );
             await dispatch({ type: userTypes.LOAD_USER_SUCCESS, payload: res.data });
             setUser(true)
 
         } catch (err) {
             console.log(err.message);
-            dispatch({ type: userTypes.LOAD_USER_FAILURE, payload: err })
+            dispatch({ type: userTypes.LOAD_USER_FAILURE, payload: err });
+
         }
     }
 }
