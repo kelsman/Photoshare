@@ -4,12 +4,13 @@ import { userTypes } from '../actions/user/user.types';
 const initState = {
 
     // token: '',
-    user: null,
+    currentUser: null,
     isAuthenticated: false,
     errors: {
         signup: '',
         login: '',
-        logout: ''
+        logout: '',
+        loadUser: ''
     }
 
 }
@@ -50,7 +51,22 @@ const userReducer = (state = initState, action) => {
             };
         case userTypes.LOG_OUT_SUCESS:
             return {
-                ...state
+                ...state,
+                currentUser: null,
+                isAuthenticated: false
+            };
+        case userTypes.LOAD_USER_FAILURE:
+            return {
+                ...state,
+                error: {
+                    loadUser: action.payload
+                }
+            }
+        case userTypes.LOAD_USER_SUCCESS:
+            return {
+                ...state,
+                currentUser: action.payload,
+                isAuthenticated: true
             }
         default:
             return state;

@@ -1,6 +1,7 @@
 import React from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
-import Login from './components/auth/Login';
+import LogIn from './components/auth/Login/index';
+import { Switch, Route } from 'react-router-dom';
+import PostsPage from './pages/post';
 
 
 
@@ -9,10 +10,13 @@ function App() {
   return (
     <div className="App">
 
-
       <Switch>
-        <Route exact path="/" component={Login} />
+        <Route exact path="/" component={LogIn} />
+        <Route exact path='/user/feeds' component={PostsPage} />
       </Switch>
+
+
+
 
 
     </div>

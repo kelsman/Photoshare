@@ -98,7 +98,7 @@ router.post('/login', [
         const payload = {
             user: user.id
         };
-        const token = await jwt.sign(payload, jwtSecret, { expiresIn: 36000 }, (err, token) => {
+        await jwt.sign(payload, jwtSecret, { expiresIn: 36000 }, (err, token) => {
             if (err) {
                 console.log(err.message)
                 return res.status(500).json("server error")
@@ -135,7 +135,7 @@ router.delete('/', [auth], async (req, res) => {
 // req Get
 // desc Get user by id
 // access Private
-router.get('/', auth, async (req, res) => {
+router.get('/userInfo', auth, async (req, res) => {
     try {
         const user = await User.findOne({ _id: req.user }).select(["-password", "-password2"]);
         if (!user) {

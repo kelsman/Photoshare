@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Satisfy&display=swap');
+
+
+.sideMenu-Container{
+    width:  25%;
+    height: 100vh;
+    position: relative;
+    background-color: #2a2834;
+    color: #fff;
+
+
+}
+.logo-section{
+    width: 100%;
+    .logo-name{
+        width: 100%;
+        h3{
+            font-size: 26px;
+              font-family: 'Satisfy', cursive;
+              text-align: center;
+              padding: 20px;
+        }
+    }
+}
+.profile-info{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    .profile-img{
+        width: 130px;
+        height: 130px;
+        border: 2px solid #FCaC4C;
+        border-radius: 50%;
+        padding: 3px;
+        img{
+            width: 100%;
+            height: 100%;
+            object-fit:cover;
+            object-position: center;
+            border-radius: inherit;
+        }
+    }
+}
+.profile-names{
+    margin: 10px 0;
+    p{
+        margin: 5px 0;
+    }
+    .profileName{
+        text-transform: capitalize;
+        text-align: center;
+    }
+    .username{
+        text-transform: lowercase;
+        opacity: .6;
+        font-size: 13px;
+        text-align: center;
+        padding: 5px;
+
+    }
+}
+.post{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+   
+    .posts, .Followers{
+        border-right: 1px solid #ffff;
+    }
+    .posts, .Followers, .Following{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 0 10px;
+        span{
+            display: inline-block;
+            margin: 3px;
+            opacity: .7;
+            
+        }
+    }
+};
+.menu-list{
+    width: 100%;
+
+    height: 300px;
+ 
+
+    ul{
+        list-style-type: none;
+        margin: 10px 16%;
+        li{
+            display: flex;
+            align-items: center;
+            margin: 28px 0;
+            cursor: pointer;
+            width: 100%;
+
+            &:hover{
+                border-right: 2px solid #FCaC4C;
+                .icon{
+                    color: #e2336b;
+                }
+            }
+            span{
+                margin: 0 10px;
+            }
+
+            
+          
+        }
+    }
+}
+.break{
+     width: 200px;
+     border: 1px solid #fff;
+     margin: 0 auto;
+     height: 1.5px;
+     opacity: .3;
+}

@@ -3,7 +3,7 @@ const jwtSecret = process.env.jsonSecret
 
 module.exports = auth = async (req, res, next) => {
     //check fot token
-    const token = req.header("x-auth-token")
+    const token = req.headers["x-auth-token"] || req.body.token || req.query.token
     try {
         if (!token) {
             return res.status(401).json({ msg: 'No token, authorization denied' });

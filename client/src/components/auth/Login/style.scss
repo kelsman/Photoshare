@@ -1,0 +1,155 @@
+@import url('https://fonts.googleapis.com/css2?family=Satisfy&display=swap');
+
+.LogInWrapper{
+    width: 100%;
+    height: 100%;
+    position : relative;
+    overflow: hidden;
+}
+.HeaderContainer{
+    width: 100%;
+  
+  
+    
+}
+.header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 180px;
+    
+    h2{
+        font-size: 2.5rem;
+        text-align: start;
+        text-decoration: royalblue;
+        font-family: 'Satisfy', cursive;
+    }
+    img{
+        width: 70px;
+        height: 2rem;
+        background-color: transparent;
+    }
+}
+
+.form-section{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+
+
+}
+.svg{
+    width: 50%;
+    
+    img{
+      width: 100%;
+      height: 100%;
+      object-fit: center;
+      object-position: cover;
+    }
+    @media only screen and (max-width: 768px) and (max-device-width: 768px) and (orientation: portrait){
+        display: none;
+    }
+    @media only screen and (min-width: 768px)and (min-device-width: 768px){
+        display: block;
+    }
+
+}
+.login-form{
+    width: 50%;
+
+
+
+    h3{
+        text-align: center;
+        padding: 10px;
+        text-transform: capitalize;
+        font-weight: 600;
+        color: #111;
+
+    }
+
+    @media only screen and (max-width: 768px ){
+        margin: 0 10px;
+        width: 100%;
+    }
+}
+form{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    input{
+        border: 0;
+        outline: 0;
+        width: 90%;
+    }
+
+}
+.password-input,.email-input{
+    border-bottom: 1px solid black;
+    width: 90%;
+    display: flex;
+    align-items: center;
+    // justify-content: space-evenly;
+    margin: 30px 0px;
+    
+    
+
+    input[placeholder="enter email address"], input[placeholder="Password"] {
+        padding-bottom: 3px;
+        margin-left: 5px;
+    }
+    
+    span{
+        display: block;
+    }
+    &:focus{
+    border-image: linear-gradient(to right, blue, purple);
+    }
+};
+.password-input{
+   div{
+       display: flex;
+   }
+   justify-content: space-between;
+
+.togglebtn{
+   cursor: pointer;
+   }
+}
+
+.login-btn{
+
+    margin: 10px auto;
+    width: 80%;
+    &:focus{
+        outline: none;
+    }
+
+
+    button{
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+        border: 0;
+        background-color: orange;
+        border-radius: 15px;
+        height: 30px;
+        cursor: pointer;
+        &:focus{
+            outline: none;
+        }
+    }
+}
+p{
+    a{
+        text-decoration: none;
+        color: navy;
+    }
+}
