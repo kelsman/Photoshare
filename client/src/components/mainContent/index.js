@@ -5,6 +5,7 @@ import { BsSearch } from 'react-icons/bs'
 import { AiOutlinePlusCircle } from 'react-icons/ai'
 import { IconContext } from "react-icons";
 import './style.scss';
+import Feeds from '../feeds';
 
 
 const Main = () => {
@@ -41,6 +42,12 @@ const Main = () => {
                         <span>Add Photo</span>
                     </div>
                 </div>
+            </section>
+
+            <section className="feeds-section">
+                <h4>Feed</h4>
+                <Feeds />
+
             </section>
 
 

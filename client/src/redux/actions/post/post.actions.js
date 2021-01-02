@@ -186,8 +186,75 @@ export const deleteComment = (postId, commentId) => {
  * @description Get User post
  */
 
-export const myPost = () => {
+export const post = (id) => {
     return async (dispatch) => {
 
+        const { authToken } = localStorage;
+        if (authToken) {
+            await setToken(authToken);
+        };
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
+        try {
+
+            const res = await axios.get(`/api/route/post/${id}`, config);
+
+            dispatch({
+                type: PostTypes.GET_POST,
+                payload: res.data,
+            });
+        } catch (err) {
+
+            dispatch({
+                type: PostTypes.POST_ERROR,
+                payload: {
+                    msg:
+                        err.response.statusText +
+                        " - GET_POST error - getPost - " +
+                        "Post Id: " +
+                        id,
+                    status: err.response.status,
+                },
+            });
+        }
+    }
+}
+
+/**
+ * @description delete User post by Id
+ */
+
+export const deletePost = (id) => {
+    return async (dispatch) => {
+
+        const { authToken } = localStorage;
+        if (authToken) {
+            await setToken(authToken);
+        };
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
+        try {
+            await axios.delete(`/api/route/post/${id}`, config);
+
+            dispatch({
+                type: PostTypes.DELETE_POST,
+                payload: id,
+            });
+
+
+        } catch (err) {
+            dispatch({
+                type: PostTypes.POST_ERROR, payload: {
+                    msg: err.response.statusText + " - DELETE_POST error - deletePost",
+                    status: err.response.status,
+                }
+            })
+        }
     }
 }

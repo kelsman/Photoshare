@@ -20,11 +20,15 @@ const userReducer = (state = initState, action) => {
     switch (action.type) {
         case userTypes.SIGN_UP_SUCCESS:
             return {
-                ...state
+                ...state,
+                isAuthenticated: false
+
             };
         case userTypes.SIGN_UP_FAIL:
             return {
                 ...state,
+                isAuthenticated: false,
+                currentUser: null,
                 error: {
                     signup: action.payload
                 }
@@ -49,7 +53,7 @@ const userReducer = (state = initState, action) => {
                     logout: action.payload
                 }
             };
-        case userTypes.LOG_OUT_SUCESS:
+        case userTypes.LOG_OUT_SUCCESS:
             return {
                 ...state,
                 currentUser: null,
@@ -58,6 +62,9 @@ const userReducer = (state = initState, action) => {
         case userTypes.LOAD_USER_FAILURE:
             return {
                 ...state,
+                isAuthenticated: false,
+
+
                 error: {
                     loadUser: action.payload
                 }

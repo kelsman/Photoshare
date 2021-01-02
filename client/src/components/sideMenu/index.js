@@ -1,5 +1,7 @@
 import React from 'react';
 import './style.scss';
+import { connect } from 'react-redux';
+import { LogOut } from '../../redux/actions/user/user.actions';
 //icons imports 
 import { FaServer } from 'react-icons/fa'
 import { BsSearch } from 'react-icons/bs'
@@ -7,10 +9,27 @@ import { BsBellFill } from 'react-icons/bs'
 import { FiSettings } from 'react-icons/fi'
 import { IconContext } from "react-icons";
 import { FiLogOut } from 'react-icons/fi'
+import { ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify'
+import "react-toastify/dist/ReactToastify.css";
+import { withRouter } from 'react-router-dom';
 
-const SideMenu = ({ username, followers, name, Fllowing }) => {
+const SideMenu = ({ user, history, LogOut }) => {
+
+    const handleLogOut = async () => {
+        try {
+            await LogOut(history)
+        } catch (error) {
+            console.log(error);
+            toast.error(`${error}`, {
+                autoClose: 1000
+            })
+        }
+    }
+    const { username, followers, name, Fllowing } = user;
     return (
-        <div className="sideMenu-Container">
+        <div className="side-menu">
+
             <section className="logo-section">
                 <div className="logo-name">
                     <h3> Photogram</h3>
@@ -76,7 +95,7 @@ const SideMenu = ({ username, followers, name, Fllowing }) => {
 
                     <div className="break"> </div>
 
-                    <li className="logout">
+                    <li className="logout" onClick={handleLogOut}>
                         <IconContext.Provider value={{ size: "1.3em", className: "icon" }}>
                             <div>
                                 <FiLogOut />
@@ -87,9 +106,13 @@ const SideMenu = ({ username, followers, name, Fllowing }) => {
                 </ul>
             </section>
 
-
+            <ToastContainer />
         </div>
     )
 };
 
-export default SideMenu;
+const mapDispatchToProps = {
+    LogOut
+}
+
+export default connect(null, mapDispatchToProps)(withRouter(SideMenu));

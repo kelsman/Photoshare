@@ -1,16 +1,15 @@
 .main-container{
+    height: 100%;
     width: 75%;
-    background-color: #3c3f51;
-    overflow: hidden;
+    overflow-y: scroll;
 }
 
 .topNav{
   display: flex;
-  width: 95%;
+  width: 80%;
   margin: 0 auto;
   align-items: center;
   justify-content: space-between;
-
   height: 10vh;
   padding: 5px;
 };
@@ -19,12 +18,11 @@
 
 .search-component{
   width: 200px;
- 
   display: flex;
   align-items: center;
   height: 6vh;
-  background: #282a34;;
-  border: 1px solid #3c3f51;
+  background: #E6E6E7;;
+
   border-radius: 7px;
   .searchIcon{
     padding-left: 5px;
@@ -76,4 +74,16 @@
     color:  #fff;
     font-size: smaller;
   }
+}
+.feeds-section{
+    height: 100%;
+    width: 100%;
+
+    h4{
+        width: 80%;
+        margin: 0 auto;
+        text-align: start;
+        padding: 10px;
+        font-size: 20px;
+    }
 }

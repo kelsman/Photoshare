@@ -43,8 +43,8 @@ export const signIn = (formData, history) => {
             await toast.success("Log in Successful");
 
             setTimeout(() => {
-                history.push('/user/feeds');
-            }, 2000)
+                history.push('/userFeeds');
+            }, 1500)
 
         } catch (err) {
             console.log(err);
@@ -56,12 +56,15 @@ export const signIn = (formData, history) => {
 
 
 }
-export const logOut = () => {
+export const LogOut = (history) => {
+
     return async (dispatch) => {
 
         try {
             await localStorage.removeItem('authToken');
             dispatch({ type: userTypes.LOG_OUT_SUCCESS });
+            await toast.success('sign out succesful')
+            history.push('/')
         } catch (err) {
             console.log(err.message);
             dispatch({ type: userTypes.LOG_OUT_FAIL, payload: err })
@@ -85,7 +88,7 @@ export const loadUser = (setUser) => {
                 // }
             );
             await dispatch({ type: userTypes.LOAD_USER_SUCCESS, payload: res.data });
-            setUser(true)
+            setUser(false)
 
         } catch (err) {
             console.log(err.message);

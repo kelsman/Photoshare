@@ -1,18 +1,21 @@
 import React from 'react';
 import LogIn from './components/auth/Login/index';
 import { Switch, Route } from 'react-router-dom';
-import PostsPage from './pages/post';
+import { connect } from 'react-redux'
+import MainPage from './pages/mainPage';
+// import PostsPage from './pages/post';
 
 
 
-function App() {
+const App = (props) => {
 
   return (
     <div className="App">
 
       <Switch>
         <Route exact path="/" component={LogIn} />
-        <Route exact path='/user/feeds' component={PostsPage} />
+        <Route path="/userFeeds" render={() => <MainPage />} />
+
       </Switch>
 
 
@@ -22,5 +25,10 @@ function App() {
     </div>
   );
 }
+const mapStateToProps = (state) => {
+  return {
+    isAuthenticated: state.user.isAuthenticated
+  }
+}
+export default connect(mapStateToProps)(App);
 
-export default App;
