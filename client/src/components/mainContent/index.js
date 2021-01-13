@@ -57,7 +57,6 @@ const Main = ({history, createPost, getposts}) => {
    }
 
     const handleFormSubmit = async (e)=> {
-
         e.preventDefault();
         
         if(!fileSelected){

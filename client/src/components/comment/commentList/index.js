@@ -3,15 +3,46 @@ import { connect } from 'react-redux';
 
 
 
-const CommentList = () => {
+function formatDate(date) {
+    return new Intl.DateTimeFormat().format(new Date(date));
+}
 
+
+
+const CommentList = ({ postId, commentId, posts, comments }) => {
+
+    const { _id, text, User, date } = comments
+    console.log(comments.text)
     return (
-        <Fragment>
+        <Fragment >
 
-            hi
+            <div key={commentId}>
 
+                <p>
+                    {text}
+                    <span>
+                        posted on {formatDate(date)}
+                    </span>
+                </p>
+
+
+
+
+            </div>
         </Fragment>
+
+
+
     )
 };
 
-export default connect(null)(CommentList);
+const mapStateToProps = ({ post, user }) => {
+    return {
+        posts: post.posts,
+        postLoading: post.loading,
+        user: user.currentUser
+
+    }
+}
+
+export default connect(mapStateToProps)(CommentList);

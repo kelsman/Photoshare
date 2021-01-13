@@ -14,6 +14,7 @@ import { BsHeart } from 'react-icons/bs'
 import { FaRegComment } from 'react-icons/fa';
 import { addComment } from '../../redux/actions/post/post.actions';
 import CommentForm from '../comment/commentForm';
+import CommentList from '../comment/commentList';
 // import { post } from '../../redux/actions/post/post.actions';
 
 
@@ -75,6 +76,7 @@ const DisplayPosts = ({ posts, postLoading, user }) => {
                                                 </div>
                                                 <div className="post-picture">
                                                     <img
+                                                        loading="lazy"
                                                         src={post.postImg}
                                                         alt="postimg"
                                                         onLoad={handlePostImgLoading}
@@ -109,6 +111,14 @@ const DisplayPosts = ({ posts, postLoading, user }) => {
 
                                                 </div>
                                                 <CommentForm postId={post._id} />
+                                                {
+                                                    post.comments.map((comment) => {
+                                                        return (
+
+                                                            <CommentList key={comment._id} comments={comment} commentId={comment._id} />
+                                                        )
+                                                    })
+                                                }
 
 
                                             </div>
