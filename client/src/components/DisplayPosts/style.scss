@@ -76,3 +76,13 @@
 .commentIcon:focus{
     background: red;
 }
+/* caption */
+.caption-Wrapper{
+    .username{
+        font-weight: 600;
+    }
+    .caption{
+     font-weight: 20;
+     opacity: .8;
+    }
+}

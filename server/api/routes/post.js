@@ -261,14 +261,14 @@ router.put('/comment/:id', [auth, [
                 }
             }
 
-        }, { new: true }).populate('User', 'username').sort({ createdAt: -1 });
+        }, { new: true }).populate('users', 'username').sort({ createdAt: -1 });
 
         await post.save((err) => {
             if (err) {
                 return res.status(422).json({ msg: err })
             }
             res.json(post.comments);
-        })
+        });
 
     } catch (err) {
         console.log(err);

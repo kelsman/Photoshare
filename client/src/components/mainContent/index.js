@@ -10,7 +10,7 @@ import Modal from 'react-modal';
 import { ToastContainer} from 'react-toastify';
 import { createPost, getposts } from '../../redux/actions/post/post.actions'
 import { connect} from 'react-redux';
-import { Router, withRouter} from 'react-router-dom';
+import { withRouter} from 'react-router-dom';
 
 const Main = ({history, createPost, getposts}) => {
 
@@ -18,10 +18,7 @@ const Main = ({history, createPost, getposts}) => {
     const [modalIsOpen, setIsOpen] = useState(false);
     // eslint-disable-next-line no-unused-vars
     const [redirect, setRedirect] = useState(false);
-    // const [formData, setFormData]= useState({
-    //     caption: '',
-    //     image: null
-    // });
+   
     const [ fileSelected, setFileSelected] = useState(null)
     const [caption, setCaption] = useState('')
 
@@ -29,12 +26,12 @@ const Main = ({history, createPost, getposts}) => {
 
         let isSubscribed = true;
         if (isSubscribed) {
-
             getposts()
         }
         return () => isSubscribed = false;
     
-    }, [getposts, redirect]);
+        
+    }, [getposts]);
 
     
 
@@ -83,11 +80,7 @@ const Main = ({history, createPost, getposts}) => {
 
 
     }
-    // if(redirect){
-    //     return (
-    //         <Redirect to={redirect}/>
-    //     )
-    // }
+   
 
     return (
         <div className="main-container">
@@ -131,14 +124,16 @@ const Main = ({history, createPost, getposts}) => {
                     className="modal"
                     overlayClassName="modal-overlay"
                 >
-                    <button className="closemodal-btn">
+                    <button 
+                    className="closemodal-btn"
+                    onClick = {()=> setIsOpen(false)}>
                     close
                     
                     </button>
                    <div className="createPost-form">
                     <form 
-                    action="/api/route/post" 
-                    method="post" 
+                        action="/api/route/post" 
+                        method="post" 
                     encType="multipart/form-data"
                     onSubmit={handleFormSubmit} >
                     <div className="caption">

@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 
 // import moment from "moment";
 import Avatar from '../../../src/assets/images/Avatar.png'
@@ -12,6 +12,8 @@ import { withRouter } from 'react-router-dom'
 
 import { BsHeart } from 'react-icons/bs'
 import { FaRegComment } from 'react-icons/fa';
+import { addComment } from '../../redux/actions/post/post.actions';
+import CommentForm from '../comment/commentForm';
 // import { post } from '../../redux/actions/post/post.actions';
 
 
@@ -19,25 +21,22 @@ import { FaRegComment } from 'react-icons/fa';
 const DisplayPosts = ({ posts, postLoading, user }) => {
 
     // const [imgLoaded, setImgLoaded] = useState(false);
+    const [liked, setLiked] = useState(false);
+
+
 
     const handlePostImgLoading = () => {
         // setImgLoaded(true)
 
-    }
+    };
 
     const handleCommentIconClick = () => {
         console.log('icon clicked')
     };
+    const handleLiked = () => {
+        setLiked(prev => !prev);
 
-    // const handleLikeIconClick = () => {
-    //     console.log('clicked like')
-    // }
-
-    // const { posts, postLoading, user } = props
-
-    // if (postLoading) {
-    //     return <h1> Loading</h1>
-    // }
+    }
 
 
     return (
@@ -91,7 +90,7 @@ const DisplayPosts = ({ posts, postLoading, user }) => {
                                                     <h5>
                                                         <IconContext.Provider value={{ className: "likesIcon", style: { fill: "red" } }}>
 
-                                                            <BsHeart /> {post.likes.length === 0 ? 0 : post.likes.length}
+                                                            <BsHeart onClick={handleLiked} /> {post.likes.length === 0 ? 0 : post.likes.length}
                                                         </IconContext.Provider>
                                                     </h5>
                                                     <h5>
@@ -101,10 +100,22 @@ const DisplayPosts = ({ posts, postLoading, user }) => {
                                                     </h5>
 
                                                 </div>
+                                                <div className="caption-Wrapper">
+                                                    <p>
+                                                        <span className="username"> {user.username}</span>
+                                                        <span className="caption"> {post.caption ? post.caption : null}</span>
+
+                                                    </p>
+
+                                                </div>
+                                                <CommentForm postId={post._id} />
+
 
                                             </div>
                                         )
                                     })
+
+
                                 }
 
 
@@ -129,4 +140,4 @@ const mapStateToProps = ({ post, user }) => {
     }
 
 }
-export default connect(mapStateToProps)(withRouter(DisplayPosts));
+export default connect(mapStateToProps, { addComment })(withRouter(DisplayPosts));

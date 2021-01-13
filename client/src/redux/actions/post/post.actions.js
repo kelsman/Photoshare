@@ -162,6 +162,9 @@ export const addComment = (id, formData) => {
             headers: {
                 "Content-Type": "application/json",
             },
+            params: {
+                id
+            }
         };
         try {
             const res = await axios.put(`/api/route/post/comment/${id}`, formData, config);
