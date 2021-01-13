@@ -6,30 +6,27 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 import Loader from 'react-loader-spinner'
 import SideMenu from '../../components/sideMenu';
 import Main from '../../components/mainContent';
-
+import { getposts } from '../../redux/actions/post/post.actions'
 
 const MainPage = ({ loadUser, currentUser }) => {
+
     const [userisLoading, setUserIsLoading] = useState(true);
+
+
     useEffect(() => {
-        const fetchUser = async () => {
-
-            try {
-                await loadUser(setUserIsLoading);
-
-            } catch (error) {
-                console.log(error);
-            }
-
-
+        let isFetching = true;
+        if (isFetching) {
+            loadUser(setUserIsLoading);
         };
-        fetchUser();
-    }, [loadUser])
+        return () => {
+            isFetching = false;
+        }
 
+
+    }, [loadUser]);
 
     return (
         <div className="main-page">
-
-
             {
                 userisLoading ? (
                     <div className="loader-wrapper">
@@ -53,11 +50,12 @@ const MainPage = ({ loadUser, currentUser }) => {
         </div>
     )
 };
-const mapDispatchToProps = {
-    loadUser
-};
+// const mapDispatchToProps = {
+//     loadUser
+// };
 const mapStateToProps = (state) => ({
-    currentUser: state.user.currentUser
+    currentUser: state.user.currentUser,
+    posts: state.post.posts
 })
-export default connect(mapStateToProps, mapDispatchToProps)(MainPage);
+export default connect(mapStateToProps, { loadUser, getposts })(MainPage);
 

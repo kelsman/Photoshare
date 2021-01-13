@@ -49,14 +49,14 @@ router.post('/', [auth, parser.single("image")], async (req, res) => {
             return res.status(400).json("error in uploading file")
         }
         const { public_id, secure_url, } = result;
-
+        const { caption } = req.body;
         //save post to mongodb
         const post = await new Post({
             postedBy: req.user,
             postImg: secure_url,
             cloudinary_id: public_id,
-            caption: req.body.caption
-        });
+            caption: caption
+        })
 
         await post.save((err) => {
             if (err) {
@@ -78,10 +78,14 @@ router.post('/', [auth, parser.single("image")], async (req, res) => {
 
 router.get('/allposts', auth, async (req, res) => {
     try {
-        const posts = await Post.find({}).populate("postedBy", "username").sort({ createdAt: -1 });
+        const posts = await Post.find({}).populate({
+            path: "postedBy",
+            select: "username"
+        }).sort({ createdAt: -1 });
         if (!posts) {
             return res.status(400).json({ msg: "no posts found" })
         }
+
         res.json(posts)
     } catch (err) {
         console.log(err);
@@ -89,6 +93,24 @@ router.get('/allposts', auth, async (req, res) => {
 
     }
 });
+// @route    GET api/posts/feeds
+// @desc     Get all user feeds
+// @access   Private
+router.get('/feeds', auth, async (req, res) => {
+
+    try {
+
+        const posts = await Post.find();
+        const feeds = posts.filter((feed) => {
+            return feed.following.includes(req.user)
+        });
+        res.json(feeds);
+    } catch (error) {
+        console.log(err);
+    }
+})
+
+
 /**
  * @route    GET api/posts/:id
  * @desc     Get post by id

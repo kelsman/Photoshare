@@ -1,9 +1,9 @@
 import { PostTypes } from '../../actions/post/post.types';
-
+import { userTypes } from '../../actions/user/user.types'
 const initState = {
     posts: [],
     post: null,
-    loading: true,
+loading: true,
     error: {}
 
 };

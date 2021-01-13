@@ -49,7 +49,7 @@ export const signIn = (formData, history) => {
         } catch (err) {
             console.log(err);
             dispatch({ type: userTypes.SIGN_IN_FAIL, paylaod: err.message });
-            toast.error(`${err.response.statusText}`);
+            toast.error(`${err.response.data.msg}`);
         }
 
     }
@@ -61,10 +61,10 @@ export const LogOut = (history) => {
     return async (dispatch) => {
 
         try {
+            await history.push('/')
             await localStorage.removeItem('authToken');
-            dispatch({ type: userTypes.LOG_OUT_SUCCESS });
-            await toast.success('sign out succesful')
-            history.push('/')
+            await dispatch({ type: userTypes.LOG_OUT_SUCCESS });
+            await toast.success('sign out succesful');
         } catch (err) {
             console.log(err.message);
             dispatch({ type: userTypes.LOG_OUT_FAIL, payload: err })
@@ -81,18 +81,14 @@ export const loadUser = (setUser) => {
             }
 
             const res = await axios.get(url + '/api/route/user/userInfo'
-                // {
-                //     headers: {
-                //         "x-auth-token": token
-                //     }
-                // }
+
             );
             await dispatch({ type: userTypes.LOAD_USER_SUCCESS, payload: res.data });
             setUser(false)
 
         } catch (err) {
             console.log(err.message);
-            dispatch({ type: userTypes.LOAD_USER_FAILURE, payload: err });
+            dispatch({ type: userTypes.LOAD_USER_FAILURE, payload: err.response.data.msg });
 
         }
     }

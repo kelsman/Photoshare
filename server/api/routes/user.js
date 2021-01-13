@@ -1,35 +1,58 @@
 const User = require('../../models/user.js');
 const jwt = require('jsonwebtoken');
 const express = require('express');
-const { body, validationResult } = require('express-validator');
+const { check, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs')
 const router = express.Router();
 const jwtSecret = process.env.jsonSecret;
 const auth = require('../../middleware/user');
-//controllers functions
-const signUp = require('../../controllers/user/user')
+const multer = require('multer');
+const cloudinary = require('cloudinary').v2;
+const { cloudinaryStorage, CloudinaryStorage } = require('multer-storage-cloudinary');
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    folder: "photoshareDp",
+    allowedFormats: ['jpg', 'jpeg', 'png', "mp4"],
+    filename: (req, file, cb) => {
+        const name = file.originalname.split(' ').join('_');
+        callback(undefined, name);
+    }
+});
+
+const parser = multer({ storage: storage });
 
 // req Post
 // desc Sign up user
 // access Public
 
 router.post('/signup', [[
-    body('name', "name is required").not().isEmpty(),
-    body('email', "please enter a valid email address").isEmail(),
-    body('username', "username is required").not().isEmpty(),
+    check('name', "name is required").not().isEmpty(),
+    check('email', "please enter a valid email address").isEmail(),
+    check('username', "username is required").not().isEmpty(),
     // password must be at least 5 chars long
-    body('password', "password must be at least 5 chars long").isLength({ min: 5 }),
-    body('password2', "password must be at least 5 chars long").isLength({ min: 5 })
+    check('password', "password must be at least 5 chars long").isLength({ min: 5 }),
+    check('password2', "password must be at least 5 chars long").isLength({ min: 5 })
 
-],]
+], parser.single("profileImg")]
     , async (req, res) => {
+        const { name, email, password, username, password2 } = req.body;
+        const file = req.file;
         // Finds the validation errors in this request and wraps them in an object with handy functions
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
 
-        const { name, username, email, password, password2 } = req.body;
+        if (!file) {
+            res.json({ msg: "no image is selected" })
+        }
 
         try {
             //check if user is already regusted
@@ -38,12 +61,17 @@ router.post('/signup', [[
                 return res.status(400).json({ msg: "account already exist" })
             };
             //create a new User if account does'nt exists
+
+            const uploadResult = await cloudinary.uploader.upload(file.path);
+            const { public_id, secure_url } = uploadResult;
             const newUser = await new User({
                 name,
                 email,
                 username,
                 password,
-                password2
+                password2,
+                cloudinary_id: public_id,
+                dipslayPicture: secure_url
             });
             // hash password before saving to database
             const salt = await bcrypt.genSalt(10);
@@ -56,7 +84,7 @@ router.post('/signup', [[
                     console.log(err.message);
                     return res.status(500).json({ success: false })
                 }
-                res.json({ msg: "user registered sucessfully" })
+                res.json({ msg: "user registered sucessfully", file })
             })
         } catch (err) {
             console.log(err.message);
@@ -65,14 +93,16 @@ router.post('/signup', [[
 
     });
 
+
+
 // req Post
 // desc Log in user
 // access Public
 
 router.post('/login', [
-    body('email', "please enter a valid email address").isEmail(),
+    check('email', "please enter a valid email address").isEmail(),
     // password must be at least 5 chars long
-    body('password', "password must be at least 5 chars long").isLength({ min: 5 })
+    check('password', "password must be at least 5 chars long").isLength({ min: 5 })
 ], async (req, res) => {
     // Finds the validation errors in this request and wraps them in an object with handy functions
     const errors = validationResult(req);

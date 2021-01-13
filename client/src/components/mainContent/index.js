@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 // import { BsBellFill } from 'react-icons/bs'
 import { IoMdNotificationsOutline } from 'react-icons/io'
 import { BsSearch } from 'react-icons/bs'
@@ -6,15 +6,88 @@ import { AiOutlinePlusCircle } from 'react-icons/ai'
 import { IconContext } from "react-icons";
 import './style.scss';
 import Feeds from '../feeds';
+import Modal from 'react-modal';
+import { ToastContainer} from 'react-toastify';
+import { createPost, getposts } from '../../redux/actions/post/post.actions'
+import { connect} from 'react-redux';
+import { Router, withRouter} from 'react-router-dom';
 
-
-const Main = () => {
+const Main = ({history, createPost, getposts}) => {
 
     const [searchValue, setSearchValue] = useState('');
+    const [modalIsOpen, setIsOpen] = useState(false);
+    // eslint-disable-next-line no-unused-vars
+    const [redirect, setRedirect] = useState(false);
+    // const [formData, setFormData]= useState({
+    //     caption: '',
+    //     image: null
+    // });
+    const [ fileSelected, setFileSelected] = useState(null)
+    const [caption, setCaption] = useState('')
+
+    useEffect(() => {
+
+        let isSubscribed = true;
+        if (isSubscribed) {
+
+            getposts()
+        }
+        return () => isSubscribed = false;
+    
+    }, [getposts, redirect]);
+
+    
+
 
     const handleSearchChange = (e) => {
         setSearchValue(e.target.value)
+    };
+
+    const handleAddBtn = async () => {
+
+        await setIsOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsOpen(false);
     }
+  
+   const handleFileChange = async (event)=> {
+      
+      await setFileSelected(event.target.files[0]);
+        console.log(fileSelected);
+     
+   }
+
+    const handleFormSubmit = async (e)=> {
+
+        e.preventDefault();
+        
+        if(!fileSelected){
+            alert('select a file ')
+        }
+        const data =  new FormData();
+        await  data.append("caption", caption);
+         await   data.append('image', fileSelected);
+      
+        
+      try {
+          await createPost(data);
+         await setRedirect(true)
+          window.location.reload();
+      } catch (error) {
+          console.log(error);
+      }
+
+      
+
+
+    }
+    // if(redirect){
+    //     return (
+    //         <Redirect to={redirect}/>
+    //     )
+    // }
 
     return (
         <div className="main-container">
@@ -33,7 +106,7 @@ const Main = () => {
                     </IconContext.Provider>
 
 
-                    <div className="addphoto">
+                    <div className="addphoto" onClick={handleAddBtn}>
                         <IconContext.Provider value={{ className: "add-icon" }}>
 
                             <AiOutlinePlusCircle />
@@ -50,9 +123,54 @@ const Main = () => {
 
             </section>
 
+            <div className="addPost-modal">
 
+                <Modal
+                    isOpen={modalIsOpen}
+                    onRequestClose={closeModal}
+                    className="modal"
+                    overlayClassName="modal-overlay"
+                >
+                    <button className="closemodal-btn">
+                    close
+                    
+                    </button>
+                   <div className="createPost-form">
+                    <form 
+                    action="/api/route/post" 
+                    method="post" 
+                    encType="multipart/form-data"
+                    onSubmit={handleFormSubmit} >
+                    <div className="caption">
+                    <input
+                     type="text" 
+                     placeholder="Caption"
+                      name="caption" 
+                      value={caption}  
+                      onChange={(e)=> setCaption(e.target.value)}
+                      />
+                    </div>
+                    <div className="file-input">
+                    <span>Uplaod Image</span>
+                    <input 
+                    type='file' 
+                    name="image"
+                    placeholder="select image to upload"
+                    onChange={handleFileChange}
+                    />
+    
+                    </div>
+                    <input type="submit" value="Post" />
+                    </form>
+
+                   
+                   </div>
+                </Modal>
+            </div>
+
+            <ToastContainer/>
         </div>
     )
 };
 
-export default Main;
+export default connect(null, {createPost, getposts})(withRouter(Main));

@@ -1,6 +1,18 @@
 const express = require('express');
 const cors = require('cors')
 const mongoose = require('mongoose');
+let Pusher = require("pusher");
+let bodyParser = require("body-parser");
+let Multipart = require("connect-multiparty");
+
+
+let pusher = new Pusher({
+    appId: process.env.PUSHER_APP_ID,
+    key: process.env.PUSHER_APP_KEY,
+    secret: process.env.PUSHER_APP_SECRET,
+    cluster: process.env.PUSHER_CLUSTER,
+    usetls: true
+})
 // const config = require('config');
 // const mongoUrl = config.get("MongoUrl");
 require('dotenv').config();
@@ -26,6 +38,7 @@ mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true, useCreat
     else {
         console.log('db connected');
         app.listen(PORT, () => console.log(`running on PORT ${PORT}`))
+
     }
 });
 
@@ -35,4 +48,4 @@ app.use('/api/route/user', require('./api/routes/user'));
 app.use('/api/route/post', require('./api/routes/post'));
 
 
-
+//pusher config

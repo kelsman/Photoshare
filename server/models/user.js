@@ -24,6 +24,12 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    dipslayPicture: {
+        type: String
+    },
+    cloudinary_id: {
+        type: String
+    },
     followers: [
         {
             type: mongoose.Schema.Types.ObjectId,

@@ -18,7 +18,8 @@ const SideMenu = ({ user, history, LogOut }) => {
 
     const handleLogOut = async () => {
         try {
-            await LogOut(history)
+            await LogOut(history);
+            history.push('/')
         } catch (error) {
             console.log(error);
             toast.error(`${error}`, {

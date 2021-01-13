@@ -7,23 +7,21 @@ import MainPage from './pages/mainPage';
 
 
 
-const App = (props) => {
+class App extends React.Component {
 
-  return (
-    <div className="App">
+  render() {
 
-      <Switch>
-        <Route exact path="/" component={LogIn} />
-        <Route path="/userFeeds" render={() => <MainPage />} />
+    return (
+      <div className="App">
 
-      </Switch>
+        <Switch>
+          <Route exact path="/" component={LogIn} />
+          <Route path="/userFeeds" render={() => <MainPage />} />
 
-
-
-
-
-    </div>
-  );
+        </Switch>
+      </div>
+    );
+  }
 }
 const mapStateToProps = (state) => {
   return {

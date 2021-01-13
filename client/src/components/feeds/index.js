@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+// import axios from 'axios'
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import './style.scss';
@@ -8,44 +9,38 @@ import Loader from 'react-loader-spinner'
 import DisplayPosts from '../DisplayPosts/DisplayPosts';
 
 
-class Feeds extends React.Component {
+const Feeds = (props) => {
 
-    componentDidMount() {
-        this.props.getposts();
-    }
-    render() {
-        return (
+    return (
+        <div className="feedWrapper">
 
-            <div className="feedWrapper">
+            {props.loading ? (
 
+                <div style={{
+                    height: "100%",
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexDirection: "column"
+                }}>
+                    <Loader
+                        type="TailSpin"
+                        color="#00BFFF"
+                        height={80}
+                        width={80}
 
-                {this.props.loading ? (
+                    />
 
-                    <div style={{
-                        height: "100%",
-                        width: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        flexDirection: "column"
-                    }}>
-                        <Loader
-                            type="TailSpin"
-                            color="#00BFFF"
-                            height={80}
-                            width={80}
+                </div>
+            ) :
 
-                        />
-
-                    </div>
-                ) :
-
-                    <DisplayPosts posts={this.props.posts} user={this.props.currentUser} />}
-            </div>
+                <DisplayPosts />}
+        </div>
 
 
-        )
-    }
+    )
+
 }
 
 const mapDispatchToprops = {
@@ -53,7 +48,7 @@ const mapDispatchToprops = {
 };
 const mapstateToProps = ({ post, user }) => {
     return {
-        posts: post.posts,
+
         loading: post.loading,
         currentUser: user.currentUser
     }

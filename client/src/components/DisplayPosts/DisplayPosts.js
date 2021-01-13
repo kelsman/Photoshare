@@ -1,21 +1,27 @@
-import React, { Fragment, useState } from 'react';
-import { Link } from 'react-router-dom';
-import moment from "moment";
+import React, { Fragment } from 'react';
+
+// import moment from "moment";
 import Avatar from '../../../src/assets/images/Avatar.png'
 import './style.scss';
-import Loader from 'react-loader-spinner'
+// import Loader from 'react-loader-spinner'
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 import { IconContext } from "react-icons";
-
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom'
 //icons 
 
 import { BsHeart } from 'react-icons/bs'
 import { FaRegComment } from 'react-icons/fa';
-const DisplayPosts = (props) => {
+// import { post } from '../../redux/actions/post/post.actions';
 
-    const [imgLoaded, setImgLoaded] = useState(false);
+
+
+const DisplayPosts = ({ posts, postLoading, user }) => {
+
+    // const [imgLoaded, setImgLoaded] = useState(false);
+
     const handlePostImgLoading = () => {
-        setImgLoaded(true)
+        // setImgLoaded(true)
 
     }
 
@@ -23,39 +29,48 @@ const DisplayPosts = (props) => {
         console.log('icon clicked')
     };
 
-    const handleLikeIconClick = () => {
-        console.log('clicked like')
-    }
+    // const handleLikeIconClick = () => {
+    //     console.log('clicked like')
+    // }
+
+    // const { posts, postLoading, user } = props
+
+    // if (postLoading) {
+    //     return <h1> Loading</h1>
+    // }
+
+
     return (
 
         <Fragment>
 
             <div className="displayPosts-container">
                 {
-                    props.posts && props.posts.length === 0 ? (
 
-                        <div className="text-container">
-                            <h4> You dont follow anyone</h4>
-                            <p> checkout the <Link to="/explore"></Link> Page For Users to Follow</p>
-                        </div>
-                    ) : (
+                    !posts.length && postLoading ? <h1> Loading </h1>
+
+
+
+                        : (
                             <div className="postsLoaded-Conatainer">
 
+
+
                                 {
-                                    props.posts.map((post) => {
+                                    posts.map((post) => {
                                         return (
                                             <div key={post._id} className="postWrapper">
                                                 <div className="card-header">
                                                     <div className="headerimg-wrapper">
                                                         <img
-                                                            src={props.user.profileImg ? props.user.profileImg : Avatar}
-                                                            alt=""
+                                                            src={user.profileImg ? user.profileImg : Avatar}
+                                                            alt="profile"
                                                             width="40px"
                                                             height="40px"
                                                         />
 
                                                     </div>
-                                                    <h5 className="header-username"> {post.postedBy.username}</h5>
+                                                    <h5 className="header-username">{post.postedBy.username ? post.postedBy.username : "username"}</h5>
 
 
                                                 </div>
@@ -93,6 +108,7 @@ const DisplayPosts = (props) => {
                                 }
 
 
+
                             </div>
                         )
 
@@ -104,5 +120,13 @@ const DisplayPosts = (props) => {
 };
 
 
+const mapStateToProps = ({ post, user }) => {
+    return {
 
-export default DisplayPosts;
+        posts: post.posts,
+        postLoading: post.loading,
+        user: user.currentUser
+    }
+
+}
+export default connect(mapStateToProps)(withRouter(DisplayPosts));
