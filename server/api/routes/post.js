@@ -6,7 +6,9 @@ const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const multer = require('multer');
 const auth = require('../../middleware/user');
-const { body, validationResult } = require('express-validator');
+const Comment = require('../../models/comment');
+const pusher = require('../../server');
+
 
 //configure cloudinary 
 
@@ -62,6 +64,7 @@ router.post('/', [auth, parser.single("image")], async (req, res) => {
             if (err) {
                 return res.json(err)
             }
+
             res.status(200).json({ success: true, post });
         })
 
@@ -242,39 +245,73 @@ router.put('/unlike/:unlikeId', auth, async (req, res) => {
 // @desc   comment on a post
 // @access    private
 
-router.put('/comment/:id', [auth, [
-    body('text', "text is required").not().isEmpty()
-]], async (req, res) => {
-    // Finds the validation errors in this request and wraps them in an object with handy functions
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
+router.post('/comment/:id', auth, async (req, res) => {
+
     const { text } = req.body;
-    const { id } = req.params
+    const { id } = req.params;
+
+    if (!text) {
+        return res
+            .status(400)
+            .send({ error: 'Please provide a message with your comment.' });
+    }
+
     try {
-        const post = await Post.findByIdAndUpdate(id, {
-            $push: {
-                comments: {
-                    text: text,
-                    User: req.user
-                }
-            }
+        // const comment = await Comment.findByIdAndUpdate(id, {
+        //     $push: {
+        //         comments: {
+        //             text: text,
+        //             User: req.user
+        //         }
+        //     }
 
-        }, { new: true }).populate('users', 'username').sort({ createdAt: -1 });
+        // }, { new: true }).populate('users', 'username').sort({ createdAt: -1 });
 
-        await post.save((err) => {
-            if (err) {
-                return res.status(422).json({ msg: err })
-            }
-            res.json(post.comments);
+        const post = await Post.findById(id);
+        if (!post) {
+            return res.status(404).send({ error: 'Could not find a post with that post id.' })
+        };
+
+        const comment = await new Comment({
+            text: text,
+            author: req.user,
+            post: id
         });
+        console.log(comment);
+        await comment.save((err) => {
+            if (err) {
+                console.log(err)
+                return res.status(422).json({ msg: err })
+            } else {
+                pusher.trigger('flash-comments', 'new-comment', comment);
+                return res.status(201).json(comment);
+            }
+        })
+
+
 
     } catch (err) {
-        console.log(err);
+        console.log(err.message)
         res.status(500).json(err.message);
     }
 });
+
+// @route    get api/post/comment
+// @desc   fetch comments
+// @access    private
+
+router.get('/comments/all-comments', auth, async (req, res) => {
+
+    try {
+        const comments = await Comment.find({});
+        if (!comments) {
+            return res.status(404).json({ msg: "comments not found" })
+        }
+        res.status(200).json(comments);
+    } catch (error) {
+        res.status(500).json({ msg: error.message })
+    }
+})
 
 // @route    put api/post/comment/:id/:commentid
 // @desc   delete comment on a post
@@ -291,6 +328,7 @@ router.delete('/comment/:Id/:commentId', auth, async (req, res) => {
         }, { new: true });
         await post.save((err) => {
             if (!err) {
+
                 return res.json(post.comments);
             }
 

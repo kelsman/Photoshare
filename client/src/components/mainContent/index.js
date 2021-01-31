@@ -8,11 +8,11 @@ import './style.scss';
 import Feeds from '../feeds';
 import Modal from 'react-modal';
 import { ToastContainer} from 'react-toastify';
-import { createPost, getposts } from '../../redux/actions/post/post.actions'
+import { createPost, getComments, getposts } from '../../redux/actions/post/post.actions'
 import { connect} from 'react-redux';
 import { withRouter} from 'react-router-dom';
 
-const Main = ({history, createPost, getposts}) => {
+const Main = ({history, createPost, getposts, getComments}) => {
 
     const [searchValue, setSearchValue] = useState('');
     const [modalIsOpen, setIsOpen] = useState(false);
@@ -25,20 +25,35 @@ const Main = ({history, createPost, getposts}) => {
     useEffect(() => {
 
         let isSubscribed = true;
-        if (isSubscribed) {
-            getposts()
+        const fetchData= async ()=> {
+            await getposts()
+            await getComments()
         }
+        if (isSubscribed) {
+          fetchData()        
+        }
+
         return () => isSubscribed = false;
+   
+    }, []);
+
+    // useEffect(() => {
+
+    //       let isSubscribed = true;
+    //     if (isSubscribed) {
+    //         getComments()
+       
+    //     }
+    //     return () => isSubscribed = false;
     
-        
-    }, [getposts]);
+    // }, [getComments])
 
     
 
 
-    const handleSearchChange = (e) => {
-        setSearchValue(e.target.value)
-    };
+    function handleSearchChange(e) {
+        setSearchValue(e.target.value);
+    }
 
     const handleAddBtn = async () => {
 
@@ -167,4 +182,4 @@ const Main = ({history, createPost, getposts}) => {
     )
 };
 
-export default connect(null, {createPost, getposts})(withRouter(Main));
+export default connect(null, {createPost, getposts, getComments})(withRouter(Main));

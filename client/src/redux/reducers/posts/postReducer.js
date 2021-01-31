@@ -1,9 +1,9 @@
 import { PostTypes } from '../../actions/post/post.types';
-import { userTypes } from '../../actions/user/user.types'
+// import { userTypes } from '../../actions/user/user.types'
 const initState = {
     posts: [],
-    post: null,
-loading: true,
+    comments: [],
+    loading: true,
     error: {}
 
 };
@@ -57,16 +57,29 @@ const postReducer = (state = initState, action) => {
             return {
                 ...state,
                 loading: false,
-                post: { ...state.post, comments: payload }
+                comments: [...state.comments, payload]
 
 
             };
+        case PostTypes.GET_COMMENTS:
+            return {
+                ...state,
+                loading: false,
+                comments: payload
+            }
+        case PostTypes.PUSEHER_COMMENT_UPDATE:
+            return {
+                ...state,
+                loading: false,
+                comments: [...state.comments, payload]
+            }
+
         case PostTypes.REMOVE_COMMENT:
             return {
                 ...state,
                 laoding: false,
-                post: {
-                    ...state.post,
+                comments: {
+                    ...state.comments,
                     comments: state.post.comments.filter((comment) => comment.id !== payload)
 
                 }

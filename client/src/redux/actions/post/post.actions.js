@@ -3,6 +3,17 @@ import axios from 'axios'
 import setToken from '../../utils';
 import { toast } from 'react-toastify';
 
+import cogoToast from 'cogo-toast';
+import Pusher from 'pusher-js'
+
+const pusher = new Pusher(process.env.REACT_APP_PUSHER_KEY, {
+    encoded: true,
+    cluster: 'mt1'
+});
+const channel = pusher.subscribe('flash-comments')
+
+const url = "http://localhost:8000"
+
 /**
  * @description getall posts
  */
@@ -12,7 +23,7 @@ export const getposts = () => {
 
             const CancelToken = axios.CancelToken;
             const source = CancelToken.source();
-            const res = await axios.get('/api/route/post/allposts', {
+            const res = await axios.get(`${url}/api/route/post/allposts`, {
                 source
             });
 
@@ -21,10 +32,7 @@ export const getposts = () => {
 
             if (err) {
                 dispatch({
-                    type: PostTypes.POST_ERROR, payload: {
-                        msg: err.response.msg,
-                        status: err.response.status
-                    }
+                    type: PostTypes.POST_ERROR, payload: err
                 })
             }
         }
@@ -50,7 +58,7 @@ export const createPost = (formData) => {
                 }
             }
 
-            const res = await axios.post('/api/route/post', formData, config);
+            const res = await axios.post(`${url}/api/route/post`, formData, config);
             await dispatch({ type: PostTypes.ADD_POST, payload: res.data });
 
             toast.success('success', {
@@ -93,7 +101,7 @@ export const addLike = (id) => {
                 await setToken(authToken);
             };
 
-            const res = await axios.put(`/api/route/post/like/:${id}`);
+            const res = await axios.put(`${url}/api/route/post/like/:${id}`);
             dispatch({
                 type: PostTypes.UPDATE_LIKES, payload: {
                     id, likes: res.data
@@ -128,7 +136,7 @@ export const removeLike = (id) => {
             if (authToken) {
                 await setToken(authToken);
             };
-            const res = axios.put(`/api/route/post/unlike/:${id}`);
+            const res = axios.put(`${url}/api/route/post/unlike/:${id}`);
             dispatch({
                 type: PostTypes.UPDATE_LIKES, payload: {
                     id, likes: res.data
@@ -152,6 +160,7 @@ export const removeLike = (id) => {
  * @description Add comment
  */
 
+
 export const addComment = (id, formData) => {
     return async (dispatch) => {
         const { authToken } = localStorage;
@@ -167,10 +176,17 @@ export const addComment = (id, formData) => {
             }
         };
         try {
-            const res = await axios.put(`/api/route/post/comment/${id}`, formData, config);
-            dispatch({ type: PostTypes.ADD_COMMENT, payload: res.data })
+            cogoToast.loading('adding comment')
+            const res = await axios.post(`${url}/api/route/post/comment/${id}`, formData, config);
+            const data = await res.data;
+            channel.bind('new-comment', function (data) {
+                alert('An event was triggered with message: ' + data.message);
+            });
 
+            dispatch({ type: PostTypes.ADD_COMMENT, payload: data })
+            cogoToast.success('comment added');
         } catch (err) {
+            cogoToast.error(`${err.message}`);
             dispatch({
                 type: PostTypes.POST_ERROR,
                 payload: {
@@ -181,30 +197,26 @@ export const addComment = (id, formData) => {
         }
     }
 };
-
 /**
- * @description Remove a comment
+ * @description GET COMMENTS
  */
-export const deleteComment = (postId, commentId) => {
+
+export const getComments = () => {
     return async (dispatch) => {
         const { authToken } = localStorage;
         if (authToken) {
             await setToken(authToken);
         };
-        const config = {
-            headers: {
-                "Content-Type": "application/json",
-            },
-        };
-        try {
-            const res = await axios.delete(`/api/route/post/comment/${postId}/${commentId}}`, config);
-            dispatch({ type: PostTypes.REMOVE_COMMENT, paylad: res.data })
-        } catch (err) {
 
+        try {
+
+            const res = await axios.get(`${url}/api/route/post/comments/all-comments`);
+            dispatch({ type: PostTypes.GET_COMMENTS, payload: res.data })
+        } catch (error) {
+            console.log(error);
         }
     }
 }
-
 /**
  * @description Get User post
  */
@@ -223,7 +235,7 @@ export const post = (id) => {
         };
         try {
 
-            const res = await axios.get(`/api/route/post/${id}`, config);
+            const res = await axios.get(`{url}/api/route/post/${id}`, config);
 
             dispatch({
                 type: PostTypes.GET_POST,
@@ -250,6 +262,7 @@ export const post = (id) => {
  * @description delete User post by Id
  */
 
+
 export const deletePost = (id) => {
     return async (dispatch) => {
 
@@ -263,7 +276,7 @@ export const deletePost = (id) => {
             },
         };
         try {
-            await axios.delete(`/api/route/post/${id}`, config);
+            await axios.delete(`{url}/api/route/post/${id}`, config);
 
             dispatch({
                 type: PostTypes.DELETE_POST,

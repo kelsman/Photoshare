@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const nodemon = require('nodemon');
 const Schema = mongoose.Schema;
 const { ObjectId } = Schema.Types;
 
@@ -28,19 +27,19 @@ const PostSchema = new Schema({
             ref: "User"
         }
     ],
-    comments: [
-        {
-            text: String,
-            User: {
-                type: ObjectId,
-                ref: "User"
-            },
-            date: {
-                type: Date,
-                default: Date.now
-            }
-        }
-    ],
+    // comments: [
+    //     {
+    //         text: String,
+    //         User: {
+    //             type: ObjectId,
+    //             ref: "User"
+    //         },
+    //         date: {
+    //             type: Date,
+    //             default: Date.now
+    //         }
+    //     }
+    // ],
 
     createdAt: {
         type: Date,

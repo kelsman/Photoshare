@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 
 // import moment from "moment";
 import Avatar from '../../../src/assets/images/Avatar.png'
@@ -10,19 +10,26 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom'
 //icons 
 
+
 import { BsHeart } from 'react-icons/bs'
 import { FaRegComment } from 'react-icons/fa';
-import { addComment } from '../../redux/actions/post/post.actions';
+import { addComment, getposts, post } from '../../redux/actions/post/post.actions';
 import CommentForm from '../comment/commentForm';
 import CommentList from '../comment/commentList';
-// import { post } from '../../redux/actions/post/post.actions';
+
+
+const DisplayPosts = ({ posts, postLoading, user, comments }) => {
 
 
 
-const DisplayPosts = ({ posts, postLoading, user }) => {
-
-    // const [imgLoaded, setImgLoaded] = useState(false);
     const [liked, setLiked] = useState(false);
+    // const [comments, setComments] = useState(() => {
+    //     posts.comments.filter((comment) => {
+
+    //     })
+    // });
+
+
 
 
 
@@ -35,11 +42,24 @@ const DisplayPosts = ({ posts, postLoading, user }) => {
         console.log('icon clicked')
     };
     const handleLiked = () => {
-        setLiked(prev => !prev);
+        setLiked(true)
 
+    };
+
+    // useEffect(()=> {
+    //     const channel = pusher.subscribe('comments');
+    // })
+
+
+
+
+
+    // const { posts, postLoading, user, comments } = this.props;
+
+
+    if (comments.length) {
+        console.log(comments);
     }
-
-
     return (
 
         <Fragment>
@@ -48,14 +68,8 @@ const DisplayPosts = ({ posts, postLoading, user }) => {
                 {
 
                     !posts.length && postLoading ? <h1> Loading </h1>
-
-
-
                         : (
                             <div className="postsLoaded-Conatainer">
-
-
-
                                 {
                                     posts.map((post) => {
                                         return (
@@ -71,17 +85,14 @@ const DisplayPosts = ({ posts, postLoading, user }) => {
 
                                                     </div>
                                                     <h5 className="header-username">{post.postedBy.username ? post.postedBy.username : "username"}</h5>
-
-
                                                 </div>
                                                 <div className="post-picture">
                                                     <img
                                                         loading="lazy"
                                                         src={post.postImg}
                                                         alt="postimg"
-                                                        onLoad={handlePostImgLoading}
-                                                        width="30px"
 
+                                                        width="30px"
                                                         height="30px"
                                                     />
 
@@ -97,7 +108,10 @@ const DisplayPosts = ({ posts, postLoading, user }) => {
                                                     </h5>
                                                     <h5>
                                                         <IconContext.Provider value={{ className: "commentIcon" }}>
-                                                            <FaRegComment onClick={handleCommentIconClick} /> {post.comments.length === 0 ? null : post.comments.length}
+                                                            <FaRegComment onClick={handleCommentIconClick} />
+                                                            {comments.length && comments.filter((comment) => {
+                                                                return comment.post === post._id
+                                                            }).length}
                                                         </IconContext.Provider>
                                                     </h5>
 
@@ -110,17 +124,15 @@ const DisplayPosts = ({ posts, postLoading, user }) => {
                                                     </p>
 
                                                 </div>
-                                                <CommentForm postId={post._id} />
-                                                {
-                                                    post.comments.map((comment) => {
-                                                        return (
+                                                <CommentForm post={post} postId={post._id} />
+                                                {comments.filter((comment) => {
+                                                    return comment.post === post._id
+                                                }).map((comment) => {
+                                                    return (
+                                                        <CommentList key={comment._id} comments={comment} commentId={comment._id} />
 
-                                                            <CommentList key={comment._id} comments={comment} commentId={comment._id} />
-                                                        )
-                                                    })
-                                                }
-
-
+                                                    )
+                                                })}
                                             </div>
                                         )
                                     })
@@ -138,16 +150,18 @@ const DisplayPosts = ({ posts, postLoading, user }) => {
             </div>
         </Fragment>
     )
-};
+
+}
 
 
 const mapStateToProps = ({ post, user }) => {
     return {
 
         posts: post.posts,
+        comments: post.comments,
         postLoading: post.loading,
         user: user.currentUser
     }
 
 }
-export default connect(mapStateToProps, { addComment })(withRouter(DisplayPosts));
+export default connect(mapStateToProps, { addComment, getposts })(withRouter(DisplayPosts));

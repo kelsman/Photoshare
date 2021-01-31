@@ -11,8 +11,9 @@ function formatDate(date) {
 
 const CommentList = ({ postId, commentId, posts, comments }) => {
 
-    const { _id, text, User, date } = comments
-    console.log(comments.text)
+    const { text, date } = comments
+    // eslint-disable-next-line no-unused-vars
+    const [Comments, setComments] = useState(comments)
     return (
         <Fragment >
 

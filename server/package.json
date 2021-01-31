@@ -28,6 +28,7 @@
     "multer-storage-cloudinary": "^4.0.0",
     "nodemon": "^2.0.6",
     "pusher": "^4.0.2",
-    "react-notifications-component": "^3.0.3"
+    "react-notifications-component": "^3.0.3",
+    "socket.io": "^3.1.0"
   }
 }

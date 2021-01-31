@@ -3,9 +3,9 @@ import LogIn from './components/auth/Login/index';
 import { Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux'
 import MainPage from './pages/mainPage';
+
+
 // import PostsPage from './pages/post';
-
-
 
 class App extends React.Component {
 
