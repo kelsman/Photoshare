@@ -10,7 +10,7 @@ const pusher = new Pusher(process.env.REACT_APP_PUSHER_KEY, {
     encoded: true,
     cluster: 'mt1'
 });
-const channel = pusher.subscribe('flash-comments')
+const channel = pusher.subscribe('flash-comments');
 
 const url = "http://localhost:8000"
 
@@ -179,10 +179,10 @@ export const addComment = (id, formData) => {
             cogoToast.loading('adding comment')
             const res = await axios.post(`${url}/api/route/post/comment/${id}`, formData, config);
             const data = await res.data;
-            channel.bind('new-comment', function (data) {
-                alert('An event was triggered with message: ' + data.message);
-            });
-
+            // channel.bind('new-comment', function (data) {
+            //     alert('An event was triggered with message: ' + data.message);
+            //     console.log(data);
+            // });
             dispatch({ type: PostTypes.ADD_COMMENT, payload: data })
             cogoToast.success('comment added');
         } catch (err) {

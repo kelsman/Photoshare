@@ -1,6 +1,7 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment } from 'react'
 import { connect } from 'react-redux';
-
+import Avatar from '../../../assets/images/Avatar.png'
+import './style.scss';
 
 
 function formatDate(date) {
@@ -9,16 +10,20 @@ function formatDate(date) {
 
 
 
-const CommentList = ({ postId, commentId, posts, comments }) => {
+const CommentList = ({ commentId, comments, }) => {
 
-    const { text, date } = comments
-    // eslint-disable-next-line no-unused-vars
-    const [Comments, setComments] = useState(comments)
+    const { text, date, authorId, authorName, authorPicture, } = comments
+    // const { username, dipslayPicture } = a
+    // // eslint-disable-next-line no-unused-vars
+
     return (
         <Fragment >
 
-            <div key={commentId}>
-
+            <div key={commentId} className="comment-wrapper">
+                <img
+                    src={authorPicture ? authorPicture : Avatar}
+                    alt="profile" />
+                <p> {authorName}</p>
                 <p>
                     {text}
                     <span>

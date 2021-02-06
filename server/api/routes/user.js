@@ -71,7 +71,7 @@ router.post('/signup', [[
                 password,
                 password2,
                 cloudinary_id: public_id,
-                dipslayPicture: secure_url
+                displayPicture: secure_url
             });
             // hash password before saving to database
             const salt = await bcrypt.genSalt(10);

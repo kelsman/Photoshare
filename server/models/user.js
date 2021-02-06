@@ -18,13 +18,12 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-
     },
     password2: {
         type: String,
         required: true
     },
-    dipslayPicture: {
+    displayPicture: {
         type: String
     },
     cloudinary_id: {

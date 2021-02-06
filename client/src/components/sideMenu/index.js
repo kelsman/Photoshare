@@ -13,6 +13,7 @@ import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify'
 import "react-toastify/dist/ReactToastify.css";
 import { withRouter } from 'react-router-dom';
+import Avatar from '../../assets/images/Avatar.png'
 
 const SideMenu = ({ user, history, LogOut }) => {
 
@@ -41,7 +42,7 @@ const SideMenu = ({ user, history, LogOut }) => {
             <section className="profile-info">
                 <div className="profile-img">
 
-                    <img src="https://images.unsplash.com/photo-1601758123927-4f7acc7da589?ixid=MXwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="profile" />
+                    <img src={user.displayPicture ? user.displayPicture : Avatar} alt="profile" />
                 </div>
                 <div className="profile-names">
                     <p className="profileName"> {name}</p>

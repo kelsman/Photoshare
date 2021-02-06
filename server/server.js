@@ -41,6 +41,6 @@ app.use('/api/route/user', require('./api/routes/user'));
 app.use('/api/route/post', require('./api/routes/post'));
 
 app.listen(PORT, () => console.log(`running on PORT ${PORT}`));
-
+//socket setup
 
 

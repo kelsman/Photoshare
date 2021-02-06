@@ -4,10 +4,14 @@ import { Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux'
 import MainPage from './pages/mainPage';
 
+// import Pusher from 'pusher-js'
+
 
 // import PostsPage from './pages/post';
 
 class App extends React.Component {
+
+
 
   render() {
 

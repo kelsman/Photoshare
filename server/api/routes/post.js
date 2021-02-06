@@ -267,17 +267,22 @@ router.post('/comment/:id', auth, async (req, res) => {
 
         // }, { new: true }).populate('users', 'username').sort({ createdAt: -1 });
 
-        const post = await Post.findById(id);
+        const post = await Post.findById(id)
         if (!post) {
             return res.status(404).send({ error: 'Could not find a post with that post id.' })
         };
-
+        const user = await User.findById(req.user)
+        if (!user) {
+            return res.status(404).send({ error: 'Could not find a user with that user id' })
+        }
         const comment = await new Comment({
             text: text,
-            author: req.user,
-            post: id
+            authorId: req.user,
+            postId: id,
+            authorPicture: user.displayPicture,
+            authorName: user.username
         });
-        console.log(comment);
+
         await comment.save((err) => {
             if (err) {
                 console.log(err)
@@ -303,7 +308,7 @@ router.post('/comment/:id', auth, async (req, res) => {
 router.get('/comments/all-comments', auth, async (req, res) => {
 
     try {
-        const comments = await Comment.find({});
+        const comments = await Comment.find({}).populate("author", ["username", "dipslayPicture"]).sort({ createdAt: -1 })
         if (!comments) {
             return res.status(404).json({ msg: "comments not found" })
         }

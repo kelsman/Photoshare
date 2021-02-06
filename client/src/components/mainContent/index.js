@@ -35,7 +35,7 @@ const Main = ({history, createPost, getposts, getComments}) => {
 
         return () => isSubscribed = false;
    
-    }, []);
+    }, [getposts, getComments]);
 
     // useEffect(() => {
 

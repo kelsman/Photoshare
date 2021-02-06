@@ -13,30 +13,30 @@ import { withRouter } from 'react-router-dom'
 
 import { BsHeart } from 'react-icons/bs'
 import { FaRegComment } from 'react-icons/fa';
-import { addComment, getposts, post } from '../../redux/actions/post/post.actions';
+import { addComment, getposts } from '../../redux/actions/post/post.actions';
 import CommentForm from '../comment/commentForm';
 import CommentList from '../comment/commentList';
-
+import Pusher from 'pusher-js';
 
 const DisplayPosts = ({ posts, postLoading, user, comments }) => {
 
 
 
     const [liked, setLiked] = useState(false);
-    // const [comments, setComments] = useState(() => {
-    //     posts.comments.filter((comment) => {
+    // // const [comments, setComments] = useState(() => {
+    // //     posts.comments.filter((comment) => {
 
-    //     })
-    // });
-
-
+    // //     })
+    // // });
 
 
 
-    const handlePostImgLoading = () => {
-        // setImgLoaded(true)
 
-    };
+
+    // const handlePostImgLoading = () => {
+    //     // setImgLoaded(true)
+
+    // };
 
     const handleCommentIconClick = () => {
         console.log('icon clicked')
@@ -45,21 +45,22 @@ const DisplayPosts = ({ posts, postLoading, user, comments }) => {
         setLiked(true)
 
     };
+    useEffect(() => {
+        const pusher = new Pusher(process.env.REACT_APP_PUSHER_KEY, {
+            encoded: true,
+            cluster: 'mt1'
+        });
 
-    // useEffect(()=> {
-    //     const channel = pusher.subscribe('comments');
-    // })
+        const channel = pusher.subscribe('messages');
+        channel.bind('flash-comments', (data) => {
+            alert(JSON.stringify(data));
+        });
 
-
-
-
-
-    // const { posts, postLoading, user, comments } = this.props;
-
-
-    if (comments.length) {
-        console.log(comments);
-    }
+        return () => {
+            channel.unbind_all();
+            channel.unsubscribe();
+        };
+    }, []);
     return (
 
         <Fragment>
@@ -110,7 +111,7 @@ const DisplayPosts = ({ posts, postLoading, user, comments }) => {
                                                         <IconContext.Provider value={{ className: "commentIcon" }}>
                                                             <FaRegComment onClick={handleCommentIconClick} />
                                                             {comments.length && comments.filter((comment) => {
-                                                                return comment.post === post._id
+                                                                return comment.postId === post._id
                                                             }).length}
                                                         </IconContext.Provider>
                                                     </h5>
@@ -126,10 +127,10 @@ const DisplayPosts = ({ posts, postLoading, user, comments }) => {
                                                 </div>
                                                 <CommentForm post={post} postId={post._id} />
                                                 {comments.filter((comment) => {
-                                                    return comment.post === post._id
+                                                    return comment.postId === post._id
                                                 }).map((comment) => {
                                                     return (
-                                                        <CommentList key={comment._id} comments={comment} commentId={comment._id} />
+                                                        <CommentList key={comment._id} author={comment.author} comments={comment} commentId={comment._id} />
 
                                                     )
                                                 })}
