@@ -1,14 +1,14 @@
 const User = require('../../models/user.js');
 const jwt = require('jsonwebtoken');
 const express = require('express');
-const { check, validationResult } = require('express-validator');
+const { check, body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs')
 const router = express.Router();
 const jwtSecret = process.env.jsonSecret;
 const auth = require('../../middleware/user');
 const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
-const { cloudinaryStorage, CloudinaryStorage } = require('multer-storage-cloudinary');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -33,15 +33,15 @@ const parser = multer({ storage: storage });
 // access Public
 
 router.post('/signup', [[
-    check('name', "name is required").not().isEmpty(),
-    check('email', "please enter a valid email address").isEmail(),
-    check('username', "username is required").not().isEmpty(),
+    body('name', "name is required").not().isEmpty(),
+    body('email', "please enter a valid email address").isEmail(),
+    body('username', "username is required").not().isEmpty(),
     // password must be at least 5 chars long
-    check('password', "password must be at least 5 chars long").isLength({ min: 5 }),
-    check('password2', "password must be at least 5 chars long").isLength({ min: 5 })
+    body('password', "password must be at least 5 chars long").isLength({ min: 5 }),
 
-], parser.single("profileImg")]
-    , async (req, res) => {
+
+], parser.single("profileImg")],
+    async (req, res) => {
         const { name, email, password, username, password2 } = req.body;
         const file = req.file;
         // Finds the validation errors in this request and wraps them in an object with handy functions
@@ -82,9 +82,9 @@ router.post('/signup', [[
             await newUser.save((err) => {
                 if (err) {
                     console.log(err.message);
-                    return res.status(500).json({ success: false })
+                    return res.status(500).json({ success: false, error: err.message })
                 }
-                res.json({ msg: "user registered sucessfully", file })
+                res.json({ msg: "user registered sucessfully" })
             })
         } catch (err) {
             console.log(err.message);

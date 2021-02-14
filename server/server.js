@@ -18,6 +18,7 @@ module.exports = pusher = new Pusher({
 const app = express();
 //middlewares
 app.use(express.json());
+app.use(express.urlencoded());
 app.use(cors());
 
 
@@ -39,8 +40,7 @@ mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true, useCreat
 //defined routes
 app.use('/api/route/user', require('./api/routes/user'));
 app.use('/api/route/post', require('./api/routes/post'));
+app.use('/api/route/like', require('./api/routes/like'));
 
 app.listen(PORT, () => console.log(`running on PORT ${PORT}`));
 //socket setup
-
-

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -23,13 +24,17 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    resetPassword: {
+        type: String,
+    },
+
     displayPicture: {
         type: String
     },
     cloudinary_id: {
         type: String
     },
-    followers: [
+    following: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
