@@ -11,7 +11,7 @@ exports.signUp = async (req, res, next) => {
         //check if user already exists 
         const doesExists = await User.findOne({ email });
         if (doesExists) {
-            return next(new errorMiddleware('email is taken already', 404));
+            return res.status(404).json({ success: false, msg: "Email is already taken" });
         };
         const result = await authSchema.validateAsync({ name, username, email, password });
         const user = new User(result);

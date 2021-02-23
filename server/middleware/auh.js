@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
-const secret = process.env.JwtSecret
+const secret = process.env.JwtSecret;
+
 const authMiddleWare = async (req, res, next) => {
 
     const token = req.headers("x-auth-token");
@@ -14,12 +15,11 @@ const authMiddleWare = async (req, res, next) => {
             return res.status(500).json("error in verifying token" + ":" + err.message)
         };
         req.user = decoded.user;
-        next();
+
     } catch (error) {
         console.log(error.message);
+        next();
 
     }
-
-
 };
 module.exports = authMiddleWare;

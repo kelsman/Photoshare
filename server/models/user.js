@@ -4,8 +4,9 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto')
 
+
 const userSchema = new mongoose.Schema({
-    name: {
+    fullName: {
         type: String,
         required: true,
         minlength: 3,
@@ -29,6 +30,12 @@ const userSchema = new mongoose.Schema({
         minlength: 6,
 
     },
+    imageUrl: {
+        type: String,
+    },
+    cloudinary_id: String,
+    followers: [{ type: mongoose.Schema.Types.ObjectId }],
+    following: [{ type: mongoose.Schema.Types.ObjectId }],
     resetPasswordToken: String,
     resetPasswordExpire: Date,
     DateCreated: {
