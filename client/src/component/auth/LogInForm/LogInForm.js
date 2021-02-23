@@ -10,12 +10,12 @@ import { IconContext } from "react-icons";
 
 
 
+
+
 const validationSchema = Yup.object().shape({
     email: Yup.string().email().min(5).required('please provide a valid email'),
-    password: Yup.string().min(6, 'password must have at least 6 characters').required()
+    password: Yup.string().min(6, 'password must have at least 6 characters').required('required')
 });
-
-
 const LogInForm = () => {
 
     const [isSubmitting, setIsSubmitting] = useState(false)
