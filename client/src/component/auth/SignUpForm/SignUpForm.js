@@ -7,35 +7,52 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { BiHide, BiShowAlt } from 'react-icons/bi'
 import { IconContext } from 'react-icons';
+import axios from 'axios';
 
-const validationSchema = Yup.object().shape({
-    fullName: Yup.string().required('name is required'),
-    username: Yup.string().required('username is required'),
-    email: Yup.string().email('please enter a valid email address').required(),
-    password: Yup.string().required('required'),
-
-
-})
 
 function SignUpForm() {
 
-    const [showPassword, setShowPassword] = useState(false)
+    const validationSchema = Yup.object().shape({
+        name: Yup.string().required('fullname is required'),
+        username: Yup.string().required('username is required'),
+        email: Yup.string().email('please enter a valid email address').required(),
+        password: Yup.string().required('required'),
+    });
+
+    const [showPassword, setShowPassword] = useState(false);
+
     const handleShowToggle = () => {
 
         setShowPassword(prev => !prev)
-    }
-    const handleFormSubmit = (values) => {
+    };
 
-        return console.log(values);
+    const handleFormSubmit = async (values) => {
+
+        try {
+            const data = await new FormData();
+            data.append('name', values.name);
+            data.append('username', values.username);
+            data.append("email", values.email);
+            data.append('password', values.password);
+            data.append('avatar', values.avatar);
+
+            const res = await axios.post('http://localhost:9000/api/route/user/register',
+                data);
+            console.log(res)
+        } catch (error) {
+            console.log(error.message)
+
+        }
+
 
     };
     const formik = useFormik({
         initialValues: {
-            fullName: '',
+            name: '',
             username: "",
             email: "",
             password: '',
-            file: null,
+            avatar: null,
         },
         validationSchema,
 
@@ -51,11 +68,11 @@ function SignUpForm() {
                 <h2>Sign up</h2>
                 <div className="name-input">
                     <input
-                        name="fullName"
+                        name="name"
                         type="text"
                         placeholder="Full Name"
                         value={values.fullName}
-                        onChange={handleChange}
+                        onChange={handleChange('name')}
                     />
                 </div>
                 {errors.fullName && <small className="error" >{errors.fullName}</small>}
@@ -67,7 +84,7 @@ function SignUpForm() {
                         name="username"
                         placeholder="username"
                         value={values.username}
-                        onChange={handleChange}
+                        onChange={handleChange('username')}
                     />
                 </div>
                 {errors.username && <small className="error" >{errors.username}</small>}
@@ -78,7 +95,7 @@ function SignUpForm() {
                         name="email"
                         placeholder="email"
                         value={values.email}
-                        onChange={handleChange}
+                        onChange={handleChange('email')}
                     />
                 </div>
                 {errors.email && <small className="error">{errors.email}</small>}
@@ -88,7 +105,7 @@ function SignUpForm() {
                         name="password"
                         placeholder="password"
                         value={values.password}
-                        onChange={handleChange}
+                        onChange={handleChange('password')}
                     />
                     {showPassword ?
                         <button className="btn-icon" type="button" onClick={handleShowToggle}> <BiShowAlt />
@@ -103,8 +120,8 @@ function SignUpForm() {
                 <div className="file-input">
                     <input
                         type="file"
-                        name="file"
-                        onChange={(event) => setFieldValue("file", event.target.files[0])}
+                        name="avatar"
+                        onChange={(event) => setFieldValue("avatar", event.target.files[0])}
                     />
 
                 </div>

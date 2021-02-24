@@ -6,7 +6,7 @@ const crypto = require('crypto')
 
 
 const userSchema = new mongoose.Schema({
-    fullName: {
+    name: {
         type: String,
         required: true,
         minlength: 3,
@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
         minlength: 6,
 
     },
-    imageUrl: {
+    avatar: {
         type: String,
     },
     cloudinary_id: String,

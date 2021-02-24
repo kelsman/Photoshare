@@ -3,7 +3,7 @@ const secret = process.env.JwtSecret;
 
 const authMiddleWare = async (req, res, next) => {
 
-    const token = req.headers("x-auth-token");
+    const token = req.header("x-auth-token");
     if (!token) {
         res.status(401).json({ success: false, error: "you're not authorised" })
     };
@@ -14,11 +14,12 @@ const authMiddleWare = async (req, res, next) => {
         if (!decoded) {
             return res.status(500).json("error in verifying token" + ":" + err.message)
         };
+
         req.user = decoded.user;
+        next();
 
     } catch (error) {
         console.log(error.message);
-        next();
 
     }
 };

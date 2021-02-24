@@ -2,21 +2,47 @@ const { fail } = require('assert');
 const User = require('../models/User');
 const authSchema = require('../validation');
 const sendEmail = require('../utils/sendMail');
-const crypto = require('crypto')
+const crypto = require('crypto');
+const multer = require('multer');
 
+const { cloudinary } = require('../utils/cloudinary');
+
+
+
+
+
+// @ sign up a new user 
 exports.signUp = async (req, res, next) => {
     const { name, username, email, password } = req.body;
-    try {
 
+    try {
         //check if user already exists 
         const doesExists = await User.findOne({ email });
         if (doesExists) {
             return res.status(404).json({ success: false, msg: "Email is already taken" });
         };
-        const result = await authSchema.validateAsync({ name, username, email, password });
-        const user = new User(result);
+        //if user doesn't exist we validate the user inputs 
+        await authSchema.validateAsync(req.body);
+        //  upload to cloudinary
+        const upload = await cloudinary.uploader.upload(req.file.path, {
+            folder: "avatars",
+            use_filename: true,
+            allowed_formats: ["jpeg", 'png',]
+        });
+        if (!upload) {
+            return res.status(401).json({ success: false, msg: "error in saving profile-picture" })
+        }
+
+        const user = new User({
+            name,
+            username,
+            email,
+            password,
+            avatar: upload.secure_url,
+            cloudinary_id: upload.public_id
+        });
         await user.save()
-        res.status(201).json({ success: true, user });
+        res.status(201).json({ success: true, msg: "account created successfully" });
 
 
     } catch (error) {
@@ -25,6 +51,9 @@ exports.signUp = async (req, res, next) => {
     }
 
 };
+
+// @sign in a user
+
 exports.signIn = async (req, res, next) => {
     const { email, password } = req.body;
     try {
@@ -49,8 +78,28 @@ exports.signIn = async (req, res, next) => {
         res.status(500).send("server error" + error.message)
         next(error);
     }
-}
+};
 
+// get signed in user 
+exports.getUser = async (req, res, next) => {
+    try {
+
+        const user = await User.findById(req.user.id).select('-password');
+        if (!user) {
+            return res.status(404).json({ success: false, msg: "unauthorised" })
+        };
+        res.status(200).json({ success: true, user })
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ msg: "server error" + ":" + error.message });
+    }
+};
+
+//@ delete an account 
+
+
+
+//@forget password
 exports.forgetPassword = async (req, res, next) => {
     const { email } = req.body;
 
@@ -86,7 +135,7 @@ exports.forgetPassword = async (req, res, next) => {
         return res.status(500).json({ success: false, error: "email could not be sent" });
     }
 }
-
+//@ reset password
 exports.resetPassword = async (req, res, next) => {
 
     // compare token from the url 
@@ -113,8 +162,9 @@ exports.resetPassword = async (req, res, next) => {
 
 
     } catch (err) {
-        console.log(err);
+        console.log(err.message);
         return res.status(500).json({ sucess: false, msg: "server error" })
+
     }
 }
 

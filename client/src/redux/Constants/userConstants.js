@@ -1,0 +1,9 @@
+
+export const userActionTypes = {
+    LOG_IN_SUCCESS: "LOG_IN_SUCCESS",
+    LOG_IN_FAIL: "LOG_IN_FAIL",
+    SIGN_UP_SUCESS: "SIGN_UP_SUCESS",
+    SIGN_UP_FAIL: "SIGN_UP_FAIL",
+    LOG_OUT_SUCCESS: "LOG_OUT_SUCCESS",
+    LOG_OUT_FAIL: "LOG_OUT_FAIL"
+};
