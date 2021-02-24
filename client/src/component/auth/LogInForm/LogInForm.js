@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './style.scss';
 import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
-
+import { connect } from 'react-redux';
+import { signin, loaduser } from '../../../redux/Actions/userActions'
 // import { Formik } from 'formik';
 import { useFormik } from 'formik'
 import { AiOutlineLock, AiOutlineMail } from 'react-icons/ai'
 import { IconContext } from "react-icons";
+import cogoToast from 'cogo-toast';
 
 
 
@@ -16,21 +18,36 @@ const validationSchema = Yup.object().shape({
     email: Yup.string().email().min(5).required('please provide a valid email'),
     password: Yup.string().min(6, 'password must have at least 6 characters').required('required')
 });
-const LogInForm = () => {
+const LogInForm = ({ signin, loadUserError, loaduser }) => {
+
+
+
+    useEffect(() => {
+        if (localStorage.getItem) {
+            loaduser()
+        } else {
+            return () => null
+        }
+    }, [])
 
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const handleFormSubmit = async (values) => {
+        try {
+            await signin(values);
 
+
+        } catch (error) {
+            console.log(error.message)
+        }
+
+    }
     const formik = useFormik({
         initialValues: {
             email: "",
             password: ""
         },
         validationSchema,
-        onSubmit: async (values) => {
-            await setIsSubmitting(true)
-            // await alert(JSON.stringify(values, null, 2));
-            // setIsSubmitting(false)
-        }
+        onSubmit: handleFormSubmit
 
     })
 
@@ -91,5 +108,10 @@ const LogInForm = () => {
         </div>
     )
 };
-export default LogInForm;
+const mapStateToProps = ({ user }) => {
+    return {
+        loadUserErrorr: user.authError.loadUserError
+    }
+}
+export default connect(mapStateToProps, { signin, loaduser })(LogInForm);
 

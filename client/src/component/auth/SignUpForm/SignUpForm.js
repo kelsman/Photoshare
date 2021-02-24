@@ -2,7 +2,9 @@
 import React, { Fragment, useState } from 'react'
 import { Link } from 'react-router-dom';
 import './style.scss';
-
+import { signup } from '../../../redux/Actions/userActions';
+import { withRouter } from 'react-router-dom'
+import { connect } from 'react-redux'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { BiHide, BiShowAlt } from 'react-icons/bi'
@@ -10,7 +12,7 @@ import { IconContext } from 'react-icons';
 import axios from 'axios';
 
 
-function SignUpForm() {
+function SignUpForm({ history, signup }) {
 
     const validationSchema = Yup.object().shape({
         name: Yup.string().required('fullname is required'),
@@ -36,12 +38,10 @@ function SignUpForm() {
             data.append('password', values.password);
             data.append('avatar', values.avatar);
 
-            const res = await axios.post('http://localhost:9000/api/route/user/register',
-                data);
-            console.log(res)
+            await signup(data, history);
+
         } catch (error) {
             console.log(error.message)
-
         }
 
 
@@ -137,6 +137,6 @@ function SignUpForm() {
     )
 }
 
-export default SignUpForm
+export default connect(null, { signup })(withRouter(SignUpForm))
 
 

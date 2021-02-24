@@ -20,8 +20,8 @@ const userReducer = (state = initState, { type, payload }) => {
             return {
                 ...state,
                 isLoading: false,
-                isAuthenticated: true,
-                currentUser: payload
+
+
             };
         case userActionTypes.LOG_IN_FAIL:
             return {
@@ -52,12 +52,24 @@ const userReducer = (state = initState, { type, payload }) => {
                     signOutError: payload
                 }
             };
-        case userActionTypes.LOG_IN_SUCCESS:
+
+        case userActionTypes.LOAD_USER_SUCCESS:
             return {
                 ...state,
                 isLoading: false,
-            }
+                isAuthenticated: true,
+                currentUser: payload
 
+            };
+        case userActionTypes.LOAD_USER_FAIL:
+            return {
+                ...state,
+                isLoading: false,
+                isAuthenticated: false,
+                authError: {
+                    loadUserError: payload
+                }
+            }
         default:
             return state;
     }
