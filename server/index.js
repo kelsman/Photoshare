@@ -28,7 +28,7 @@ connectDb();
 //load Api routes
 // app.use('/api/route/user', require('./api/routes/user'));
 app.use('/api/route/user', require('./api/routes/user'));
-
+app.use('/api/route/post', require('./api/routes/post'));
 //establish http server connections
 app.listen(Port, () => {
     return console.log(`server running on port ${Port}`);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './style.scss';
 import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
@@ -8,36 +8,36 @@ import { signin, loaduser } from '../../../redux/Actions/userActions'
 import { useFormik } from 'formik'
 import { AiOutlineLock, AiOutlineMail } from 'react-icons/ai'
 import { IconContext } from "react-icons";
-import cogoToast from 'cogo-toast';
+// import cogoToast from 'cogo-toast';
 
+// Routes 
+import * as Routes from '../../routes';
+
+import { useHistory } from 'react-router-dom';
 
 
 
 
 const validationSchema = Yup.object().shape({
     email: Yup.string().email().min(5).required('please provide a valid email'),
-    password: Yup.string().min(6, 'password must have at least 6 characters').required('required')
+    password: Yup.string().min(6, 'password must have at least 6 characters').required()
 });
-const LogInForm = ({ signin, loadUserError, loaduser }) => {
+const LogInForm = ({ signin }) => {
 
+    const history = useHistory();
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-
-    useEffect(() => {
-        if (localStorage.getItem) {
-            loaduser()
-        } else {
-            return () => null
-        }
-    }, [])
-
-    const [isSubmitting, setIsSubmitting] = useState(false)
     const handleFormSubmit = async (values) => {
         try {
+            setIsSubmitting(true)
             await signin(values);
-
+            setIsSubmitting(false)
+            history.push(Routes.Dashboard);
 
         } catch (error) {
-            console.log(error.message)
+            console.log(error.message);
+            values.email = "";
+            values.password = ""
         }
 
     }
@@ -94,9 +94,12 @@ const LogInForm = ({ signin, loadUserError, loaduser }) => {
                 {errors.password && <small style={{ color: "red", opacity: .7 }}> {errors.password}</small>}
                 <Link className="password-reset-link" to="/accounts/password/reset">Forgot your password? </Link>
 
-                <button type="submit" className="submit-btn">
-                    Log in
-                    </button>
+                <button
+                    type="submit"
+                    className="submit-btn"
+                    disabled={isSubmitting ? true : false}>
+                    {isSubmitting ? "Signing in.." : "Log in"}
+                </button>
 
 
 

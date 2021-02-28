@@ -5,7 +5,7 @@ const authMiddleWare = async (req, res, next) => {
 
     const token = req.header("x-auth-token");
     if (!token) {
-        res.status(401).json({ success: false, error: "you're not authorised" })
+        res.status(401).json({ success: false, msg: "you're not authorised" })
     };
     try {
         // verify the token
@@ -20,6 +20,7 @@ const authMiddleWare = async (req, res, next) => {
 
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ success: false, msg: error.message })
 
     }
 };

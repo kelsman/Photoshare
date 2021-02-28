@@ -1,9 +1,9 @@
-const { fail } = require('assert');
+
 const User = require('../models/User');
 const authSchema = require('../validation');
 const sendEmail = require('../utils/sendMail');
 const crypto = require('crypto');
-const multer = require('multer');
+
 
 const { cloudinary } = require('../utils/cloudinary');
 
@@ -23,11 +23,12 @@ exports.signUp = async (req, res, next) => {
         };
         //if user doesn't exist we validate the user inputs 
         await authSchema.validateAsync(req.body);
+
         //  upload to cloudinary
         const upload = await cloudinary.uploader.upload(req.file.path, {
             folder: "avatars",
             use_filename: true,
-            allowed_formats: ["jpeg", 'png',]
+            allowed_formats: ["jpeg", 'png', 'gif']
         });
         if (!upload) {
             return res.status(401).json({ success: false, msg: "error in saving profile-picture" })
