@@ -8,7 +8,7 @@ import { loaduser } from '../../redux/Actions/userActions';
 
 
 const token = localStorage.getItem('authToken');
-const HomeScreen = ({ loaduser }) => {
+const HomeScreen = ({ loaduser, currentUser }) => {
 
 
     const history = useHistory();
@@ -22,10 +22,13 @@ const HomeScreen = ({ loaduser }) => {
         return () => subscribe = null
     }, [])
 
-
     return (
         <div className="homeScreen">
             <SideMenu />
+            <div className="right-side">
+
+                {currentUser && currentUser.following.length ? <p> You have many followers </p> : <p>You're not following anybody</p>}
+            </div>
         </div>
     )
 

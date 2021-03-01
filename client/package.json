@@ -21,6 +21,7 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "sass": "^1.32.8",
+    "styled-components": "^5.2.1",
     "web-vitals": "^1.0.1",
     "yup": "^0.32.9"
   },

@@ -34,8 +34,21 @@ const userSchema = new mongoose.Schema({
         type: String,
     },
     cloudinary_id: String,
-    followers: [{ type: mongoose.Schema.Types.ObjectId }],
-    following: [{ type: mongoose.Schema.Types.ObjectId }],
+    followers: [
+        {
+            user: { type: mongoose.Schema.Types.ObjectId },
+            name: String,
+            avatar: String
+        }
+    ],
+    following: [
+        {
+            user: { type: mongoose.Schema.Types.ObjectId },
+            name: String,
+            avatar: String
+
+        }
+    ],
     resetPasswordToken: String,
     resetPasswordExpire: Date,
     DateCreated: {

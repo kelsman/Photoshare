@@ -97,7 +97,7 @@ exports.getUser = async (req, res, next) => {
     }
 };
 
-//@ delete an account 
+
 
 
 
@@ -169,5 +169,9 @@ exports.resetPassword = async (req, res, next) => {
 
     }
 }
+
+//@ delete an account 
+
+
 
 

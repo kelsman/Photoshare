@@ -1,4 +1,12 @@
-.homescreen {
+.homeScreen {
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: row;
+}
+.right-side{
+    border: 1px solid red;
+    width: 100%;
+    height: 100vh;
+    // padding : 0, 10px;
 }

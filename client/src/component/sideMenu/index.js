@@ -1,4 +1,4 @@
-import React, { Fragment, } from 'react';
+import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux'
 import './style.scss';
 import * as Icon from 'react-feather';
@@ -6,7 +6,7 @@ import * as Icon from 'react-feather';
 import { LogOut } from '../../redux/Actions/userActions';
 //linebreak component
 import { useHistory } from 'react-router-dom';
-
+import * as Routes from '../routes';
 const LineBreak = () => {
 
     return (
@@ -25,6 +25,7 @@ const SideMenu = ({ user, isLoading, currentUser, LogOut }) => {
 
 
     const [defaultSelected, setdefaultSelected] = React.useState(true);
+    const [clicked, setClicked] = useState(false)
 
     const history = useHistory();
 
@@ -75,7 +76,10 @@ const SideMenu = ({ user, isLoading, currentUser, LogOut }) => {
                                     <Icon.Menu className="menu-icon" color={defaultSelected ? "tomato" : "black"} />
                                     <h4> Feeds</h4>
                                 </li>
-                                <li>
+                                <li onClick={() => {
+                                    setClicked(true)
+                                    history.push(Routes.Explore)
+                                }}>
                                     <Icon.Search className="menu-icon" />
                                     <h4>Explore</h4>
                                 </li>

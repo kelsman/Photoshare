@@ -7,3 +7,6 @@ module.exports = authSchema = Joi.object({
     password: Joi.string().min(3)
 });
 
+
+
+
