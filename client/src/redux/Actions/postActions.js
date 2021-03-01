@@ -9,16 +9,15 @@ import * as Routes from '../../component/routes';
 const baseUrl = process.env.REACT_APP_BASE_URL || "http://localhost:9000"
 
 //  load explore posts 
-export const getPosts = () => {
+export const getPosts = (history) => {
     return async (dispatch) => {
         const token = localStorage.getItem('authToken');
 
         try {
             if (token) {
-                setToken(token)
+                await setToken(token)
             };
-
-            const response = await axios.get(`${baseUrl}/api/route/post/allPosts`);
+            const response = await axios.get(`/api/route/post/allPosts`);
             if (response) {
                 dispatch({ type: postActionTypes.GET_POSTS_SUCCESS, payload: response.data.posts })
                 console.log(response.data);
@@ -26,9 +25,13 @@ export const getPosts = () => {
 
         } catch (error) {
             if (error.response) {
-                console.log(error.message)
+                console.log(error.response.data)
                 await dispatch({ type: postActionTypes.GET_POSTS_FAIL, payload: error.response.data })
-                cogoToast.error(`${error.response.data.msg}`, { position: "top-right" })
+                if (error.response.data.msg === "jwt expired" || error.response.data.msg === `you're not authorised`) {
+                    localStorage.removeItem('authToken');
+                    history.push('/')
+                }
+                // cogoToast.error(`${error.response.data.msg}`, { position: "top-right" })
             }
         }
 

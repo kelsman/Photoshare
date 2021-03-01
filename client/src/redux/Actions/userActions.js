@@ -18,7 +18,7 @@ export const signup = (data, history) => {
                 }
             }
             cogoToast.loading('Registering....')
-            const response = await axios.post(`${baseUrl}/api/route/user/register`, config, data);
+            const response = await axios.post(`/api/route/user/register`, config, data);
             if (response) {
                 await dispatch({ type: userActionTypes.SIGN_UP_SUCESS, payload: response.data });
                 cogoToast.success('Register successfully');
@@ -43,7 +43,7 @@ export const signin = (data) => {
                     "Content-Type": "application/json"
                 }
             };
-            const response = await axios.post(`${baseUrl}/api/route/user/login`, data, config);
+            const response = await axios.post(`/api/route/user/login`, data, config);
             if (response) {
                 await dispatch({ type: userActionTypes.LOG_IN_SUCCESS, payload: response.data });
                 await localStorage.setItem('authToken', response.data.jwtToken);
@@ -65,7 +65,7 @@ export const loaduser = (history) => {
 
         try {
             if (token) { setToken(token) }
-            const response = await axios.get("http://localhost:9000/api/route/user/getUser");
+            const response = await axios.get("/api/route/user/getUser");
             if (response) {
                 await dispatch({ type: userActionTypes.LOAD_USER_SUCCESS, payload: response.data.user })
 

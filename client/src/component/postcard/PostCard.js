@@ -6,9 +6,14 @@ const Wrapper = styled.div`
     /* width:  270px; */
     min-height: 200px;
     max-height: 400px;
+    border: 1px solid orange;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center
 `
 const PostMedia = styled.embed`
-max-width: 100%;
+width: 100%;
 min-height: inherit;
 max-height: inherit;
 object-fit: cover;
@@ -63,7 +68,7 @@ const styles = {
 
 function PostCard({ key, date, media, likes, comments, postedBy }) {
     return (
-        <Wrapper>
+        <Wrapper className="post-wrapper">
             <PostMedia alt="post image" src={media} height="300px" autoplay />
             <BottomWrapper>
                 <div style={styles.bottomLeft}>

@@ -5,13 +5,15 @@ import PostCard from '../../component/postcard/PostCard';
 
 import { getPosts } from '../../redux/Actions/postActions'
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 const ExploreScreen = ({ getPosts, posts }) => {
 
+    const history = useHistory();
     useEffect(() => {
         let subscirbe = true;
         if (subscirbe) {
-            getPosts()
+            getPosts(history)
         }
         return () => subscirbe = null
     }, []);
@@ -43,7 +45,6 @@ const ExploreScreen = ({ getPosts, posts }) => {
                                 likes={likes}
                                 comments={comments}
                             />
-
                         </div>
 
 

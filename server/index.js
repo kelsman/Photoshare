@@ -16,6 +16,7 @@ app.use(cors());
 if (app.get('env') === "development") {
     app.use(morgan('dev'));
 }
+// data parsing
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
@@ -30,6 +31,10 @@ connectDb();
 app.use('/api/route/user', require('./api/routes/user'));
 app.use('/api/route/post', require('./api/routes/post'));
 //establish http server connections
+
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static('../client/build'))
+}
 app.listen(Port, () => {
     return console.log(`server running on port ${Port}`);
 });

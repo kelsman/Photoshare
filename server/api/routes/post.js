@@ -22,4 +22,5 @@ router.get('/myPosts', authMiddleWare, postController.getPosts);
 
 //  get all posts for explore page 
 router.get('/allPosts', authMiddleWare, postController.allPosts);
+
 module.exports = router;

@@ -87,7 +87,6 @@ const SideMenu = ({ user, isLoading, currentUser, LogOut }) => {
                                     <Icon.LogOut className="menu-icon" />
                                     <h4> Log out </h4>
                                 </li>
-
                             </ul>
                         </div>
 
