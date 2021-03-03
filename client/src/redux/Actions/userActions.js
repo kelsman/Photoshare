@@ -34,7 +34,7 @@ export const signup = (data, history) => {
     }
 };
 
-export const signin = (data) => {
+export const signin = (data, history) => {
     return async (dispatch) => {
 
         try {
@@ -48,11 +48,13 @@ export const signin = (data) => {
                 await dispatch({ type: userActionTypes.LOG_IN_SUCCESS, payload: response.data });
                 await localStorage.setItem('authToken', response.data.jwtToken);
                 await cogoToast.success('sign in success', { position: 'bottom-right' });
+                history.push(Routes.Dashboard);
 
             }
         } catch (error) {
             if (error.response) {
                 await dispatch({ type: userActionTypes.LOG_IN_FAIL, payload: error.response.data });
+                cogoToast.error(`${error.response.data.msg}`)
             }
         }
     }

@@ -6,7 +6,7 @@ import axios from 'axios';
 import cogoToast from 'cogo-toast';
 import * as Routes from '../../component/routes';
 
-const baseUrl = process.env.REACT_APP_BASE_URL || "http://localhost:9000"
+// const baseUrl = process.env.REACT_APP_BASE_URL || "http://localhost:9000"
 
 //  load explore posts 
 export const getPosts = (history) => {

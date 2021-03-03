@@ -1,0 +1,15 @@
+.icon__heart,.icon_search, .icon_heart{
+    cursor: pointer;
+    &:focus{
+        fill: black;
+    }
+}
+
+a{
+    text-decoration: none;
+    color: unset;
+}
+ion-icon {
+    font-size: 26;
+    fill: unset;
+  }

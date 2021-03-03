@@ -61,13 +61,13 @@ exports.signIn = async (req, res, next) => {
         //check if user exists 
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(404).json({ success: false, error: `user with ${email} doesn't exists` })
+            return res.status(404).json({ success: false, msg: `user with ${email} doesn't exists` })
         };
 
         // check if password matches 
         const isMatch = await user.matchPasswords(password);
         if (!isMatch) {
-            return res.status(404).json({ success: false, error: "Invalid Credentials" });
+            return res.status(404).json({ success: false, msg: "Invalid Credentials" });
         };
         // create a jwt token 
         const jwtToken = await user.generateToken();

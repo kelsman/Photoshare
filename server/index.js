@@ -33,7 +33,7 @@ app.use('/api/route/post', require('./api/routes/post'));
 //establish http server connections
 
 if (process.env.NODE_ENV === "production") {
-    app.use(express.static('../client/build'))
+    app.use(express.static(path.join(__dirname, '/build')))
 }
 app.listen(Port, () => {
     return console.log(`server running on port ${Port}`);

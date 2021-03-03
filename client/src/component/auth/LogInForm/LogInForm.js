@@ -19,8 +19,8 @@ import { useHistory } from 'react-router-dom';
 
 
 const validationSchema = Yup.object().shape({
-    email: Yup.string().email().min(5).required('please provide a valid email'),
-    password: Yup.string().min(6, 'password must have at least 6 characters').required()
+    email: Yup.string().email().required('please provide a valid email'),
+    password: Yup.string().required(`password can't be empty`)
 });
 const LogInForm = ({ signin }) => {
 
@@ -30,9 +30,9 @@ const LogInForm = ({ signin }) => {
     const handleFormSubmit = async (values) => {
         try {
             setIsSubmitting(true)
-            await signin(values);
+            await signin(values, history);
             setIsSubmitting(false)
-            history.push(Routes.Dashboard);
+            // history.push(Routes.Dashboard);
 
         } catch (error) {
             console.log(error.message);

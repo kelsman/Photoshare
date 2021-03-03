@@ -1,13 +1,18 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import './style.scss'
 import Header from '../../component/Header';
-import PostCard from '../../component/postcard/PostCard';
+import PostCard from '../../component/Explorepostcard/PostCard';
 
 import { getPosts } from '../../redux/Actions/postActions'
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import * as Routes from '../../component/routes';
 
-const ExploreScreen = ({ getPosts, posts }) => {
+import MobileTabMenu from '../../component/MobileTabMenu';
+import SearchBox from '../../component/SearchBox/SearchBox';
+
+
+const ExploreScreen = ({ getPosts, posts, location }) => {
 
     const history = useHistory();
     useEffect(() => {
@@ -16,43 +21,38 @@ const ExploreScreen = ({ getPosts, posts }) => {
             getPosts(history)
         }
         return () => subscirbe = null
-    }, []);
-
-    console.log(posts)
-
-
-
-
-
-
+    }, [getPosts]);
 
     return (
 
         <div className="container">
-            <Header />
-            <p> Explore </p>
-            <div className="posts-wrapper">
-                {posts && posts.length && posts.map((post) => {
-                    const { _id, date, postedBy, likes, comments, postMedia } = post;
-                    return (
-
-                        <div className="post-container" key={_id}>
-                            <PostCard
-                                id={_id}
-                                date={date}
-                                postedBy={postedBy}
-                                media={postMedia}
-                                likes={likes}
-                                comments={comments}
-                            />
-                        </div>
-
-
-                    )
-                })}
-
+            <section className="header-section">
+                <Header />
+            </section>
+            <div className="searchBox-wrapper_mobile" >
+                <SearchBox />
             </div>
 
+            <div className='posts-container'>
+                <div className="image-grid">
+                    {posts && posts.length && posts.map((post) => {
+
+                        return (
+                            <PostCard
+                                post={post}
+                                key={post._id}
+                            />
+
+
+                        )
+                    })}
+
+
+                </div>
+            </div>
+            <div className="menuTab-Wrapper">
+                <MobileTabMenu />
+            </div>
         </div>
     )
 };
