@@ -11,15 +11,17 @@ width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 2px;
+
+  
 `
 
 function PostCard({ post }) {
 
-
+    const history = useHistory();
     return (
-        <React.Fragment key={post._id} >
+        <React.Fragment >
 
-            <Media alt="" src={post.postMedia} />
+            <Media alt="" src={post.postMedia} onClick={() => history.push(Routes.PostPage + `/${post._id}`, { post })} />
 
 
             {/*     <BottomWrapper>

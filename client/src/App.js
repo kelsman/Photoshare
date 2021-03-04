@@ -13,6 +13,8 @@ import { useHistory } from 'react-router-dom';
 import * as Routes from './component/routes';
 import { loaduser } from './redux/Actions/userActions';
 import { connect } from 'react-redux'
+import PostPage from './screens/PostPage';
+import ErrorBoundary from './component/ErrorBounday';
 
 
 const token = localStorage.getItem('authToken')
@@ -31,11 +33,14 @@ function App({ loaduser }) {
 
     <div className="App">
       <Switch>
-        <Route exact path={Routes.Login} render={() => <LoginScreen />} />
-        <Route exact path={Routes.SignUp} render={() => <SignUpScreen />} />
-        <Route exact path={Routes.Dashboard} render={() => <HomeScreen />} />
-        <Route exact path={Routes.Explore} render={() => <ExploreScreen />} />
-        <Route exact path={Routes.ExplorePost} component={ExplorePost} />
+        <ErrorBoundary>
+          <Route exact path={Routes.Login} render={() => <LoginScreen />} />
+          <Route exact path={Routes.SignUp} render={() => <SignUpScreen />} />
+          <Route exact path={Routes.Dashboard} render={() => <HomeScreen />} />
+          <Route exact path={Routes.Explore} render={() => <ExploreScreen />} />
+          <Route exact path={Routes.ExplorePost} component={ExplorePost} />
+          <Route exact path={`${Routes.PostPage}/:postId`} component={PostPage} />
+        </ErrorBoundary>
         <Route component={Error404} />
       </Switch>
     </div>

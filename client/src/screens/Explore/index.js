@@ -2,14 +2,16 @@ import React, { useState, useEffect, Fragment } from 'react';
 import './style.scss'
 import Header from '../../component/Header';
 import PostCard from '../../component/Explorepostcard/PostCard';
+import MobileTabMenu from '../../component/MobileTabMenu';
+import SearchBox from '../../component/SearchBox/SearchBox';
 
 import { getPosts } from '../../redux/Actions/postActions'
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import * as Routes from '../../component/routes';
 
-import MobileTabMenu from '../../component/MobileTabMenu';
-import SearchBox from '../../component/SearchBox/SearchBox';
+
+import * as Routes from '../../component/routes';
+import { v4 as uuidv4 } from 'uuid';
 
 
 const ExploreScreen = ({ getPosts, posts, location }) => {
@@ -38,9 +40,10 @@ const ExploreScreen = ({ getPosts, posts, location }) => {
                     {posts && posts.length && posts.map((post) => {
 
                         return (
+
                             <PostCard
                                 post={post}
-                                key={post._id}
+                                key={uuidv4()}
                             />
 
 

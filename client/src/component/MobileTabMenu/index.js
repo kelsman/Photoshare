@@ -37,8 +37,12 @@ const MobileTabMenu = ({ user, }) => {
             <Link to={Routes.Explore}>
                 <Icon.Search className="icon__search" size={26} />
             </Link>
-
-            <Icon.PlusCircle className="icon__plus" size={26} />
+            <div>
+                <label htmlFor="file" style={{ cursor: "pointer" }}>
+                    <Icon.PlusCircle className="icon__plus" size={26} />
+                </label>
+                <input accept="image/*" type="file" id="file" style={{ display: "none" }} />
+            </div>
             <Icon.Heart className="icon__heart" fill={"black"} size={26} />
 
             {user && user.avatar && (
