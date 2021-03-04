@@ -1,11 +1,16 @@
 import React, { useEffect } from 'react'
-import { connect } from 'react-redux';
 import './style.scss';
-import { useHistory } from 'react-router-dom'
 
-import SideMenu from '../../component/sideMenu';
+import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom'
 import { loaduser } from '../../redux/Actions/userActions';
 
+import Header from '../../component/Header';
+import SideMenu from '../../component/sideMenu';
+import Menu from '../../component/MenuButtons';
+import NavigationHeader from '../../component/NavigationHeader';
+import SideBar from '../../component/SideBar';
+import Cards from '../../component/Cards';
 
 const token = localStorage.getItem('authToken');
 const HomeScreen = ({ loaduser, currentUser }) => {
@@ -24,11 +29,17 @@ const HomeScreen = ({ loaduser, currentUser }) => {
 
     return (
         <div className="homeScreen">
-            <SideMenu />
-            <div className="right-side">
+            {/*  the navigation Header */}
+            <NavigationHeader />
+            {/* main */}
+            <main>
+                <div className="container">
+                    <Cards />
+                    <SideBar />
+                </div>
 
-                {currentUser && currentUser.following.length ? <p> You have many followers </p> : <p>You're not following anybody</p>}
-            </div>
+            </main>
+
         </div>
     )
 

@@ -83,10 +83,11 @@ function PostPage() {
                         <section className="icon_section">
 
                             <Icon.Heart className="icon_section_icon" />
+
                             <Icon.MessageCircle className="icon_section_icon" />
                         </section>
-                        {likes && likes.length > 0 ?
-                            <p className="like_count"> {likes.length} likes</p>
+                        {likes && likes.length ?
+                            <p className="like_count"> {likes.length}likes</p>
                             : <p className="like_count">Be the first to <b>Like this</b></p>
                         }
                         <p className="post_date">{moment(date).format('MMMM DD')}</p>
@@ -114,6 +115,7 @@ function PostPage() {
                     <div className="new_post_comment">
                         <form onSubmit={(event) => event.preventDefault()}>
                             <input
+
                                 placeholder="Add a comment"
                                 type="text"
                                 name="comment"
@@ -128,9 +130,11 @@ function PostPage() {
                 </div>
             </section>
 
-            <div className="mobile_tab_menu" >
+            <div className="mobile_tab_menu">
                 <MobileTabMenu />
+
             </div>
+
         </div>
     )
 }

@@ -46,7 +46,9 @@ const MobileTabMenu = ({ user, }) => {
             <Icon.Heart className="icon__heart" fill={"black"} size={26} />
 
             {user && user.avatar && (
-                <img src={user.avatar} alt="avatar" width="26px" height="26px" />
+                <Link to={Routes.ProfilePage}>
+                    <img src={user.avatar} alt="avatar" width="26px" height="26px" />
+                </Link>
             )}
 
         </Wrapper>

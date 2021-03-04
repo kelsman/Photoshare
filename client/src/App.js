@@ -15,6 +15,7 @@ import { loaduser } from './redux/Actions/userActions';
 import { connect } from 'react-redux'
 import PostPage from './screens/PostPage';
 import ErrorBoundary from './component/ErrorBounday';
+import UserProfile from './screens/UserProfile';
 
 
 const token = localStorage.getItem('authToken')
@@ -40,6 +41,7 @@ function App({ loaduser }) {
           <Route exact path={Routes.Explore} render={() => <ExploreScreen />} />
           <Route exact path={Routes.ExplorePost} component={ExplorePost} />
           <Route exact path={`${Routes.PostPage}/:postId`} component={PostPage} />
+          <Route exact path={Routes.ProfilePage} component={UserProfile} />
         </ErrorBoundary>
         <Route component={Error404} />
       </Switch>
