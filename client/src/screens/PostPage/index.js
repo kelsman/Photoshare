@@ -25,6 +25,7 @@ function PostPage() {
             <section className="header">
                 <Header />
             </section>
+            {/* mobile header */}
             <section className="mobile_header">
                 <button onClick={() => history.goBack()}>
                     <Icon.ArrowLeft size={25} />
@@ -32,8 +33,8 @@ function PostPage() {
                 </button>
                 <h4> Post</h4>
             </section>
+            {/* end of mobile header */}
             <section className="main">
-                {/* mobile header */}
                 <div className="mobile_post_header">
                     <div className="poster">
 
@@ -44,7 +45,6 @@ function PostPage() {
                         </div>
                     </div>
                 </div>
-                {/* end of mobile header */}
                 <div className="image-wrapper">
                     <img src={postMedia} alt="image" />
                 </div>
@@ -127,13 +127,8 @@ function PostPage() {
                     </div>
                 </div>
             </section>
-            <div className="mobile_tab_menu" style={{
-                width: "100%",
-                position: "fixed",
-                bottom: "0px",
-                left: '0px',
-                zIndex: 4,
-            }}>
+
+            <div className="mobile_tab_menu" >
                 <MobileTabMenu />
             </div>
         </div>
@@ -141,7 +136,6 @@ function PostPage() {
 }
 
 export default PostPage
-
 
 
 
