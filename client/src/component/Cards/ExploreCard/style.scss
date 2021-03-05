@@ -1,0 +1,112 @@
+@import "../../../Sass/variables";
+
+.card {
+  border: 1px solid $border-color-grey;
+  background-color: $background-white;
+  margin-bottom: 3.5em;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75em;
+    height: 60px;
+
+    .profile {
+      margin-bottom: 0;
+    }
+
+    .cardButton {
+      height: 30px;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .cardImage {
+    width: 100%;
+    display: block;
+    height: 500px;
+    object-fit: cover;
+  }
+
+  .likedBy {
+    display: flex;
+    padding-left: 1em;
+
+    span {
+      font-size: 0.75em;
+      margin-left: 0.5em;
+      padding-top: 0.5em;
+    }
+  }
+
+  .comments {
+    margin-bottom: 0.75em;
+    height: 80%;
+    overflow-y: auto;
+  }
+
+  .timePosted {
+    font-size: 0.6em;
+    padding-left: 2.8em;
+    padding-bottom: 1em;
+    color: $font-color-secondary;
+    border-bottom: 1px solid $border-color-grey-secondary;
+  }
+
+  .newComment {
+    display: flex;
+    background: inherit;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;   
+    width: 100vw !important;
+    height: 60px;
+    border-top: 1px solid $border-color-grey;
+
+    font-size: 0.85em;
+    margin-top: auto;
+    
+    .commentText {
+      color: $font-color-primary;
+      width: 80%;
+      height: 100%;
+      padding-left: 3em;
+     
+    }
+
+    .postText-btn {
+        border: 0;
+        outline: 0;
+        cursor: pointer;
+        background: transparent;
+        margin: 0 10px;
+        color: $link-color-secondary;
+        font-weight: 900;
+      &:focus{
+          outline: 0;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 640px) {
+  .card {
+    border: none;
+    background-color: $background-grey;
+    margin-bottom: 0.75em;
+
+
+    .timePosted {
+      border: none;
+    }
+  }
+}

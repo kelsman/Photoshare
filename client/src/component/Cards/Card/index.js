@@ -25,10 +25,10 @@ function Card(props) {
             <CardMenu />
             <div className="likedBy">
                 <Profile iconSize="small" hideAccountName={true} />
-                <span>
+                {/*  <span>
                     Liked by <strong>{likedByText}</strong> and{" "}
                     <strong>{likedByNumber} others</strong>
-                </span>
+                </span> */}
             </div>
             <div className="comments">
                 {comments.map((comment) => {

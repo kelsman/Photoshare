@@ -2,7 +2,7 @@
 
 .post-page{
  min-width: fit-content;
-
+ min-height: 100%;
  
 }
 main{
@@ -108,4 +108,27 @@ main{
           outline: 0;
       }
     }
+  }
+  .mobile_post_content{
+    margin-top: 0px !important;
+    display: none;
+  }
+  @media screen and (max-width: 600px){
+
+    main{
+        width: 100%;
+        // margin-top: 0px !important;
+        // padding-top: 0px !important;
+        display: block;
+        padding-top: 0px;
+    }
+
+    .mobile_post_content{
+        width: 100%;
+        display: block;
+    }
+     .post_content{
+         display: none;
+     }    
+
   }

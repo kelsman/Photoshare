@@ -8,11 +8,12 @@ import CommentList from '../../component/CommentList';
 import Profile from '../../component/Profile';
 import CardMenu from '../../component/Cards/CardMenu';
 import MobileTabMenu from '../../component/MobileTabMenu';
-
+import Card from '../../component/Cards/Card'
 // external liberires
 import * as Icon from 'react-feather'
 import moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
+import ExploreMobileCard from '../../component/Cards/ExploreCard';
 
 function PostPage() {
 
@@ -39,6 +40,8 @@ function PostPage() {
                     <div className="post_image">
                         <img src={postMedia} alt="image" />
                     </div>
+
+
 
                     <div className="post_details">
                         <div className="profile">
@@ -88,6 +91,14 @@ function PostPage() {
                     </div>
 
                 </div>
+                <div className="mobile_post_content">
+                    <ExploreMobileCard
+                        likes={likes}
+                        comments={comments}
+                        image={postMedia}
+                        postedBy={postedBy}
+                    />
+                </div>
 
             </main>
 
@@ -96,7 +107,11 @@ function PostPage() {
 }
 
 export default PostPage
-
+//  image,
+// comments,
+// likedByText,
+// likedByNumber,
+// hours
 
 
 
