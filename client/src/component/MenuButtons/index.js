@@ -6,9 +6,9 @@ import './style.scss';
 import { useHistory } from 'react-router-dom';
 import * as Routes from '../routes'
 
-const history = useHistory()
 
 const Menu = () => {
+    const history = useHistory()
 
     return (
         <div className="menu">

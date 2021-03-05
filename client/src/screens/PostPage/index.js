@@ -1,17 +1,24 @@
 import React from 'react'
-import './style.scss'
-
+import './style.scss';
 import { useHistory } from 'react-router-dom';
-import Header from '../../component/Header';
-import * as Icon from 'react-feather'
 
-import moment from 'moment';
-import { v4 as uuidv4 } from 'uuid';
+// componnets
+import NavigationHeader from '../../component/NavigationHeader';
+import CommentList from '../../component/CommentList';
+import Profile from '../../component/Profile';
+import CardMenu from '../../component/Cards/CardMenu';
 import MobileTabMenu from '../../component/MobileTabMenu';
 
+// external liberires
+import * as Icon from 'react-feather'
+import moment from 'moment';
+import { v4 as uuidv4 } from 'uuid';
+
 function PostPage() {
+
     const history = useHistory();
-    const [comment, setComment] = React.useState('');
+
+    const [commentText, setCommentText] = React.useState('');
 
     const [post, setPost] = React.useState(history.location.state.post)
 
@@ -22,118 +29,67 @@ function PostPage() {
 
     return (
         <div className="post-page">
-            <section className="header">
-                <Header />
-            </section>
-            {/* mobile header */}
-            <section className="mobile_header">
-                <button onClick={() => history.goBack()}>
-                    <Icon.ArrowLeft size={25} />
+            <header>
+                <NavigationHeader />
+            </header>
 
-                </button>
-                <h4> Post</h4>
-            </section>
-            {/* end of mobile header */}
-            <section className="main">
-                <div className="mobile_post_header">
-                    <div className="poster">
+            <main>
+                <div className="post_content">
 
-                        <img src={postedBy.avatar} alt="" />
-                        <div className="right">
-                            <p>{postedBy.username}</p>
-                            <Icon.MoreVertical onClick={() => console.log('clicked')} />
+                    <div className="post_image">
+                        <img src={postMedia} alt="image" />
+                    </div>
+
+                    <div className="post_details">
+                        <div className="profile">
+                            <Profile image={postedBy.avatar} iconSize="medium" username={postedBy.username} />
+                            <Icon.MoreHorizontal className="more-icon" size={26} />
                         </div>
-                    </div>
-                </div>
-                <div className="image-wrapper">
-                    <img src={postMedia} alt="image" />
-                </div>
-                {/*  post owner details */}
-                <div className="post_details">
-                    <div className="poster">
-                        <section className="left">
-                            <img src={postedBy.avatar} alt="" />
-                            <p>{postedBy.username}</p>
-                        </section>
-                        <section className="right">
-                            <Icon.MoreVertical />
-                        </section>
-                    </div>
-                    {/* end of  post owner details */}
-                    {/* comment section */}
-                    <div className="comment-section">
-                        {
-                            comments && comments.length && comments.map((comment) => (
-                                <div key={uuidv4()} className="poster_container">
-                                    <div className="comment-section_poster">
-                                        <img src={postedBy.avatar} alt="" />
-                                        <p className="comment_name" >{comment.name}</p>
-                                        <p className="comment_text" > {comment.text}</p>
-                                    </div>
 
-                                    <small className="comment_date">
-                                        {moment(comment.date).fromNow()}
-                                    </small>
-                                </div>
-                            ))
-                        }
-                    </div>
-                    {/* like icon and like count section */}
-                    <div className="icons">
-                        <section className="icon_section">
+                        {/* comment section */}
+                        <div className="comment-section">
+                            {comments.map((comment) => (
+                                <CommentList
+                                    key={uuidv4()}
+                                    accountName={comment.name}
+                                    comment={comment.text}
+                                    commentImage={comment.avatar}
+                                    commentTime={comment.date}
+                                />
+                            ))}
 
-                            <Icon.Heart className="icon_section_icon" />
+                        </div>
 
-                            <Icon.MessageCircle className="icon_section_icon" />
-                        </section>
-                        {likes && likes.length ?
-                            <p className="like_count"> {likes.length}likes</p>
-                            : <p className="like_count">Be the first to <b>Like this</b></p>
-                        }
-                        <p className="post_date">{moment(date).format('MMMM DD')}</p>
+                        {/* icons*/}
+                        <div className="card_icon_menu">
+                            <div className="card-menu">
+                                <CardMenu />
+                            </div>
+                            {!likes.length ?
+                                <small className="like-title"> Be the first to <b>like this</b></small>
+                                :
+                                <small>{likes.length} Likes</small>
+                            }
 
-                    </div>
-                    {/* mobile screen comments section */}
-                    <div className="mobile_comment-section">
-                        {
-                            comments && comments.length && comments.map((comment) => (
-                                <div key={uuidv4()} className="poster_container">
-                                    <div className="comment-section_poster">
-                                        <img src={postedBy.avatar} alt="" />
-                                        <p className="comment_name" >{comment.name}</p>
-                                        <p className="comment_text" > {comment.text}</p>
-                                    </div>
 
-                                    <small className="comment_date">
-                                        {moment(comment.date).fromNow()}
-                                    </small>
-                                </div>
-                            ))
-                        }
-                    </div>
-                    {/* end of mobile screen comment section */}
-                    <div className="new_post_comment">
-                        <form onSubmit={(event) => event.preventDefault()}>
-                            <input
+                            <small className="post-date">
+                                {
+                                    moment(date).format('MMM D')
+                                }
+                            </small>
+                        </div>
 
-                                placeholder="Add a comment"
-                                type="text"
-                                name="comment"
-                                value={comment}
-                                onChange={(e) => setComment(e.target.value)}
-                            />
-                            <button disabled={!comment ? true : false} type="submit" className="post-btn">
-                                Post
-                            </button>
+                        {/*  add a comment form */}
+                        <form className="addComment" onSubmit={(e) => e.preventDefault()}>
+                            <input value={commentText} onChange={(e) => setCommentText(e.target.value)} type="text" placeholder="Add a comment..." className="commentText" />
+                            <button type="submit" className="postText-btn">Post</button>
                         </form>
+
                     </div>
+
                 </div>
-            </section>
 
-            <div className="mobile_tab_menu">
-                <MobileTabMenu />
-
-            </div>
+            </main>
 
         </div>
     )

@@ -3,6 +3,8 @@ import Sticky from 'react-sticky-el';
 import ProfileIcon from '../ProfileIcon';
 import './style.scss';
 import { connect } from 'react-redux';
+import Suggestions from '../SuggestionsFollow';
+import Footer from '../Footer';
 
 const SideBar = ({ user }) => {
     return (
@@ -16,17 +18,12 @@ const SideBar = ({ user }) => {
                         <span className="name">{user && user.name}</span>
                     </div>
                 </div>
-                {/* end of profile*/}
-
                 {/*  suggestions */}
+                <Suggestions />
 
-
-                {/* end of  suggestions */}
-
-
+                {/* Footer */}
+                <Footer />
             </div>
-
-
         </Sticky>
     )
 };

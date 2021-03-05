@@ -1,0 +1,16 @@
+@import '../../Sass/variables';
+
+
+.cards{
+    width: 600px;
+}
+@media screen and (max-width: 600px){
+    .cards{
+        width: 100%;
+    }
+}
+@media screen and (min-width: 768px){
+    .cards{
+        margin-top: 0.7em;
+    }
+}

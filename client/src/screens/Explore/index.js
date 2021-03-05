@@ -4,7 +4,7 @@ import Header from '../../component/Header';
 import PostCard from '../../component/Explorepostcard/PostCard';
 import MobileTabMenu from '../../component/MobileTabMenu';
 import SearchBox from '../../component/SearchBox/SearchBox';
-
+import NavigationHeader from '../../component/NavigationHeader';
 import { getPosts } from '../../redux/Actions/postActions'
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -29,7 +29,7 @@ const ExploreScreen = ({ getPosts, posts, location }) => {
 
         <div className="container">
             <section className="header-section">
-                <Header />
+                <NavigationHeader />
             </section>
             <div className="searchBox-wrapper_mobile" >
                 <SearchBox />
@@ -45,8 +45,6 @@ const ExploreScreen = ({ getPosts, posts, location }) => {
                                 post={post}
                                 key={uuidv4()}
                             />
-
-
                         )
                     })}
 

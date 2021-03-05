@@ -56,43 +56,46 @@ const LogInForm = ({ signin }) => {
     return (
 
         <div>
-            <h1 className="logo">Photogram</h1>
-
+            {/* <h1 className="logo">Photogram</h1> */}
             <form onSubmit={handleSubmit} className="login-form">
                 <h2> Log in</h2>
-                <div className="email-container">
-                    <IconContext.Provider value={{ className: "react-icons" }}>
-                        <AiOutlineMail />
-
-                    </IconContext.Provider>
-                    <input
-                        className="email-input"
-                        type="email"
-                        name="email"
-                        value={formik.values.email}
-                        onChange={handleChange}
-                        placeholder="email"
-                    />
+                <div>
+                    <div className="email-container">
+                        <IconContext.Provider value={{ className: "react-icons" }}>
+                            <AiOutlineMail />
+                        </IconContext.Provider>
+                        <input
+                            className="email-input"
+                            type="email"
+                            name="email"
+                            value={formik.values.email}
+                            onChange={handleChange}
+                            placeholder="email"
+                        />
+                    </div>
+                    {errors.email && <small className="error" style={{ color: "red", opacity: .7 }}> {errors.email}</small>}
                 </div>
-                {errors.email && <small style={{ color: "red", opacity: .7 }}> {errors.email}</small>}
+                <div>
+                    <div className="password-container">
+                        <IconContext.Provider value={{ className: "react-icons" }}>
+                            <AiOutlineLock />
+                        </IconContext.Provider>
+                        <input
+                            className="password-input"
+                            type="password"
+                            name="password"
+                            value={values.password}
+                            onChange={handleChange}
+                            placeholder="password"
+                        />
 
-                <div className="password-container">
-                    <IconContext.Provider value={{ className: "react-icons" }}>
-                        <AiOutlineLock />
-                    </IconContext.Provider>
-                    <input
-                        className="password-input"
-                        type="password"
-                        name="password"
-                        value={values.password}
-                        onChange={handleChange}
-                        placeholder="password"
-                    />
+
+                    </div>
+                    {errors.password && <small className="error" style={{ color: "red", opacity: .7 }}> {errors.password}</small>}
+
 
                 </div>
-
-                {errors.password && <small style={{ color: "red", opacity: .7 }}> {errors.password}</small>}
-                <Link className="password-reset-link" to="/accounts/password/reset">Forgot your password? </Link>
+                <Link className="password-reset-link reset-password" to="/accounts/password/reset">Forgot your password? </Link>
 
                 <button
                     type="submit"

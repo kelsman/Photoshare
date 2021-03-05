@@ -1,5 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Akaya+Telivigala&display=swap');
-
+div{
+    margin: 0;
+    padding: 0;
+}
 .logo{
     font-family: 'Akaya Telivigala', cursive;
     text-align: center;
@@ -11,11 +14,21 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-evenly;
+    // justify-content: space-evenly;
     width: 411px;
     height: 600px;
     background-color: #E5E5E5;
+    margin-top: 0.82em;
+    
   
+}
+.error{
+ 
+    margin-top: 0.82em;
+    max-width: 300px;
+    text-align: left;
+    display: block;
+    margin-left: 2em;
 }
 .email-container, .password-container{
     height: 48px;
@@ -29,7 +42,7 @@
     background-color: #F2F5FA;
     border: none;
     padding: 0 10px; 
-    margin: 16px 0;
+    // margin: 16px 0;
    
 
 }
@@ -59,14 +72,23 @@ input{
     color: blue;
     text-decoration: none;
     font-weight: 300;
-
+}
+.password-reset-link.reset-password{
+    color: blue;
+    text-decoration: none;
+    font-weight: 300;
+    display: block;
+    max-width: 300px;
+    margin: 0 auto;
+    text-align: right;
+   
 }
 
-@media screen and (min-width: 320px) and (max-width: 600px){
+@media screen and (max-width: 600px){
     .login-form{
         width: 98%;
         min-width: 300px;
-        max-width: 400px;
+        max-width: 350px;
 
     }
     .email-container, .password-container{

@@ -22,8 +22,6 @@ function PostCard({ post }) {
         <React.Fragment >
 
             <Media alt="" src={post.postMedia} onClick={() => history.push(Routes.PostPage + `/${post._id}`, { post })} />
-
-
             {/*     <BottomWrapper>
                 <div style={styles.bottomLeft}>
 
