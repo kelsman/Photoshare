@@ -4,6 +4,7 @@ import { ReactComponent as CardButton } from '../../../assets/cardButton.svg'
 import CardMenu from '../CardMenu';
 import CommentList from '../../CommentList';
 import Profile from '../../Profile';
+import moment from 'moment';
 
 
 function Card(props) {

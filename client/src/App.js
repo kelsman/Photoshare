@@ -17,6 +17,7 @@ import PostPage from './screens/PostPage';
 import ErrorBoundary from './component/ErrorBounday';
 // import UserProfile from './screens/UserProfile';
 
+import { connectSocket } from './services/socketService';
 
 const token = localStorage.getItem('authToken')
 
@@ -26,6 +27,7 @@ function App({ loaduser }) {
     if (subscribe) {
       if (token) {
         loaduser()
+        connectSocket()
       }
     }
     return () => subscribe = null;

@@ -95,16 +95,17 @@ exports.unlikePost = async (req, res, next) => {
 
 exports.commentPost = async (req, res, next) => {
 
-    const { comment } = req.body;
+    const { commentText } = req.body;
+    console.log(req.body)
     try {
-        if (!comment.length) {
-            return res.json({ msg: "please add a comment" })
+        if (!commentText) {
+            return res.status(401).json({ msg: "please add a comment text" })
         }
         const user = await User.findById(req.user.id).select("-password")
         const post = await Post.findById(req.params.id);
 
         const newComment = {
-            text: comment,
+            text: commentText,
             commentBy: req.user.id,
             avatar: user.avatar,
             name: user.username
@@ -112,11 +113,11 @@ exports.commentPost = async (req, res, next) => {
         };
 
         await post.comments.unshift(newComment);
-        post.save()
-        res.json(post.comments);
+        await post.save()
+        res.json({ msg: "comment success" });
     } catch (error) {
         console.log(error.message);
-        res.status(500).json({ success: false, msg: "server error" })
+        res.status(500).json({ success: false, msg: "server error", newComment })
         next(error)
     }
 

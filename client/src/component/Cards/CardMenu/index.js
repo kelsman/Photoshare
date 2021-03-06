@@ -6,13 +6,13 @@ import Bookmark from "../../../assets/bookmark.svg";
 import './style.scss';
 import * as Icon from 'react-feather'
 
-const CardMenu = () => {
+const CardMenu = ({ focus }) => {
     return (
         <div className="cardMenu">
             <div className="interactions">
 
                 <Icon.Heart className="icon" />
-                <Icon.MessageCircle className="icon" />
+                <Icon.MessageCircle className="icon" onClick={focus} />
                 <Icon.Share className="icon" />
             </div>
             <Icon.Bookmark className="icon" />

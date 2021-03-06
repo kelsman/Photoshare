@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom'
 import { loaduser } from '../../redux/Actions/userActions';
 
-import Header from '../../component/Header';
+// import Header from '../../component/Header';
 import SideMenu from '../../component/sideMenu';
 import Menu from '../../component/MenuButtons';
 import NavigationHeader from '../../component/NavigationHeader';

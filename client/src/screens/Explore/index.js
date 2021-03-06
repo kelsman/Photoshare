@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import './style.scss'
-import Header from '../../component/Header';
+// import Header from '../../component/Header';
 import PostCard from '../../component/Explorepostcard/PostCard';
 import MobileTabMenu from '../../component/MobileTabMenu';
 import SearchBox from '../../component/SearchBox/SearchBox';
