@@ -1,7 +1,7 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 
 import './style.scss';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 // componnets
 import NavigationHeader from '../../component/NavigationHeader';
@@ -16,39 +16,88 @@ import moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
 import ExploreMobileCard from '../../component/Cards/ExploreCard';
 
-import { commentPost } from '../../redux/Actions/postActions';
+import { commentPost, getPosts, getSinglePost } from '../../redux/Actions/postActions';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 
-function PostPage({ commentPost }) {
+function PostPage({ commentPost, socket, getPosts, userpost, getSinglePost, history }) {
 
-    const history = useHistory();
+    //    get postId from params
+    const { postId } = useParams();
 
+    //  states 
     const [commentText, setCommentText] = React.useState('');
+    const [isLoading, setIsLoading] = useState(true)
+    // const [comments, setComments] = useState(userpost.comments)
 
-    const [post, setPost] = React.useState(history.location.state.post)
+
+    // const [post, setPost] = React.useState(history.location.state.post);
     const inputRef = useRef()
 
     const focus = () => {
         inputRef.current.focus()
+    };
+    //  loading ref
+    const Loading = useRef(true)
+    // console.log(Loading)
+
+    useEffect(async () => {
+        let subscribe = true;
+        if (subscribe) {
+            try {
+                await getUserPost(postId)
+                setIsLoading(false)
+            } catch (error) {
+                console.log(error.message)
+            }
+
+        }
+        return () => subscribe = null;
+    }, [getSinglePost]);
+
+
+
+    //  @ functions 
+    const getUserPost = async (postId) => {
+        try {
+            await getSinglePost(postId)
+        } catch (error) {
+            console.log(error)
+        }
     };
 
     const handleCommentPost = async (event) => {
         event.preventDefault();
         console.info('submitting btn')
         try {
-            await commentPost(post._id, commentText);
-            // setCommentText('')
+            await commentPost(userpost._id, commentText, socket, history);
+            setCommentText('');
+
+
         } catch (error) {
-            console.log(error)
+            console.log(error.message)
         }
     }
-    // console.log(post);
-    const { location: { pathname, state } } = history;
-    const { avatar, postedBy, likes, date, postMedia, comments } = post;
 
+    // const { location: { pathname, state } } = history;
+
+    const handleCommentTextChange = (e) => {
+        setCommentText(e.target.value)
+    }
+
+    // if (Loading) {
+    //     return <p> Loading</p>
+    // }
+    // const { postedBy, likes, date, postMedia, comments } = userpost
+    console.log(userpost);
+    if (isLoading) {
+        return <p>Loading...</p>
+    }
     return (
         <div className="post-page">
+
+
             <header>
                 <NavigationHeader />
             </header>
@@ -57,17 +106,17 @@ function PostPage({ commentPost }) {
                 <div className="post_content">
 
                     <div className="post_image">
-                        <img src={postMedia} alt="image" />
+                        <img src={userpost.postMedia} alt="image" />
                     </div>
                     <div className="post_details">
                         <div className="profile">
-                            <Profile image={postedBy.avatar} iconSize="medium" username={postedBy.username} />
+                            <Profile image={userpost.postedBy.avatar} iconSize="medium" username={userpost.postedBy.username} />
                             <Icon.MoreHorizontal className="more-icon" size={26} />
                         </div>
 
                         {/* comment section */}
                         <div className="comment-section">
-                            {comments.map((comment) => (
+                            {userpost.comments.map((comment) => (
                                 <CommentList
                                     key={uuidv4()}
                                     accountName={comment.name}
@@ -84,16 +133,16 @@ function PostPage({ commentPost }) {
                             <div className="card-menu">
                                 <CardMenu focus={focus} />
                             </div>
-                            {!likes.length ?
+                            {!userpost.likes.length ?
                                 <small className="like-title"> Be the first to <b>like this</b></small>
                                 :
-                                <small>{likes.length} Likes</small>
+                                <small>{userpost.likes.length} Likes</small>
                             }
 
 
                             <small className="post-date">
                                 {
-                                    moment(date).format('MMM D')
+                                    moment(userpost.date).format('MMM D')
                                 }
                             </small>
                         </div>
@@ -103,7 +152,7 @@ function PostPage({ commentPost }) {
                             <input
                                 ref={inputRef}
                                 value={commentText}
-                                onChange={(e) => setCommentText(e.target.value)}
+                                onChange={handleCommentTextChange}
                                 type="text"
                                 placeholder="Add a comment..."
                                 className="commentText"
@@ -121,20 +170,32 @@ function PostPage({ commentPost }) {
                 </div>
                 <div className="mobile_post_content">
                     <ExploreMobileCard
-                        likes={likes}
-                        comments={comments}
-                        image={postMedia}
-                        postedBy={postedBy}
+                        likes={userpost.likes}
+                        comments={userpost.comments}
+                        image={userpost.postMedia}
+                        postedBy={userpost.postedBy}
+                        handleCommentPost={handleCommentPost}
+                        commenText={commentText}
+                        onChange={handleCommentTextChange}
                     />
                 </div>
 
             </main>
 
+
+
+
+
         </div>
     )
 }
-
-export default connect(null, { commentPost })(PostPage)
+const mapStateToProps = ({ socket, post }) => {
+    return {
+        socket: socket.socket,
+        userpost: post.post
+    }
+}
+export default connect(mapStateToProps, { commentPost, getPosts, getSinglePost })(withRouter(PostPage))
 //  image,
 // comments,
 // likedByText,

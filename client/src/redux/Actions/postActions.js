@@ -9,10 +9,13 @@ import * as Routes from '../../component/routes';
 const token = localStorage.getItem('authToken');
 
 const baseUrl = process.env.REACT_APP_BASE_URL || "http://localhost:9000"
+
+
+
 //  load explore posts 
 export const getPosts = (history) => {
     return async (dispatch) => {
-
+        const token = localStorage.getItem('authToken')
         try {
             if (token) {
                 await setToken(token)
@@ -20,7 +23,7 @@ export const getPosts = (history) => {
             const response = await axios.get(`/api/route/post/allPosts`);
             if (response) {
                 dispatch({ type: postActionTypes.GET_POSTS_SUCCESS, payload: response.data.posts })
-                console.log(response.data);
+                // console.log(response.data.msg);
             };
 
         } catch (error) {
@@ -39,7 +42,7 @@ export const getPosts = (history) => {
 }
 
 //  @comment on a post with a given post id passed as a param to the url
-export const commentPost = (postId, commentText) => {
+export const commentPost = (postId, commentText, socket, history) => {
     return async (dispatch) => {
         if (token) {
             await setToken(token)
@@ -51,21 +54,58 @@ export const commentPost = (postId, commentText) => {
                     "Content-Type": "application/json"
                 }
             }
+            console.log(`${postId}`)
             const response = await axios.post(`/api/route/post/comment/${postId}`, { commentText });
             if (response) {
-                dispatch({ type: postActionTypes.GET_POSTS_SUCCESS, payload: response.data.msg })
+                socket.on('addComment', (data) => {
+                    dispatch({ type: postActionTypes.COMMENT_POST_SUCCESS, payload: data })
+
+                })
                 console.log(response.data);
             };
 
         } catch (error) {
             if (error.response) {
                 console.log(error.response.data)
-                await dispatch({ type: postActionTypes.GET_POSTS_FAIL, payload: error.response.data })
+                await dispatch({ type: postActionTypes.COMMENT_POST_FAIL, payload: error.response.data.msg })
                 if (error.response.data.msg === "jwt expired" || error.response.data.msg === `you're not authorised`) {
                     localStorage.removeItem('authToken');
-
+                    history.push('/')
                 }
                 // cogoToast.error(`${error.response.data.msg}`, { position: "top-right" })
+            }
+        }
+    }
+}
+
+export const getSinglePost = (postId, history) => {
+
+    return async (dispatch) => {
+
+        if (token) {
+            await setToken(token)
+        };
+        const config = {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }
+        try {
+            const response = await axios.get(`/api/route/post/singlePost/${postId}`, config)
+            if (response) {
+                dispatch({ type: postActionTypes.GET_SINGLE_POST_SUCCESS, payload: response.data.msg })
+                // console.log(response.data.msg);
+            };
+
+        } catch (error) {
+            if (error.response) {
+                console.log(error.response.data)
+                await dispatch({ type: postActionTypes.GET_SINGLE_POST_FAIL, payload: error.response.data.msg })
+                if (error.response.data.msg === "jwt expired" || error.response.data.msg === `you're not authorised`) {
+                    localStorage.removeItem('authToken');
+                    history.push('/');
+
+                }
             }
         }
     }

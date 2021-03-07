@@ -5,7 +5,7 @@ var bodyParser = require('body-parser')
 const cors = require('cors')
 const connectDb = require('./db');
 const app = express();
-
+const jwt = require('jsonwebtoken')
 const socket = require('socket.io');
 
 const Port = process.env.Port || 9000
@@ -47,12 +47,31 @@ const server = app.listen(Port, () => {
 });
 
 const io = socket(server);
+app.set('socketio', io);
+// io.use((socket, next) => {
+//     const token = socket.handshake.auth.token;
+//     try {
 
+//         if (token) {
+//             const user = jwt.decode(token, process.env.JwtSecret)
+//             if (!user) {
+//                 return next(new Error('not authorised'))
+//             }
+//             socket.user = user;
+//             return next()
+//         }
+//     } catch (error) {
+//         next(error)
+//     }
+// });
 io.on('connection', (socket) => {
     console.log('made socket connection');
+
     socket.on('disconnect', () => {
         console.log('socket disconnected');
     })
+    return socket
 })
+
 
 

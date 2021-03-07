@@ -9,8 +9,8 @@ import moment from 'moment';
 
 const ExploreMobileCard = (props) => {
 
-    const { likes, comments, date, image, storyBorder, postedBy } = props;
-    const [commentText, setCommentText] = React.useState('');
+    const { likes, comments, date, image, storyBorder, postedBy, handleCommentPost, onChange, commentText } = props;
+    // const [commentText, setCommentText] = React.useState('');
 
     return (
         <div className="card">
@@ -43,8 +43,15 @@ const ExploreMobileCard = (props) => {
                 })}
             </div>
             <div className="timePosted"> {moment(date).format('MMM D')}</div>
-            <form className="newComment" onSubmit={(e) => e.preventDefault()}>
-                <input value={commentText} onChange={(e) => setCommentText(e.target.value)} type="text" placeholder="Add a comment..." className="commentText" />
+            <form className="newComment" onSubmit={handleCommentPost}>
+                <input
+                    value={commentText}
+                    onChange={onChange}
+                    type="text" placeholder="Add a comment..." className="commentText"
+                    name="commentText"
+                    autoComplete="false"
+                    autoCapitalize="false"
+                />
                 <button className="postText-btn">Post</button>
             </form>
         </div>

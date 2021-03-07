@@ -4,23 +4,26 @@ const postController = require('../../controllers/postController');
 const { upload } = require('../../utils/multer');
 const router = express.Router();
 
-// create a post
+// @create a post
 router.post('/createPost', [authMiddleWare, upload.single('postfile')], postController.createPost);
-// like a post
+// @like a post
 router.put('/likePost/:postid', authMiddleWare, postController.likePost);
-// unlike a post
+// @unlike a post
 router.put('/unlikePost/:id', authMiddleWare, postController.unlikePost);
-// comment on a post
-router.post('/comment/:id', authMiddleWare, postController.commentPost);
-// delete a comment
+// @comment on a post
+router.post('/comment/:postId', authMiddleWare, postController.commentPost);
+// @delete a comment
 router.put('/deleteComment/:id/:comment_id', authMiddleWare, postController.deleteComment);
-// delete a post
+// @delete a post
 router.delete('/deletePost/:id', authMiddleWare, postController.deletePost)
 
-//  get user posts 
+//  @get a single post by the post id
+router.get('/singlePost/:postId', authMiddleWare, postController.getSinglePost);
+
+//  @get user posts 
 router.get('/myPosts', authMiddleWare, postController.getPosts);
 
-//  get all posts for explore page 
+//  @get all posts for explore page 
 router.get('/allPosts', authMiddleWare, postController.allPosts);
 
 module.exports = router;

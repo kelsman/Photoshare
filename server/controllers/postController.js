@@ -63,6 +63,8 @@ exports.likePost = async (req, res, next) => {
 
 };
 
+// @ unlike a post
+
 exports.unlikePost = async (req, res, next) => {
     try {
         const post = await Post.findById(req.params.id);
@@ -91,33 +93,34 @@ exports.unlikePost = async (req, res, next) => {
     }
 };
 
-//  @comment a post 
-
+//  @comment on a post 
 exports.commentPost = async (req, res, next) => {
 
     const { commentText } = req.body;
-    console.log(req.body)
+    const socket = req.app.get('socketio');
+
     try {
         if (!commentText) {
             return res.status(401).json({ msg: "please add a comment text" })
         }
         const user = await User.findById(req.user.id).select("-password")
-        const post = await Post.findById(req.params.id);
+        const post = await Post.findById(req.params.postId);
 
         const newComment = {
             text: commentText,
             commentBy: req.user.id,
             avatar: user.avatar,
             name: user.username
-
         };
 
         await post.comments.unshift(newComment);
         await post.save()
-        res.json({ msg: "comment success" });
+        console.log(post)
+        socket.emit('addComment', post);
+        res.status(201).json({ msg: "comment success" });
     } catch (error) {
         console.log(error.message);
-        res.status(500).json({ success: false, msg: "server error", newComment })
+        res.status(500).json({ success: false, msg: error.message })
         next(error)
     }
 
@@ -194,6 +197,23 @@ exports.allPosts = async (req, res, next) => {
         next(eror)
     }
 };
+
+//  get  single post by the post id 
+
+exports.getSinglePost = async (req, res, next) => {
+
+    try {
+        const post = await Post.findById(req.params.postId).populate('postedBy', ["avatar", "username"]);
+        if (!post) {
+            return res.status(404).json({ success: false, msg: "post does not exist" })
+        }
+        res.status(200).json({ sucess: true, msg: post })
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).send('Server Error');
+        next(eror)
+    }
+}
 
 //  get posts by user
 exports.getPosts = async (req, res, next) => {

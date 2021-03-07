@@ -27,7 +27,7 @@ height: 50px;
 const MobileTabMenu = ({ user, }) => {
 
     const history = useHistory();
-    console.log(history);
+    // console.log(history);
     const { location } = history;
     return (
         <Wrapper>

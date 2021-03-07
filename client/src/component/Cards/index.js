@@ -1,11 +1,10 @@
 import React from 'react';
 import './style.scss';
 import Card from './Card';
-import { useHistory } from 'react-router-dom';
+// import { useHistory } from 'react-router-dom';
 
 const Cards = () => {
-    const history = useHistory();
-    console.log(history);
+
     const commentsOne = [
         {
             user: "raffagrassetti",

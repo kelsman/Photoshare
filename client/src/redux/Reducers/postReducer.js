@@ -1,8 +1,8 @@
 import * as postActionTypes from '../Constants/postConstants'
-
+import { updateComment } from '../Helpers';
 const initState = {
     isLoading: true,
-    post: [],
+    post: null,
     posts: null,
     myposts: [],
     error: {
@@ -31,21 +31,8 @@ const postReducer = (state = initState, { type, payload }) => {
                     getError: payload
                 }
             };
-        case postActionTypes.CREATE_POST_SUCCESS:
-            return {
-                ...state,
-                isLoading: false,
-                post: [payload, ...state.post]
-            };
-        case postActionTypes.CREATE_POST_FAIL:
 
-            return {
-                ...state,
-                isLoading: false,
-                error: {
-                    getError: payload
-                }
-            }
+
         case postActionTypes.LIKE_POST_SUCCESS:
             return {
                 ...state,
@@ -62,7 +49,8 @@ const postReducer = (state = initState, { type, payload }) => {
         case postActionTypes.COMMENT_POST_SUCCESS:
             return {
                 ...state,
-                isLoading: false
+                isLoading: false,
+                post: payload
             }
         case postActionTypes.COMMENT_POST_FAIL:
             return {
@@ -71,6 +59,12 @@ const postReducer = (state = initState, { type, payload }) => {
                 error: {
                     commentError: payload
                 }
+            }
+        case postActionTypes.GET_SINGLE_POST_SUCCESS:
+            return {
+                ...state,
+                isLoading: false,
+                post: payload
             }
         default:
             return state;

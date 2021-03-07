@@ -17,17 +17,17 @@ import PostPage from './screens/PostPage';
 import ErrorBoundary from './component/ErrorBounday';
 // import UserProfile from './screens/UserProfile';
 
-import { connectSocket } from './services/socketService';
+import { connectSocketIo } from './redux/Socket/socketActions'
 
 const token = localStorage.getItem('authToken')
 
-function App({ loaduser }) {
+function App({ loaduser, connectSocketIo }) {
   useEffect(() => {
     let subscribe = true;
     if (subscribe) {
       if (token) {
         loaduser()
-        connectSocket()
+        connectSocketIo()
       }
     }
     return () => subscribe = null;
@@ -51,4 +51,4 @@ function App({ loaduser }) {
   );
 }
 
-export default connect(null, { loaduser })(App);
+export default connect(null, { loaduser, connectSocketIo })(App);
