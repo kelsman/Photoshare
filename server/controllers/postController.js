@@ -49,7 +49,7 @@ exports.likePost = async (req, res, next) => {
             return like.likedBy.toString() === req.user.id.toString()
         })
         if (isLiked) {
-            return res.status(400).json({ msg: 'Post already liked' });
+            return res.status(400).json({ msg: 'You Liked this Post already' });
         }
         await post.likes.unshift({ likedBy: req.user.id });
         await post.save()
@@ -76,7 +76,7 @@ exports.unlikePost = async (req, res, next) => {
             return like.likedBy.toString() === req.user.id.toString()
         })
         if (!isLiked) {
-            return res.json({ success: false, msg: "You haven't liked this post" })
+            return res.status(400).json({ success: false, msg: `You haven't liked this Post` });
         };
         // remove the like from the post array
         post.likes = post.likes.filter((like) => {
@@ -85,7 +85,7 @@ exports.unlikePost = async (req, res, next) => {
         post.save((err) => {
             if (!err) {
                 socket.emit('unlikePost', post)
-                return res.status(201).json({ sucess: true, msg: "unliked success", post: post.likes })
+                return res.status(201).json({ sucess: true, msg: "unliked success" })
             }
 
         });
@@ -117,10 +117,10 @@ exports.commentPost = async (req, res, next) => {
             name: user.username
         };
 
-        await post.comments.unshift(newComment);
+        await post.comments.push(newComment);
         await post.save()
-        console.log(post)
         socket.emit('addComment', post);
+        console.log(post)
         res.status(201).json({ msg: "comment success" });
     } catch (error) {
         console.log(error.message);

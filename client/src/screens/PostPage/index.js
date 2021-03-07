@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 
 import './style.scss';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams, withRouter } from 'react-router-dom';
 
 // componnets
 import NavigationHeader from '../../component/NavigationHeader';
@@ -15,16 +15,15 @@ import Card from '../../component/Cards/Card'
 import * as Icon from 'react-feather'
 import moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
-import ExploreMobileCard from '../../component/Cards/ExploreCard';
+
 
 // redux imports
 import { commentPost, getPosts, getSinglePost, likePost, unLikePost } from '../../redux/Actions/postActions';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import { truncate } from 'fs';
 
 
-function PostPage({ commentPost, socket, getPosts, userpost, getSinglePost, history, likePost, unLikePost }) {
+
+function PostPage({ commentPost, socket, getPosts, user, userpost, getSinglePost, history, likePost, unLikePost }) {
 
     //    get postId from params
     const { postId } = useParams();
@@ -32,7 +31,7 @@ function PostPage({ commentPost, socket, getPosts, userpost, getSinglePost, hist
     //  states 
     const [commentText, setCommentText] = React.useState('');
     const [isLoading, setIsLoading] = useState(true);
-    const [isLikedButtonClicked, setIsLikedButtonClicked] = useState(false)
+    // const [isLikedButtonClicked, setIsLikedButtonClicked] = useState(false)
     const inputRef = useRef()
 
     const focus = () => {
@@ -58,10 +57,11 @@ function PostPage({ commentPost, socket, getPosts, userpost, getSinglePost, hist
 
     //  @ functions  all functions defined here
 
+
     const likeFunc = async () => {
         try {
             await likePost(userpost._id, socket, history)
-            setIsLikedButtonClicked(true)
+            // setIsLikedButtonClicked(true)
         } catch (error) {
             console.log(error)
         }
@@ -69,7 +69,7 @@ function PostPage({ commentPost, socket, getPosts, userpost, getSinglePost, hist
     const unlikeFunc = async () => {
         try {
             await unLikePost(userpost._id, socket, history)
-            setIsLikedButtonClicked(false)
+
 
         } catch (error) {
             console.error(error)
@@ -116,6 +116,7 @@ function PostPage({ commentPost, socket, getPosts, userpost, getSinglePost, hist
             <main>
                 <div className="post_content">
 
+
                     <div className="post_image">
                         <img src={userpost.postMedia} alt="image" />
                     </div>
@@ -142,7 +143,12 @@ function PostPage({ commentPost, socket, getPosts, userpost, getSinglePost, hist
                         {/* icons*/}
                         <div className="card_icon_menu">
                             <div className="card-menu">
-                                <CardMenu focus={focus} likeFunc={likeFunc} isLiked={isLikedButtonClicked} unlikeFunc={unlikeFunc} />
+                                <CardMenu
+                                    userpost={userpost}
+                                    focus={focus}
+                                    likeFunc={likeFunc}
+                                    // isLiked={isLikedButtonClicked}
+                                    unlikeFunc={unlikeFunc} />
                             </div>
                             {!userpost.likes.length ?
                                 <small className="like-title"> Be the first to <b>like this</b></small>
@@ -179,17 +185,7 @@ function PostPage({ commentPost, socket, getPosts, userpost, getSinglePost, hist
                     </div>
 
                 </div>
-                <div className="mobile_post_content">
-                    <ExploreMobileCard
-                        likes={userpost.likes}
-                        comments={userpost.comments}
-                        image={userpost.postMedia}
-                        postedBy={userpost.postedBy}
-                        handleCommentPost={handleCommentPost}
-                        commenText={commentText}
-                        onChange={handleCommentTextChange}
-                    />
-                </div>
+
 
             </main>
 
@@ -200,18 +196,16 @@ function PostPage({ commentPost, socket, getPosts, userpost, getSinglePost, hist
         </div>
     )
 }
-const mapStateToProps = ({ socket, post }) => {
+const mapStateToProps = ({ socket, post, user }) => {
     return {
         socket: socket.socket,
-        userpost: post.post
+        userpost: post.post,
+        user: user.currentUser
     }
 }
-export default connect(mapStateToProps, { commentPost, getPosts, getSinglePost, likePost, unLikePost })(withRouter(PostPage))
-//  image,
-// comments,
-// likedByText,
-// likedByNumber,
-// hours
+export default connect(mapStateToProps,
+    { commentPost, getPosts, getSinglePost, likePost, unLikePost }
+)(withRouter(PostPage))
 
 
 

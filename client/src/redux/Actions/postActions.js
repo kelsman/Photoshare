@@ -138,10 +138,12 @@ export const likePost = (postId, socket, history) => {
             if (error.response) {
                 console.log(error.response.data)
                 await dispatch({ type: postActionTypes.LIKE_POST_FAIL, payload: error.response.data.msg })
+                cogoToast.info(`${error.response.data.msg}`, { position: 'top-center' })
                 if (error.response.data.msg === "jwt expired" || error.response.data.msg === `you're not authorised`) {
                     localStorage.removeItem('authToken');
                     history.push('/');
                 }
+
             }
 
         }
@@ -175,7 +177,9 @@ export const unLikePost = (postId, socket, history) => {
         } catch (error) {
             if (error.response) {
                 console.log(error.response.data)
+
                 await dispatch({ type: postActionTypes.UNLIKE_POST_FAIL, payload: error.response.data.msg })
+                cogoToast.error(`${error.response.data.msg}`, { position: 'top-right' })
                 if (error.response.data.msg === "jwt expired" || error.response.data.msg === `you're not authorised`) {
                     localStorage.removeItem('authToken');
                     history.push('/');
