@@ -10,43 +10,41 @@ import Profile from '../../component/Profile';
 import CardMenu from '../../component/Cards/CardMenu';
 import MobileTabMenu from '../../component/MobileTabMenu';
 import Card from '../../component/Cards/Card'
+
 // external liberires
 import * as Icon from 'react-feather'
 import moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
 import ExploreMobileCard from '../../component/Cards/ExploreCard';
 
-import { commentPost, getPosts, getSinglePost } from '../../redux/Actions/postActions';
+// redux imports
+import { commentPost, getPosts, getSinglePost, likePost, unLikePost } from '../../redux/Actions/postActions';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { truncate } from 'fs';
 
 
-function PostPage({ commentPost, socket, getPosts, userpost, getSinglePost, history }) {
+function PostPage({ commentPost, socket, getPosts, userpost, getSinglePost, history, likePost, unLikePost }) {
 
     //    get postId from params
     const { postId } = useParams();
 
     //  states 
     const [commentText, setCommentText] = React.useState('');
-    const [isLoading, setIsLoading] = useState(true)
-    // const [comments, setComments] = useState(userpost.comments)
-
-
-    // const [post, setPost] = React.useState(history.location.state.post);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isLikedButtonClicked, setIsLikedButtonClicked] = useState(false)
     const inputRef = useRef()
 
     const focus = () => {
         inputRef.current.focus()
     };
-    //  loading ref
-    const Loading = useRef(true)
-    // console.log(Loading)
+
 
     useEffect(async () => {
         let subscribe = true;
         if (subscribe) {
             try {
-                await getUserPost(postId)
+                await getSinglePost(postId)
                 setIsLoading(false)
             } catch (error) {
                 console.log(error.message)
@@ -58,14 +56,32 @@ function PostPage({ commentPost, socket, getPosts, userpost, getSinglePost, hist
 
 
 
-    //  @ functions 
-    const getUserPost = async (postId) => {
+    //  @ functions  all functions defined here
+
+    const likeFunc = async () => {
         try {
-            await getSinglePost(postId)
+            await likePost(userpost._id, socket, history)
+            setIsLikedButtonClicked(true)
         } catch (error) {
             console.log(error)
         }
-    };
+    }
+    const unlikeFunc = async () => {
+        try {
+            await unLikePost(userpost._id, socket, history)
+            setIsLikedButtonClicked(false)
+
+        } catch (error) {
+            console.error(error)
+        }
+    }
+    // const getUserPost = async (postId) => {
+    //     try {
+    //         await getSinglePost(postId)
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // };
 
     const handleCommentPost = async (event) => {
         event.preventDefault();
@@ -86,11 +102,6 @@ function PostPage({ commentPost, socket, getPosts, userpost, getSinglePost, hist
         setCommentText(e.target.value)
     }
 
-    // if (Loading) {
-    //     return <p> Loading</p>
-    // }
-    // const { postedBy, likes, date, postMedia, comments } = userpost
-    console.log(userpost);
     if (isLoading) {
         return <p>Loading...</p>
     }
@@ -131,7 +142,7 @@ function PostPage({ commentPost, socket, getPosts, userpost, getSinglePost, hist
                         {/* icons*/}
                         <div className="card_icon_menu">
                             <div className="card-menu">
-                                <CardMenu focus={focus} />
+                                <CardMenu focus={focus} likeFunc={likeFunc} isLiked={isLikedButtonClicked} unlikeFunc={unlikeFunc} />
                             </div>
                             {!userpost.likes.length ?
                                 <small className="like-title"> Be the first to <b>like this</b></small>
@@ -195,7 +206,7 @@ const mapStateToProps = ({ socket, post }) => {
         userpost: post.post
     }
 }
-export default connect(mapStateToProps, { commentPost, getPosts, getSinglePost })(withRouter(PostPage))
+export default connect(mapStateToProps, { commentPost, getPosts, getSinglePost, likePost, unLikePost })(withRouter(PostPage))
 //  image,
 // comments,
 // likedByText,

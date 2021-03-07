@@ -36,7 +36,8 @@ const postReducer = (state = initState, { type, payload }) => {
         case postActionTypes.LIKE_POST_SUCCESS:
             return {
                 ...state,
-                isLoading: false
+                isLoading: false,
+                post: payload
             }
         case postActionTypes.LIKE_POST_FAIL:
             return {
@@ -59,6 +60,19 @@ const postReducer = (state = initState, { type, payload }) => {
                 error: {
                     commentError: payload
                 }
+            }
+        case postActionTypes.UNLIKE_POST_SUCCESS:
+            return {
+                ...state,
+                isLoading: false,
+                post: payload
+
+            }
+        case postActionTypes.UNLIKE_POST_FAIL:
+            return {
+                ...state,
+                isLoading: false,
+                error: payload
             }
         case postActionTypes.GET_SINGLE_POST_SUCCESS:
             return {

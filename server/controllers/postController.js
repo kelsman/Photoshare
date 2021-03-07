@@ -38,7 +38,7 @@ exports.createPost = async (req, res, next) => {
 }
 // @ like a post 
 exports.likePost = async (req, res, next) => {
-
+    const socket = req.app.get('socketio');
     try {
         // find the post 
         const post = await Post.findById(req.params.postid)
@@ -53,7 +53,8 @@ exports.likePost = async (req, res, next) => {
         }
         await post.likes.unshift({ likedBy: req.user.id });
         await post.save()
-        return res.json(post.likes);
+        socket.emit('likePost', post)
+        return res.status(201).json({ msg: "liked" });
 
     } catch (error) {
         console.log(error.message)
@@ -66,6 +67,7 @@ exports.likePost = async (req, res, next) => {
 // @ unlike a post
 
 exports.unlikePost = async (req, res, next) => {
+    const socket = req.app.get('socketio');
     try {
         const post = await Post.findById(req.params.id);
 
@@ -82,8 +84,10 @@ exports.unlikePost = async (req, res, next) => {
         });
         post.save((err) => {
             if (!err) {
+                socket.emit('unlikePost', post)
                 return res.status(201).json({ sucess: true, msg: "unliked success", post: post.likes })
             }
+
         });
 
     } catch (error) {

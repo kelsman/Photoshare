@@ -54,7 +54,6 @@ export const commentPost = (postId, commentText, socket, history) => {
                     "Content-Type": "application/json"
                 }
             }
-            console.log(`${postId}`)
             const response = await axios.post(`/api/route/post/comment/${postId}`, { commentText });
             if (response) {
                 socket.on('addComment', (data) => {
@@ -108,5 +107,82 @@ export const getSinglePost = (postId, history) => {
                 }
             }
         }
+    }
+}
+
+//  like a post 
+
+export const likePost = (postId, socket, history) => {
+
+    return async (dispatch) => {
+
+        const token = localStorage.getItem('authToken');
+
+        const config = {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }
+        if (token) {
+            await setToken(token)
+        };
+        try {
+            const response = await axios.put(`/api/route/post/likePost/${postId}`, config);
+            if (response) {
+                socket.on('likePost', (data) => {
+                    dispatch({ type: postActionTypes.LIKE_POST_SUCCESS, payload: data })
+                });
+                console.log(response.data);
+            }
+        } catch (error) {
+            if (error.response) {
+                console.log(error.response.data)
+                await dispatch({ type: postActionTypes.LIKE_POST_FAIL, payload: error.response.data.msg })
+                if (error.response.data.msg === "jwt expired" || error.response.data.msg === `you're not authorised`) {
+                    localStorage.removeItem('authToken');
+                    history.push('/');
+                }
+            }
+
+        }
+
+    }
+
+}
+//  unlike a post function
+
+export const unLikePost = (postId, socket, history) => {
+    return async (dispatch) => {
+
+        const token = localStorage.getItem('authToken');
+
+        const config = {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }
+        if (token) {
+            await setToken(token)
+        };
+        try {
+            const response = await axios.put(`/api/route/post/unlikePost/${postId}`, config);
+            if (response) {
+                socket.on('unlikePost', (data) => {
+                    dispatch({ type: postActionTypes.UNLIKE_POST_SUCCESS, payload: data })
+                });
+                console.log(response.data);
+            }
+        } catch (error) {
+            if (error.response) {
+                console.log(error.response.data)
+                await dispatch({ type: postActionTypes.UNLIKE_POST_FAIL, payload: error.response.data.msg })
+                if (error.response.data.msg === "jwt expired" || error.response.data.msg === `you're not authorised`) {
+                    localStorage.removeItem('authToken');
+                    history.push('/');
+                }
+            }
+
+        }
+
     }
 }
