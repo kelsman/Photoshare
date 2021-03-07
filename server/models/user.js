@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: [true, "please enter a username"],
         minlength: 3,
+        unique: true,
     },
     email: {
         type: String,
@@ -35,16 +36,17 @@ const userSchema = new mongoose.Schema({
     },
     cloudinary_id: String,
     followers: [
+
         {
-            user: { type: mongoose.Schema.Types.ObjectId },
-            name: String,
+            user: { type: mongoose.Schema.Types.ObjectId, ref: "Users" },
+            username: String,
             avatar: String
         }
     ],
     following: [
         {
-            user: { type: mongoose.Schema.Types.ObjectId },
-            name: String,
+            user: { type: mongoose.Schema.Types.ObjectId, ref: "Users" },
+            username: String,
             avatar: String
 
         }

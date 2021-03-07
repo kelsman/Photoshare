@@ -131,7 +131,6 @@ exports.commentPost = async (req, res, next) => {
 };
 
 //  delete a comment 
-
 exports.deleteComment = async (req, res, next) => {
 
     try {
@@ -184,12 +183,12 @@ exports.deletePost = async (req, res, next) => {
 }
 
 //  get posts for explore 
-
 exports.allPosts = async (req, res, next) => {
 
     try {
-        const posts = await Post.find().sort({ date: -1 }).populate('postedBy', ["avatar", "username"]).select('-cloudinary_id')
+        // const posts = await Post.find().sort({ date: -1 }).populate('postedBy', ["avatar", "username"]).select('-cloudinary_id')
 
+        const posts = await Post.find().where('random').populate('postedBy', ["avatar", "username"]).select('-cloudinary_id')
         if (!posts) {
             return res.status(404).json({ msg: 'Post not found' });
         };

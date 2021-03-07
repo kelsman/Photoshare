@@ -170,8 +170,88 @@ exports.resetPassword = async (req, res, next) => {
     }
 }
 
-//@ delete an account 
+//  follow a user 
+exports.followUser = async (req, res, next) => {
+    try {
 
+        const follower = await User.findById(req.user.id);
+        // console.log(follower);
+        // user to be followed
+        const user = await User.findById(req.params.id);
+        console.log(user)
+        if (!user) {
+            return res.status(404).json({ msg: "this user does not exist" })
+        };
+        // check if user is following
+        const isFollowing = user.followers.some((follower) => {
+            return follower.user.toString() === req.user.id.toString()
+        });
+        if (isFollowing) {
+            return res.status(400).json({ sucess: false, msg: "youre following this user already" })
+        };
+        const newFollower = {
+            user: req.user.id,
+            avatar: follower.avatar,
+            username: follower.username
+        }
+        const newFollowing = {
+            user: user._id,
+            avatar: user.avatar,
+            username: user.username
+        }
+        await user.followers.push(newFollower);
+        await follower.following.push(newFollowing);
+
+        await user.save();
+        await follower.save();
+
+
+        res.status(201).json({ msg: "follow success" });
+    } catch (error) {
+        console.log(error.message)
+        return res.status(500).json({ msg: error });
+        next(err)
+    }
+
+}
+exports.unFollowUser = async (req, res, next) => {
+    try {
+        //  user who wants to unfollow 
+        const unfollower = await User.findById(req.user.id);
+        // user to be unfollowed
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).json({ msg: "this user does not exist" })
+        };
+        // check if user is beig followed
+        const isFollowing = user.followers.some((follower) => {
+            return follower.user.toString() === unfollower._id.toString()
+        });
+        if (!isFollowing) {
+            return res.status(400).json({ success: false, msg: "you're not following this user" })
+        }
+
+        user.followers = user.followers.filter((follower) => {
+            return follower.user.toString() !== req.user.id.toString()
+        });
+        //  save changes to followers list 
+
+        //  we nedd to save chnages to unfollowers following 
+        unfollower.following = unfollower.following.filter((following) => {
+            following.user.toString() !== user._id.toString()
+        })
+        await user.save();
+        await unfollower.save();
+
+        res.status(200).json({ success: true, msg: "unfollow success" });
+
+
+    } catch (error) {
+        console.log(error.message)
+        return res.status(500).json({ msg: 'server error' });
+        next(err)
+    }
+}
 
 
 

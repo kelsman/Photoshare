@@ -7,7 +7,7 @@ import { useHistory, useParams, withRouter } from 'react-router-dom';
 import NavigationHeader from '../../component/NavigationHeader';
 import CommentList from '../../component/CommentList';
 import Profile from '../../component/Profile';
-import CardMenu from '../../component/Cards/CardMenu';
+import ExploreCardMenu from '../../component/ExplorePostCardMenu';
 import MobileTabMenu from '../../component/MobileTabMenu';
 import Card from '../../component/Cards/Card'
 
@@ -143,7 +143,7 @@ function PostPage({ commentPost, socket, getPosts, user, userpost, getSinglePost
                         {/* icons*/}
                         <div className="card_icon_menu">
                             <div className="card-menu">
-                                <CardMenu
+                                <ExploreCardMenu
                                     userpost={userpost}
                                     focus={focus}
                                     likeFunc={likeFunc}
