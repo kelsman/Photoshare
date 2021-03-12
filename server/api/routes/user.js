@@ -14,7 +14,7 @@ router.get('/getUser', authMiddleWare, authController.getUser);
 router.post('/forgetpassword', authController.forgetPassword);
 router.put('/resetpassword/:resetToken', authController.resetPassword);
 //  follow a user
-router.post('/follow/:id', authMiddleWare, authController.followUser);
+router.post('/follow/:userid', authMiddleWare, authController.followUser);
 //  unfollow a user
-router.post('/unfollow/:id', authMiddleWare, authController.unFollowUser)
+router.post('/unfollow/:userid', authMiddleWare, authController.unFollowUser)
 module.exports = router;

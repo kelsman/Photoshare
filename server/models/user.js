@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        reuired: [true, "please provide an email "],
+        required: [true, "please provide an email "],
         unique: true,
         trim: true,
         minlength: 5,
@@ -35,22 +35,6 @@ const userSchema = new mongoose.Schema({
         type: String,
     },
     cloudinary_id: String,
-    followers: [
-
-        {
-            user: { type: mongoose.Schema.Types.ObjectId, ref: "Users" },
-            username: String,
-            avatar: String
-        }
-    ],
-    following: [
-        {
-            user: { type: mongoose.Schema.Types.ObjectId, ref: "Users" },
-            username: String,
-            avatar: String
-
-        }
-    ],
     resetPasswordToken: String,
     resetPasswordExpire: Date,
     DateCreated: {

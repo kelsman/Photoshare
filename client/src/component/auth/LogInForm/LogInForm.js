@@ -15,13 +15,12 @@ import * as Routes from '../../routes';
 
 import { useHistory } from 'react-router-dom';
 
-
-
-
 const validationSchema = Yup.object().shape({
     email: Yup.string().email().required('please provide a valid email'),
     password: Yup.string().required(`password can't be empty`)
 });
+
+
 const LogInForm = ({ signin }) => {
 
     const history = useHistory();

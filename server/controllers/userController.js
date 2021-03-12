@@ -3,8 +3,11 @@ const User = require('../models/User');
 const authSchema = require('../validation');
 const sendEmail = require('../utils/sendMail');
 const crypto = require('crypto');
+const Following = require('../models/Following')
+const Followers = require('../models/Follower');
+const mongoose = require('mongoose')
 
-
+const ObjectId = mongoose.Schema.Types.ObjectId
 const { cloudinary } = require('../utils/cloudinary');
 
 
@@ -23,6 +26,9 @@ exports.signUp = async (req, res, next) => {
         };
         //if user doesn't exist we validate the user inputs 
         await authSchema.validateAsync(req.body);
+
+
+
 
         //  upload to cloudinary
         const upload = await cloudinary.uploader.upload(req.file.path, {
@@ -48,6 +54,7 @@ exports.signUp = async (req, res, next) => {
 
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ success: false, msg: "server error" })
         next(error);
     }
 
@@ -61,7 +68,7 @@ exports.signIn = async (req, res, next) => {
         //check if user exists 
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(404).json({ success: false, msg: `user with ${email} doesn't exists` })
+            return res.status(404).json({ success: false, msg: 'invalid credentials' })
         };
 
         // check if password matches 
@@ -173,79 +180,121 @@ exports.resetPassword = async (req, res, next) => {
 //  follow a user 
 exports.followUser = async (req, res, next) => {
     try {
+        const user = await User.findById(req.user.id);
+        //  get the user to be followed
+        const followUser = await User.findById(req.params.userid)
 
-        const follower = await User.findById(req.user.id);
-        // console.log(follower);
-        // user to be followed
-        const user = await User.findById(req.params.id);
-        console.log(user)
-        if (!user) {
+        if (!followUser) {
             return res.status(404).json({ msg: "this user does not exist" })
-        };
-        // check if user is following
-        const isFollowing = user.followers.some((follower) => {
-            return follower.user.toString() === req.user.id.toString()
-        });
+        }
+        if (user._id == followUser._user) {
+            return res.send("sorry u can't follow youself")
+        }
+
+        const isFollowing = await Following.findOne(
+            { $and: [{ _user: req.user.id }, { _following: { $elemMatch: { user: req.params.userid } } }] }
+        )
         if (isFollowing) {
-            return res.status(400).json({ sucess: false, msg: "youre following this user already" })
-        };
-        const newFollower = {
-            user: req.user.id,
-            avatar: follower.avatar,
-            username: follower.username
+            return res.status(400).json({ msg: "you follow this user already" })
         }
-        const newFollowing = {
-            user: user._id,
-            avatar: user.avatar,
-            username: user.username
-        }
-        await user.followers.push(newFollower);
-        await follower.following.push(newFollowing);
-
-        await user.save();
-        await follower.save();
 
 
+        await Following.updateOne(
+            { _user: req.user.id },
+            {
+
+                $push: {
+
+                    _following: {
+                        user: followUser._id,
+                        username: followUser.username,
+                        avatar: followUser.avatar
+                    }
+                }
+
+            },
+            { upsert: true, new: true }
+        ).exec()
+
+        //  update the followeduser follower model
+
+        await Followers.updateOne(
+            { _user: followUser._id },
+            {
+                $push: {
+                    _followers: {
+                        user: req.user.id,
+                        avatar: user.avatar,
+                        username: user.username
+                    }
+                }
+
+            },
+            { upsert: true, new: true }
+        ).exec();
         res.status(201).json({ msg: "follow success" });
     } catch (error) {
         console.log(error.message)
-        return res.status(500).json({ msg: error });
+        return res.status(500).json({ msg: error.message });
         next(err)
     }
 
 }
 exports.unFollowUser = async (req, res, next) => {
+
     try {
-        //  user who wants to unfollow 
-        const unfollower = await User.findById(req.user.id);
-        // user to be unfollowed
-        const user = await User.findById(req.params.id);
-        if (!user) {
-            return res.status(404).json({ msg: "this user does not exist" })
-        };
-        // check if user is beig followed
-        const isFollowing = user.followers.some((follower) => {
-            return follower.user.toString() === unfollower._id.toString()
-        });
-        if (!isFollowing) {
-            return res.status(400).json({ success: false, msg: "you're not following this user" })
+
+        //  **  logged in user
+        const user = await User.findById(req.user.id);
+        const userToUnfollow = await User.findById(req.params.userid);
+        //  ensure user can't unfollow himself 
+        if (user._id == userToUnfollow._user) {
+            return res.send("sorry u can't unfollow youself")
         }
+        //  check if userToUnfollow is followed by user
+        const isFollowing = await Following.findOne(
+            { $and: [{ _user: req.user.id }, { _following: { $elemMatch: { user: req.params.userid } } }] }
+        )
+        if (!isFollowing) {
+            return res.status(400).json({ msg: "not following this user" })
+        }
+        // if following, remove usertoUnfollow from the following list
 
-        user.followers = user.followers.filter((follower) => {
-            return follower.user.toString() !== req.user.id.toString()
-        });
-        //  save changes to followers list 
+        await Following.updateOne(
+            { _user: req.user.id },
 
-        //  we nedd to save chnages to unfollowers following 
-        unfollower.following = unfollower.following.filter((following) => {
-            following.user.toString() !== user._id.toString()
-        })
-        await user.save();
-        await unfollower.save();
+            {
+                $pull: {
+                    _following: {
+                        user: userToUnfollow._id,
+                        username: userToUnfollow.username,
+                        avatar: userToUnfollow.avatar
+                    }
+                }
+            },
+            { new: true }
+        );
+        //  update the userToUnfollow followers list 
 
-        res.status(200).json({ success: true, msg: "unfollow success" });
+        await Followers.updateOne(
+            { _user: userToUnfollow._id },
+            {
+                $pull: {
+                    _followers: {
+                        user: req.user.id,
+                        avatar: user.avatar,
+                        username: user.username
+                    }
+                }
+            },
+            { new: true }
+        );
 
 
+
+
+        return res.send("unfollow success");
+        // return res.status(200).json({ success: true, msg: "unfollow user success" })
     } catch (error) {
         console.log(error.message)
         return res.status(500).json({ msg: 'server error' });

@@ -3,26 +3,27 @@ const mongoose = require('mongoose');
 const nototificationSchema = new mongoose.Schema({
     sender: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: Users,
+        ref: "Users",
     },
     receiver: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: Users,
+        ref: "Users"
     },
     notificationType: {
         type: String,
         enum: ["follow", 'like', 'comment',]
     },
-    date: {
+    dateAdded: {
         type: Date
     },
-    notificationData: {
+    metaData: {
         type: Object
     },
-    read: {
+    seen: {
         type: Boolean,
         default: false,
     },
+
 });
 
 module.exports = Notification = mongoose.model('Notifications', nototificationSchema);

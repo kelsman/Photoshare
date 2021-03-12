@@ -8,34 +8,15 @@ const postSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Users"
     },
-    caption: String,
+    caption: {
+        type: String
+    },
     postMedia: {
         type: String,
         required: true
     },
     cloudinary_id: String,
-    likes: [
-        {
-            likedBy: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Users"
-            }
-        }
-    ],
-    comments: [{
-        commentBy: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Users"
-        },
-        text: String,
-        name: String,
-        avatar: String,
-        date: {
-            type: Date,
-            default: Date.now()
 
-        }
-    }],
     date: {
         type: Date,
         default: Date.now()

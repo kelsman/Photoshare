@@ -1,7 +1,13 @@
 const User = require('../models/User');
+const PostLikes = require('../models/Likepost');
+
 const { cloudinary } = require('../utils/cloudinary');
 
 const Post = require('../models/Post')
+const Notification = require('../models/Notification');
+const Following = require('../models/Following');
+const PostComments = require('../models/Comment');
+
 
 // @ create a post 
 exports.createPost = async (req, res, next) => {
@@ -15,46 +21,75 @@ exports.createPost = async (req, res, next) => {
             resource_type: 'auto',
         });
         if (upload) {
-
             const post = await new Post({
                 postedBy: req.user.id,
-                caption,
+                caption: req.body.caption,
                 postMedia: upload.secure_url,
                 cloudinary_id: upload.public_id,
             });
-            await post.save((err) => {
-                if (!err) {
-                    res.status(201).json({ success: true, post })
-                }
-            })
-        }
 
+            await post.save()
+            res.status(201).json({ success: true, post })
+        }
     } catch (error) {
         res.status(500).json({ sucess: false, msg: `failed to make post : ${error.message}` })
-        next()
+        next(error)
     }
 
 
 }
-// @ like a post 
+// @ like a post && unlike a post 
 exports.likePost = async (req, res, next) => {
+
     const socket = req.app.get('socketio');
     try {
+        // @** logged in user 
+        const user = await User.findById(req.user.id)
+
         // find the post 
         const post = await Post.findById(req.params.postid)
-
-        //  check if post has been liked before
-
-        const isLiked = post.likes.some((like) => {
-            return like.likedBy.toString() === req.user.id.toString()
-        })
-        if (isLiked) {
-            return res.status(400).json({ msg: 'You Liked this Post already' });
+        if (!post) {
+            return res.status(400).json({ msg: "post not found" })
         }
-        await post.likes.unshift({ likedBy: req.user.id });
-        await post.save()
-        socket.emit('likePost', post)
-        return res.status(201).json({ msg: "liked" });
+        //  check if the post has been liked by the logged in user 
+
+        const isLiked = await PostLikes.findOne(
+            { $and: [{ _post: req.params.postid }, { likes: { $elemMatch: { _user: req.user.id } } }] }
+        );
+        if (isLiked) {
+            await PostLikes.updateOne(
+                { _post: req.params.postid },
+                {
+                    $pull: {
+                        likes: {
+                            _user: req.user.id,
+                            username: user.username,
+                            avatar: user.avatar
+                        }
+                    }
+                },
+                { upsert: true }
+            ).exec()
+            return res.status(200).json({ msg: "unlike successful" })
+        } else {
+            await PostLikes.updateOne(
+                { _post: req.params.postid },
+                {
+                    $push: {
+                        likes: {
+                            _user: req.user.id,
+                            username: user.username,
+                            avatar: user.avatar
+                        }
+                    }
+                },
+                { upsert: true }
+            ).exec()
+
+            return res.status(200).json({ msg: " like post success" })
+        }
+
+
 
     } catch (error) {
         console.log(error.message)
@@ -64,38 +99,9 @@ exports.likePost = async (req, res, next) => {
 
 };
 
-// @ unlike a post
 
-exports.unlikePost = async (req, res, next) => {
-    const socket = req.app.get('socketio');
-    try {
-        const post = await Post.findById(req.params.id);
 
-        //  check if post has been liked before
-        const isLiked = post.likes.some((like) => {
-            return like.likedBy.toString() === req.user.id.toString()
-        })
-        if (!isLiked) {
-            return res.status(400).json({ success: false, msg: `You haven't liked this Post` });
-        };
-        // remove the like from the post array
-        post.likes = post.likes.filter((like) => {
-            like.likedBy.toString() !== req.user.id.toString()
-        });
-        post.save((err) => {
-            if (!err) {
-                socket.emit('unlikePost', post)
-                return res.status(201).json({ sucess: true, msg: "unliked success" })
-            }
 
-        });
-
-    } catch (error) {
-        console.log(error.message)
-        res.status(500).json({ sucess: false, msg: ` something went wrong` })
-        next();
-    }
-};
 
 //  @comment on a post 
 exports.commentPost = async (req, res, next) => {
@@ -103,25 +109,33 @@ exports.commentPost = async (req, res, next) => {
     const { commentText } = req.body;
     const socket = req.app.get('socketio');
 
+
     try {
-        if (!commentText) {
-            return res.status(401).json({ msg: "please add a comment text" })
-        }
+        // user to comment 
         const user = await User.findById(req.user.id).select("-password")
+        // @post to be commented on
         const post = await Post.findById(req.params.postId);
+        if (!post) {
+            return res.status(400).json({ msg: "post not found" })
+        }
+        // const postComment = await PostComments.findOne({ _post: req.params.postId })
 
-        const newComment = {
-            text: commentText,
-            commentBy: req.user.id,
-            avatar: user.avatar,
-            name: user.username
-        };
-
-        await post.comments.push(newComment);
-        await post.save()
-        socket.emit('addComment', post);
-        console.log(post)
-        res.status(201).json({ msg: "comment success" });
+        // add to commentsschema array 
+        await PostComments.updateOne(
+            { _post: req.params.postId },
+            {
+                $push: {
+                    comments: {
+                        _user: req.user.id,
+                        commentText,
+                        username: user.username,
+                    }
+                }
+            },
+            { upsert: true, new: true }
+        ).exec()
+        // socket.emit('addComment', post);   
+        return res.status(201).json({ msg: "comment success" });
     } catch (error) {
         console.log(error.message);
         res.status(500).json({ success: false, msg: error.message })
@@ -133,28 +147,46 @@ exports.commentPost = async (req, res, next) => {
 //  delete a comment 
 exports.deleteComment = async (req, res, next) => {
 
+    const { postid, commentid } = req.params;
     try {
-        const post = await Post.findById(req.params.id);
-        // pull out comment
-        const comment = post.comments.find((comment) => comment.id === req.params.comment_id);
-        //    make sure commment exist
+
+        // make sure owner of comment is permitted to delete comment 
+        const postComment = await PostComments.findOne({ _post: postid })
+        //  pull out the comment 
+        const comment = postComment.comments.find((comment) => {
+            return String(comment._id) == String(commentid)
+        });
+
         if (!comment) {
-            return res.status(404).json({ msg: 'Comment does not exist' });
-        };
-
-        //   check user deleting the comment
-        if (comment.commentBy.toString() !== req.user.id.toString()) {
-            return res.status(401).json({ msg: "user not authorized" })
+            return res.status(400).json({ msg: "comment does not exist" });
         }
-        post.comments = post.comments.filter((comment) => comment.id !== req.params.comment_id);
+        // only authorised owner of comment can delete comment 
+        if (String(comment._user) !== String(req.user.id)) {
+            return res.status(400).json({ msg: "un authorised" });
+        }
+        console.log(comment)
 
-        post.save()
-        return res.json(post.comments);
+
+        await PostComments.updateOne(
+            { _post: postid },
+            {
+                $pull: {
+                    comments: {
+                        _id: commentid
+                    }
+                }
+            },
+            {
+                new: true,
+                upsert: true,
+            }
+        ).exec()
+        return res.status(200).json({ msg: "comment deleted" })
 
     } catch (error) {
-        console.error(err.message);
+        console.error(error.message);
+        return res.status(500).json({ msg: 'Server Error' });
         next(error)
-        return res.status(500).send('Server Error');
     }
 
 }
@@ -202,7 +234,6 @@ exports.allPosts = async (req, res, next) => {
 };
 
 //  get  single post by the post id 
-
 exports.getSinglePost = async (req, res, next) => {
 
     try {
@@ -229,5 +260,50 @@ exports.getPosts = async (req, res, next) => {
     } catch (error) {
         console.log(error.message);
         return res.status(500).send('Server Error');
+        next(error)
     }
+}
+
+//  get post feeds
+
+exports.feedPosts = async (req, res, next) => {
+    try {
+        //  get posts based on people follwoing user
+
+        const user = req.user.id;
+        const followingDoc = await Following.findOne({ _user: req.user.id });
+        if (!followingDoc) {
+            return res.status(404).json({ msg: "could not find any post" })
+        };
+        const following = followingDoc.following.map(
+            (following) => following.user
+        );
+
+        const post = await Post.aggregate([
+            {
+                $match: {
+                    $or: [{}]
+                }
+            },
+
+        ])
+    } catch (error) {
+
+    }
+}
+
+//  get post based on followers 
+
+exports.followersPosts = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.user.id);
+
+
+
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).send('Server Error');
+        next(error);
+    }
+
 }
