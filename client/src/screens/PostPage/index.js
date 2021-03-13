@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 
 import './style.scss';
 import { useHistory, useParams, withRouter } from 'react-router-dom';
@@ -18,12 +18,12 @@ import { v4 as uuidv4 } from 'uuid';
 
 
 // redux imports
-import { commentPost, getPosts, getSinglePost, likePost, unLikePost } from '../../redux/Actions/postActions';
+import { commentPost, getPosts, getSinglePost, likePost, } from '../../redux/Actions/postActions';
 import { connect } from 'react-redux';
 
 
 
-function PostPage({ commentPost, socket, getPosts, user, userpost, getSinglePost, history, likePost, unLikePost }) {
+function PostPage({ commentPost, socket, user, userpost, getSinglePost, history, likePost }) {
 
     //    get postId from params
     const { postId } = useParams();
@@ -38,7 +38,6 @@ function PostPage({ commentPost, socket, getPosts, user, userpost, getSinglePost
         inputRef.current.focus()
     };
 
-
     useEffect(async () => {
         let subscribe = true;
         if (subscribe) {
@@ -51,7 +50,7 @@ function PostPage({ commentPost, socket, getPosts, user, userpost, getSinglePost
 
         }
         return () => subscribe = null;
-    }, [getSinglePost]);
+    }, [getSinglePost, postId]);
 
 
 
@@ -66,15 +65,15 @@ function PostPage({ commentPost, socket, getPosts, user, userpost, getSinglePost
             console.log(error)
         }
     }
-    const unlikeFunc = async () => {
-        try {
-            await unLikePost(userpost._id, socket, history)
+    // const unlikeFunc = async () => {
+    //     try {
+    //         await unLikePost(userpost._id, socket, history)
 
 
-        } catch (error) {
-            console.error(error)
-        }
-    }
+    //     } catch (error) {
+    //         console.error(error)
+    //     }
+    // }
     // const getUserPost = async (postId) => {
     //     try {
     //         await getSinglePost(postId)
@@ -102,13 +101,15 @@ function PostPage({ commentPost, socket, getPosts, user, userpost, getSinglePost
         setCommentText(e.target.value)
     }
 
-    if (isLoading) {
+    if (isLoading && userpost == null) {
         return <p>Loading...</p>
     }
+
+
     return (
         <div className="post-page">
 
-
+            {}
             <header>
                 <NavigationHeader />
             </header>
@@ -122,19 +123,19 @@ function PostPage({ commentPost, socket, getPosts, user, userpost, getSinglePost
                     </div>
                     <div className="post_details">
                         <div className="profile">
-                            <Profile image={userpost.postedBy.avatar} iconSize="medium" username={userpost.postedBy.username} />
+                            <Profile image={userpost.author.avatar} iconSize="medium" username={userpost.author.username} />
                             <Icon.MoreHorizontal className="more-icon" size={26} />
                         </div>
 
                         {/* comment section */}
                         <div className="comment-section">
-                            {userpost.comments.map((comment) => (
+                            {userpost.comments && userpost.comments.map((comment) => (
                                 <CommentList
                                     key={uuidv4()}
-                                    accountName={comment.name}
-                                    comment={comment.text}
+                                    accountName={comment.username}
+                                    comment={comment.commentText}
                                     commentImage={comment.avatar}
-                                    commentTime={comment.date}
+                                    commentTime={comment.commentDate}
                                 />
                             ))}
 
@@ -147,10 +148,10 @@ function PostPage({ commentPost, socket, getPosts, user, userpost, getSinglePost
                                     userpost={userpost}
                                     focus={focus}
                                     likeFunc={likeFunc}
-                                    // isLiked={isLikedButtonClicked}
-                                    unlikeFunc={unlikeFunc} />
+                                // isLiked={isLikedButtonClicked}
+                                />
                             </div>
-                            {!userpost.likes.length ?
+                            {!userpost.likes ?
                                 <small className="like-title"> Be the first to <b>like this</b></small>
                                 :
                                 <small>{userpost.likes.length} Likes</small>
@@ -204,7 +205,7 @@ const mapStateToProps = ({ socket, post, user }) => {
     }
 }
 export default connect(mapStateToProps,
-    { commentPost, getPosts, getSinglePost, likePost, unLikePost }
+    { commentPost, getPosts, getSinglePost, likePost }
 )(withRouter(PostPage))
 
 

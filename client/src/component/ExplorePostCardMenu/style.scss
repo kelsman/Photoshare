@@ -2,22 +2,45 @@
     display: flex;
     justify-content: space-between;
     margin: 1em 0;
+    align-items: center;
   
     .interactions {
       display: flex;
       padding-left: 1em;
+
     }
   
     .icon {
-      margin-right: 1em;
+      margin: 0, 10px;
       width: 23px;
       height: 23px;
-      &.liked{
-        fill: tomato;
-      }
-  
+      
+      
       &:hover {
         cursor: pointer;
       }
+    }
+ 
+   
+  }
+
+  @keyframes animateHeart {
+    0% {
+      transform: scale(0.2);
+    }
+    40% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  @keyframes animateHeartOut {
+    0% {
+      transform: scale(1.4);
+    }
+    100% {
+      transform: scale(1);
     }
   }

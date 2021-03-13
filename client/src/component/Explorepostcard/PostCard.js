@@ -21,22 +21,12 @@ function PostCard({ post }) {
     return (
         <React.Fragment >
 
-            <Media alt="" src={post.postMedia} onClick={() => history.push(Routes.PostPage + `/${post._id}`, { post })} />
-            {/*     <BottomWrapper>
-                <div style={styles.bottomLeft}>
+            <Media
+                alt=""
+                src={post.postMedia}
+                onClick={() => history.push(Routes.PostPage + `/${post._id}`, { post })}
+            />
 
-                    <div style={styles.postAvatarContainer}>
-                        <PosterAvatar src={postedBy.avatar} alt="poster img" />
-                    </div>
-                    <h2 style={{ fontSize: "smaller", margin: "0 4px" }}>{postedBy.username}</h2>
-                </div>
-                <div style={styles.bottomRight}>
-                    <p style={{ margin: "0 3px" }}>
-                        <Icon.MessageCircle className="icon" />  {comments.length ? comments.length : 0}
-                    </p>
-                    <p style={{ margin: "0 3px" }}> <Icon.Heart className="icon" /> {likes.length ? likes.length : 0}</p>
-                </div>
-            </BottomWrapper> */}
         </React.Fragment>
     )
 }

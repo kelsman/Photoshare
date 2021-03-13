@@ -4,12 +4,11 @@ const mongoose = require('mongoose')
 
 const postSchema = new mongoose.Schema({
 
+    caption: String,
+
     postedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Users"
-    },
-    caption: {
-        type: String
     },
     postMedia: {
         type: String,

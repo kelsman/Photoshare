@@ -24,7 +24,7 @@ router.get('/singlePost/:postId', authMiddleWare, postController.getSinglePost);
 router.get('/myPosts', authMiddleWare, postController.getPosts);
 
 //  @get all posts for explore page 
-router.get('/allPosts', authMiddleWare, postController.allPosts);
+router.get('/retrieveExplorePost', authMiddleWare, postController.retrieveExplorePost);
 
 //  get followers post 
 router.get('/followerPosts', authMiddleWare, postController.followersPosts)

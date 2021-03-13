@@ -20,10 +20,10 @@ export const getPosts = (history) => {
             if (token) {
                 await setToken(token)
             };
-            const response = await axios.get(`/api/route/post/allPosts`);
+            const response = await axios.get(`/api/route/post/retrieveExplorePost`);
             if (response) {
                 dispatch({ type: postActionTypes.GET_POSTS_SUCCESS, payload: response.data.posts })
-                // console.log(response.data.msg);
+
             };
 
         } catch (error) {
@@ -41,6 +41,8 @@ export const getPosts = (history) => {
     }
 }
 
+
+
 //  @comment on a post with a given post id passed as a param to the url
 export const commentPost = (postId, commentText, socket, history) => {
     return async (dispatch) => {
@@ -56,11 +58,8 @@ export const commentPost = (postId, commentText, socket, history) => {
             }
             const response = await axios.post(`/api/route/post/comment/${postId}`, { commentText });
             if (response) {
-                socket.on('addComment', (data) => {
-                    dispatch({ type: postActionTypes.COMMENT_POST_SUCCESS, payload: data })
 
-                })
-                console.log(response.data);
+                dispatch({ type: postActionTypes.COMMENT_POST_SUCCESS, payload: response.data.data })
             };
 
         } catch (error) {
@@ -92,8 +91,8 @@ export const getSinglePost = (postId, history) => {
         try {
             const response = await axios.get(`/api/route/post/singlePost/${postId}`, config)
             if (response) {
-                dispatch({ type: postActionTypes.GET_SINGLE_POST_SUCCESS, payload: response.data.msg })
-                // console.log(response.data.msg);
+                dispatch({ type: postActionTypes.GET_SINGLE_POST_SUCCESS, payload: response.data.post[0] })
+
             };
 
         } catch (error) {
@@ -110,7 +109,9 @@ export const getSinglePost = (postId, history) => {
     }
 }
 
-//  like a post 
+
+
+//  like & unlike  a post 
 
 export const likePost = (postId, socket, history) => {
 
@@ -129,10 +130,9 @@ export const likePost = (postId, socket, history) => {
         try {
             const response = await axios.put(`/api/route/post/likePost/${postId}`, config);
             if (response) {
-                socket.on('likePost', (data) => {
-                    dispatch({ type: postActionTypes.LIKE_POST_SUCCESS, payload: data })
-                });
-                console.log(response.data);
+
+                dispatch({ type: postActionTypes.LIKE_POST_SUCCESS, payload: response.data.data })
+
             }
         } catch (error) {
             if (error.response) {
@@ -151,42 +151,4 @@ export const likePost = (postId, socket, history) => {
     }
 
 }
-//  unlike a post function
 
-export const unLikePost = (postId, socket, history) => {
-    return async (dispatch) => {
-
-        const token = localStorage.getItem('authToken');
-
-        const config = {
-            headers: {
-                "Content-Type": "application/json"
-            }
-        }
-        if (token) {
-            await setToken(token)
-        };
-        try {
-            const response = await axios.put(`/api/route/post/unlikePost/${postId}`, config);
-            if (response) {
-                socket.on('unlikePost', (data) => {
-                    dispatch({ type: postActionTypes.UNLIKE_POST_SUCCESS, payload: data })
-                });
-                console.log(response.data);
-            }
-        } catch (error) {
-            if (error.response) {
-                console.log(error.response.data)
-
-                await dispatch({ type: postActionTypes.UNLIKE_POST_FAIL, payload: error.response.data.msg })
-                cogoToast.error(`${error.response.data.msg}`, { position: 'top-right' })
-                if (error.response.data.msg === "jwt expired" || error.response.data.msg === `you're not authorised`) {
-                    localStorage.removeItem('authToken');
-                    history.push('/');
-                }
-            }
-
-        }
-
-    }
-}

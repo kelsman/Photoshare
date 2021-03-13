@@ -35,6 +35,7 @@ const userSchema = new mongoose.Schema({
         type: String,
     },
     cloudinary_id: String,
+
     resetPasswordToken: String,
     resetPasswordExpire: Date,
     DateCreated: {
