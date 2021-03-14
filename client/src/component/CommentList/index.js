@@ -18,6 +18,7 @@ const CommentList = ({ accountName, commentuser, commentImage, commentText, comm
     const userData = useSelector(({ user }) => user.currentUser)
     const dispatch = useDispatch();
     const history = useHistory();
+
     const handleDelete = async () => {
         try {
             await dispatch(deleteComment(userpost._id, commentId, history))

@@ -8,8 +8,7 @@ const router = express.Router();
 router.post('/createPost', [authMiddleWare, upload.single('postfile')], postController.createPost);
 // @like a post && unlike post
 router.put('/likePost/:postid', authMiddleWare, postController.likePost);
-// // @unlike a post
-// router.put('/unlikePost/:id', authMiddleWare, postController.unlikePost);
+
 // @comment on a post
 router.post('/comment/:postId', authMiddleWare, postController.commentPost);
 // @delete a comment
@@ -25,6 +24,9 @@ router.get('/myPosts', authMiddleWare, postController.getPosts);
 
 //  @get all posts for explore page 
 router.get('/retrieveExplorePost', authMiddleWare, postController.retrieveExplorePost);
+
+// @get feedpost for dashboard
+router.get('/retrieveFeedPosts', authMiddleWare, postController.retrieveFeedPosts)
 
 //  get followers post 
 router.get('/followerPosts', authMiddleWare, postController.followersPosts)

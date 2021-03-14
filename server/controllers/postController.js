@@ -404,27 +404,68 @@ exports.getPosts = async (req, res, next) => {
 
 //  get post feeds
 
-exports.feedPosts = async (req, res, next) => {
+exports.retrieveFeedPosts = async (req, res, next) => {
     try {
-        //  get posts based on people follwoing user
 
-        const user = req.user.id;
-        const followingDoc = await Following.findOne({ _user: req.user.id });
+        const user = await User.findById(req.user.id);
+        // get the people user is following
+
+        const followingDoc = await Following.findOne({ _user: ObjectId(req.user.id) })
         if (!followingDoc) {
-            return res.status(404).json({ msg: "could not find any post" })
-        };
-        const following = followingDoc.following.map(
-            (following) => following.user
-        );
+            return res.status(400).json({ msg: 'you re not following anybody' })
+        }
+        const following = followingDoc._following.map((follow) => follow.user)
+        console.log(following)
 
-        const post = await Post.aggregate([
+        const unwantedFields = [
+            "author.password",
+            'author.email',
+            'postedBy',
+            'author.cloudinary_id',
+            'author.DateCreated',
+            'postLikes.__v',
+            'postLikes._post',
+            'postLikes._id',
+            'postComments.__v',
+            'postComments._post',
+
+        ]
+        const posts = await Post.aggregate([
             {
                 $match: {
-                    $or: [{}]
+                    $or: [{ postedBy: { $in: following } }, { postedBy: ObjectId(req.user.id) }]
+                }
+            },
+            { $sort: { date: -1 } },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'postedBy',
+                    foreignField: '_id',
+                    as: 'author',
                 }
             },
 
+            {
+                $lookup: {
+                    from: 'likeposts',
+                    localField: '_id',
+                    foreignField: '_post',
+                    as: 'postLikes'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'comments',
+                    localField: '_id',
+                    foreignField: '_post',
+                    as: 'postComments'
+                }
+            },
+
+            { $unset: [...unwantedFields] }
         ])
+        return res.json({ posts })
     } catch (error) {
 
     }

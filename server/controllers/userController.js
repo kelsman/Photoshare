@@ -187,7 +187,7 @@ exports.followUser = async (req, res, next) => {
         if (!followUser) {
             return res.status(404).json({ msg: "this user does not exist" })
         }
-        if (user._id == followUser._user) {
+        if (String(user._id) == String(req.params.userid)) {
             return res.send("sorry u can't follow youself")
         }
 

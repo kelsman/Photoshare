@@ -1,15 +1,33 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import './style.scss';
 import * as Icon from 'react-feather'
 
 import { connect } from 'react-redux';
 
-const ExploreCardMenu = ({ focus, likeFunc, unlikeFunc, userpost, user }) => {
+const ExploreCardMenu = ({ focus, likeFunc, userpost, user }) => {
 
-    const isLiked = userpost.likes.some((like) => {
-        return like._user == user._id
-    })
+    const [isLiked, setIsLiked] = React.useState(undefined)
+
+
+    useEffect(() => {
+        let sub = true;
+        if (sub) {
+            if (userpost && userpost.likes) {
+                const doesLiked = userpost.likes.find((like) => {
+                    return like._user == user._id
+                });
+                if (doesLiked) {
+                    setIsLiked(true)
+                } else {
+                    setIsLiked(false)
+                }
+            }
+
+        }
+        return () => sub = null;
+
+    }, [userpost])
 
     return (
         <div className="cardMenu">
