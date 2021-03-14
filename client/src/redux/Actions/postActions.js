@@ -76,6 +76,38 @@ export const commentPost = (postId, commentText, socket, history) => {
     }
 }
 
+// @delete a commment 
+
+export const deleteComment = (postid, commentid, history) => async dispatch => {
+
+    try {
+        if (token) {
+            await setToken(token)
+        };
+        const config = {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }
+
+        const response = await axios.put(`/api/route/post/deleteComment/${postid}/${commentid}`, config)
+        if (response) {
+            console.log(response.data)
+            dispatch({ type: postActionTypes.DELETE_COMMENT_SUCCESS, payload: response.data.data })
+        }
+    } catch (error) {
+        if (error.response) {
+            console.log(error.response.data)
+            await dispatch({ type: postActionTypes.DELETE_COMMENT_FAIL, payload: error.response.data.msg })
+            if (error.response.data.msg === "jwt expired" || error.response.data.msg === `you're not authorised`) {
+                localStorage.removeItem('authToken');
+                history.push('/');
+
+            }
+        }
+    }
+}
+
 export const getSinglePost = (postId, history) => {
 
     return async (dispatch) => {

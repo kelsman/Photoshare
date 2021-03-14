@@ -42,8 +42,8 @@ function PostPage({ commentPost, socket, user, userpost, getSinglePost, history,
         let subscribe = true;
         if (subscribe) {
             try {
-                await getSinglePost(postId)
-                setIsLoading(false)
+                await getSinglePost(postId, history)
+                await setIsLoading(false)
             } catch (error) {
                 console.log(error.message)
             }
@@ -65,22 +65,7 @@ function PostPage({ commentPost, socket, user, userpost, getSinglePost, history,
             console.log(error)
         }
     }
-    // const unlikeFunc = async () => {
-    //     try {
-    //         await unLikePost(userpost._id, socket, history)
 
-
-    //     } catch (error) {
-    //         console.error(error)
-    //     }
-    // }
-    // const getUserPost = async (postId) => {
-    //     try {
-    //         await getSinglePost(postId)
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // };
 
     const handleCommentPost = async (event) => {
         event.preventDefault();
@@ -101,7 +86,7 @@ function PostPage({ commentPost, socket, user, userpost, getSinglePost, history,
         setCommentText(e.target.value)
     }
 
-    if (isLoading && userpost == null) {
+    if (isLoading && !userpost) {
         return <p>Loading...</p>
     }
 
@@ -109,7 +94,6 @@ function PostPage({ commentPost, socket, user, userpost, getSinglePost, history,
     return (
         <div className="post-page">
 
-            {}
             <header>
                 <NavigationHeader />
             </header>
@@ -132,12 +116,17 @@ function PostPage({ commentPost, socket, user, userpost, getSinglePost, history,
                             {userpost.comments && userpost.comments.map((comment) => (
                                 <CommentList
                                     key={uuidv4()}
+                                    commentId={comment._id}
+                                    commentuser={comment._user}
+                                    commentText={comment.commentText}
+                                    userpost={userpost}
                                     accountName={comment.username}
                                     comment={comment.commentText}
                                     commentImage={comment.avatar}
                                     commentTime={comment.commentDate}
                                 />
                             ))}
+
 
                         </div>
 

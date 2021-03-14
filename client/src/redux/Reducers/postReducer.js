@@ -10,6 +10,7 @@ const initState = {
         postError: '',
         commentError: '',
         likeError: '',
+        deleteCommentError: ''
     }
 };
 
@@ -65,6 +66,23 @@ const postReducer = (state = initState, { type, payload }) => {
                 error: {
                     commentError: payload
                 }
+            }
+
+        case postActionTypes.DELETE_COMMENT_SUCCESS:
+            return {
+                ...state,
+                isLoading: false,
+                post: {
+                    ...state.post,
+                    comments: payload.comments
+                }
+            }
+
+        case postActionTypes.DELETE_COMMENT_FAIL:
+            return {
+                ...state,
+                isLoading: false,
+                deleteCommentError: payload
             }
 
 

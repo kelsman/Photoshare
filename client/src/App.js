@@ -31,7 +31,7 @@ function App({ loaduser, connectSocketIo }) {
       }
     }
     return () => subscribe = null;
-  });
+  }, []);
   return (
 
     <div className="App">

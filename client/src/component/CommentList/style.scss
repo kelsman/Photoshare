@@ -6,6 +6,18 @@
   align-items: center;
   font-size: 0.75em;
   margin-bottom: 0.4em;
+  
+  width: 100%;
+  
+  
+  .deletebtn{
+    // align-self: flex-end;
+   
+    display: block;
+    margin-right: 0.3em;
+    cursor: pointer;
+    margin-left: auto
+  }
 
   .accountName {
     font-weight: 600;

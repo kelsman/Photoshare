@@ -146,6 +146,7 @@ exports.commentPost = async (req, res, next) => {
 
         //  get the updated comment
         let commentUpdate = await PostComments.findOne({ _post: req.params.postId })
+
         return res.status(201).json({ msg: "comment success", data: commentUpdate });
     } catch (error) {
         console.log(error.message);
@@ -192,8 +193,8 @@ exports.deleteComment = async (req, res, next) => {
                 upsert: true,
             }
         ).exec()
-
-        return res.status(200).json({ msg: "comment deleted" })
+        const updatedPost = await PostComments.findOne({ _post: postid })
+        return res.status(200).json({ msg: "comment deleted", data: updatedPost })
 
     } catch (error) {
         console.error(error.message);
@@ -310,8 +311,8 @@ exports.getSinglePost = async (req, res, next) => {
         'comments._post',
         'likeCount.__v',
         'likeCount._post',
-        'comments._id',
-        'likeCount._id',
+        // 'comments._id',
+        // 'likeCount._id',
         'postedBy',
         'cloudinary_id',
         'author.password',
