@@ -3,88 +3,52 @@ import './style.scss';
 import Card from './Card';
 // import { useHistory } from 'react-router-dom';
 
-const Cards = () => {
+import { useSelector } from 'react-redux';
+import { v4 as uuidv4 } from 'uuid';
 
-    const commentsOne = [
-        {
-            user: "raffagrassetti",
-            text: "Woah dude, this is awesome! 🔥",
-            id: 1,
-        },
-        {
-            user: "therealadamsavage",
-            text: "Like!",
-            id: 2,
-        },
-        {
-            user: "mapvault",
-            text: "Niceeeee!",
-            id: 3,
-        },
-        {
-            user: "mapvault",
-            text: "Niceeeee!",
-            id: 4,
-        },
+const Cards = ({ isFetching }) => {
 
-        {
-            user: "mapvault",
-            text: "Niceeeee!",
-            id: 5,
-        },
-        {
-            user: "mapvault",
-            text: "Niceeeee!",
-            id: 6,
-        },
+    const posts = useSelector(({ feed }) => feed.posts);
 
-    ];
 
-    const commentsTwo = [
-        {
-            user: "mapvault",
-            text: "Amazing content, keep it up!",
-            id: 4,
-        },
-    ];
+    if (isFetching) {
+        return <p> Loading</p>
+    }
 
-    const commentsThree = [
-        {
-            user: "dadatlacak",
-            text: "Love this!",
-            id: 5,
-        },
-    ];
     return (
         <div className="cards">
             {/* stories components for later */}
+            {!posts.length &&   (<div style={{marginTop: "20px"}}> <p> you have no posts yet
+                follow more people to see their posts
+                
+                </p> </div>)}
+            { posts && posts.map((post) => {
 
-            <Card
-                accountName="rafagrassetti"
-                storyBorder={true}
-                image="https://picsum.photos/800/900"
-                comments={commentsOne}
-                likedByText="dadatlacak"
-                likedByNumber={89}
-                hours={16}
-            />
-            <Card
+                return (
+                    <Card
+                        feed={post}
+                        avatar={post.author.avatar}
+                        key={uuidv4()}
+                        accountName={post.author.username}
+                        storyBorder={true}
+                        image={post.postMedia}
+                        comments={post.comments ? post.comments : null}
+                        likedByText={post.postLikes ? post.likes.username : null}
+                        // likedByNumber={feed.postLikes && feed.postLikes.likes ? feed.postLikes.likes.length : "Be the first to Like this"}
+                        hours={16}
+                    />
+                )
+
+            })}
+            {/*    <Card
                 accountName="mapvault"
                 image="https://picsum.photos/800"
                 comments={commentsTwo}
                 likedByText="therealadamsavage"
                 likedByNumber={47}
                 hours={12}
-            />
-            <Card
-                accountName="dadatlacak"
-                storyBorder={true}
-                image="https://picsum.photos/800/1000"
-                comments={commentsThree}
-                likedByText="mapvault"
-                likedByNumber={90}
-                hours={4}
-            />
+            /> */}
+
         </div>
     )
 }

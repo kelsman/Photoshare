@@ -14,7 +14,9 @@ const { getupdatedPost } = require('../utils/post');
 exports.createPost = async (req, res, next) => {
 
     const { caption } = req.body;
+    console.log(req.file)
     const file = req.file.path
+
     try {
         const upload = await cloudinary.uploader.upload(file, {
             use_filename: true,
@@ -30,7 +32,7 @@ exports.createPost = async (req, res, next) => {
             });
 
             await post.save()
-            res.status(201).json({ success: true, post })
+            res.status(201).json({ success: true, msg: "post created successfully" })
         }
     } catch (error) {
         res.status(500).json({ sucess: false, msg: `failed to make post : ${error.message}` })
@@ -415,7 +417,6 @@ exports.retrieveFeedPosts = async (req, res, next) => {
             return res.status(400).json({ msg: 'you re not following anybody' })
         }
         const following = followingDoc._following.map((follow) => follow.user)
-        console.log(following)
 
         const unwantedFields = [
             "author.password",
@@ -427,7 +428,10 @@ exports.retrieveFeedPosts = async (req, res, next) => {
             'postLikes._post',
             'postLikes._id',
             'postComments.__v',
+            'postComments._id',
             'postComments._post',
+            'cloudinary_id',
+            '__v'
 
         ]
         const posts = await Post.aggregate([
@@ -463,9 +467,31 @@ exports.retrieveFeedPosts = async (req, res, next) => {
                 }
             },
 
+            { $unwind: { "path": "$author", "preserveNullAndEmptyArrays": true } },
+            {
+                $unwind: {
+                    "path": "$postLikes", "preserveNullAndEmptyArrays": true
+                }
+            },
+            { $unwind: { path: "$postComments", "preserveNullAndEmptyArrays": true } },
+
+            {
+                $project: {
+                    _id: 1,
+                    'author': 1,
+                    postMedia: 1,
+                    likes: '$postLikes.likes',
+                    comments: '$postComments.comments'
+
+                }
+            },
+
             { $unset: [...unwantedFields] }
         ])
-        return res.json({ posts })
+        if (!posts) {
+            return res.status(400).json({ success: false, msg: 'posts not found' })
+        }
+        return res.json({ success: true, posts })
     } catch (error) {
 
     }

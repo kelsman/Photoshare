@@ -11,6 +11,40 @@ const token = localStorage.getItem('authToken');
 const baseUrl = process.env.REACT_APP_BASE_URL || "http://localhost:9000"
 
 
+// @create post 
+
+export const createPostFunc = (data, history) => {
+    const token = localStorage.getItem('authToken')
+    return async (dispatch) => {
+        try {
+            if (token) {
+                await setToken(token)
+            };
+            const config = {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            }
+            cogoToast.loading('posting')
+            const response = await axios.post('/api/route/post/createPost', data, config)
+            if (response) {
+                await dispatch({ type: postActionTypes.CREATE_POST_SUCCESS, payload: response.data.msg });
+
+                cogoToast.success('post created')
+            }
+        } catch (error) {
+            if (error.response) {
+                cogoToast.error(`${error.response.data.msg}`)
+                await dispatch({ type: postActionTypes.CREATE_POST_FAIL, payload: error.response.data })
+                if (error.response.data.msg === "jwt expired" || error.response.data.msg === `you're not authorised`) {
+                    history.push('/')
+                    localStorage.removeItem('authToken');
+                    cogoToast.info('session expired');
+                }
+            }
+        }
+    }
+}
 
 //  load explore posts 
 export const getPosts = (history) => {
@@ -20,6 +54,7 @@ export const getPosts = (history) => {
             if (token) {
                 await setToken(token)
             };
+
             const response = await axios.get(`/api/route/post/retrieveExplorePost`);
             if (response) {
                 dispatch({ type: postActionTypes.GET_POSTS_SUCCESS, payload: response.data.posts })
@@ -60,6 +95,7 @@ export const commentPost = (postId, commentText, socket, history) => {
             if (response) {
 
                 dispatch({ type: postActionTypes.COMMENT_POST_SUCCESS, payload: response.data.data })
+                console.log(response.data.data)
             };
 
         } catch (error) {
@@ -184,3 +220,37 @@ export const likePost = (postId, socket, history) => {
 
 }
 
+
+//  load feed posts 
+
+export const retrieveFeedPosts = (history) => async dispatch => {
+
+    const token = localStorage.getItem('authToken');
+
+    const config = {
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }
+    if (token) {
+        await setToken(token)
+    };
+    try {
+        const response = await axios.get(`api/route/post/retrieveFeedPosts`, config)
+        if (response) {
+            console.log(response.data)
+            dispatch({ type: postActionTypes.GET_FEEDS_SUCCESS, payload: response.data.posts })
+        }
+    } catch (error) {
+        if (error.response) {
+            console.log(error.response.data)
+            await dispatch({ type: postActionTypes.GET_FEEDS_FAIL, payload: error.response.data.msg })
+            cogoToast.info(`${error.response.data.msg}`, { position: 'top-center' })
+            if (error.response.data.msg === "jwt expired" || error.response.data.msg === `you're not authorised`) {
+                history.push('/');
+                localStorage.removeItem('authToken');
+            }
+
+        }
+    }
+}

@@ -6,8 +6,9 @@ import Error404 from './screens/Error404Screen';
 import LoginScreen from './screens/LoginScreen';
 import SignUpScreen from './screens/SignUpScreen';
 import HomeScreen from './screens/Home/HomeScreen';
-import ExplorePost from './screens/ExplorePost';
+
 import ExploreScreen from './screens/Explore';
+import NewPostPage from './screens/NewPost';
 
 import { useHistory } from 'react-router-dom';
 import * as Routes from './component/routes';
@@ -26,22 +27,36 @@ function App({ loaduser, connectSocketIo }) {
     let subscribe = true;
     if (subscribe) {
       if (token) {
-        loaduser()
+
         connectSocketIo()
       }
     }
     return () => subscribe = null;
   }, []);
+
+  useEffect(() => {
+    let subscribe = true;
+    if (subscribe) {
+      if (token) {
+
+        loaduser()
+      }
+    }
+    return () => subscribe = null;
+  }, [loaduser]);
+
   return (
 
     <div className="App">
+
       <Switch>
         <ErrorBoundary>
           <Route exact path={Routes.Login} render={() => <LoginScreen />} />
           <Route exact path={Routes.SignUp} render={() => <SignUpScreen />} />
           <Route exact path={Routes.Dashboard} render={() => <HomeScreen />} />
           <Route exact path={Routes.Explore} render={() => <ExploreScreen />} />
-          <Route exact path={Routes.ExplorePost} component={ExplorePost} />
+
+          <Route exact path={Routes.NewPostPage} component={NewPostPage} />
           <Route exact path={`${Routes.PostPage}/:postId`} component={PostPage} />
           {/* <Route exact path={Routes.ProfilePage} component={UserProfile} /> */}
         </ErrorBoundary>

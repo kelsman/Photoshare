@@ -5,12 +5,14 @@ const initState = {
     post: null,
     posts: null,
     myposts: [],
+    feeds: null,
     error: {
         getError: '',
         postError: '',
         commentError: '',
         likeError: '',
-        deleteCommentError: ''
+        deleteCommentError: '',
+        createPostError: '',
     }
 };
 
@@ -18,6 +20,7 @@ const initState = {
 const postReducer = (state = initState, { type, payload }) => {
 
     switch (type) {
+
         case postActionTypes.GET_POSTS_SUCCESS:
             return {
                 ...state,
@@ -75,7 +78,9 @@ const postReducer = (state = initState, { type, payload }) => {
                 post: {
                     ...state.post,
                     comments: payload.comments
-                }
+                },
+
+
             }
 
         case postActionTypes.DELETE_COMMENT_FAIL:
@@ -92,6 +97,8 @@ const postReducer = (state = initState, { type, payload }) => {
                 isLoading: false,
                 post: payload
             }
+
+
         default:
             return state;
 

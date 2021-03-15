@@ -2,7 +2,7 @@
 
 
 body {
-  background-color: $background-white;
+  background-color: $background-grey;
   font-family: $font;
   font-size: 16px;
   margin: 0;
@@ -10,9 +10,11 @@ body {
   min-width: fit-content;
 }
 
+
 main {
   background-color: $background-grey;
   margin-top: 60px;
+
   .container {
     display: flex;
     justify-content: left;

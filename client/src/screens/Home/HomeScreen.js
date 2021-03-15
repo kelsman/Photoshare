@@ -4,51 +4,65 @@ import './style.scss';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom'
 import { loaduser } from '../../redux/Actions/userActions';
+import { retrieveFeedPosts } from '../../redux/Actions/postActions';
+import { retrieveFeedPostsStart } from '../../redux/feed/feedAction';
 
 // import Header from '../../component/Header';
-import SideMenu from '../../component/sideMenu';
+
 import Menu from '../../component/MenuButtons';
 import NavigationHeader from '../../component/NavigationHeader';
 import SideBar from '../../component/SideBar';
 import Cards from '../../component/Cards';
 
 const token = localStorage.getItem('authToken');
-const HomeScreen = ({ loaduser, currentUser }) => {
 
+const HomeScreen = ({ loaduser, currentUser, retrieveFeedPosts, retrieveFeedPostsStart, feeds }) => {
+
+
+    const [isFetching, setIsFetching] = React.useState(true)
 
     const history = useHistory();
 
     useEffect(() => {
         let subscribe = true;
+        const retrivefeed = async () => {
+            await retrieveFeedPostsStart(history)
+            setIsFetching(false)
+        }
         if (subscribe) {
-            loaduser(history)
+            retrivefeed()
 
         }
         return () => subscribe = null
-    }, [])
+    }, [retrieveFeedPostsStart])
+
 
     return (
         <div className="homeScreen">
             {/*  the navigation Header */}
             <NavigationHeader />
+
             {/* main */}
             <main>
                 <div className="container">
-                    <Cards />
+                    <Cards isFetching={isFetching} />
                     <SideBar />
                 </div>
 
             </main>
+
+
 
         </div>
     )
 
 }
 
-const mapStateToProps = ({ user }) => {
+const mapStateToProps = ({ user, post, feed }) => {
     return {
-        currentUser: user.currentUser
+        currentUser: user.currentUser,
+        posts: feed.posts
     }
 }
 
-export default connect(mapStateToProps, { loaduser })(HomeScreen);
+export default connect(mapStateToProps, { loaduser, retrieveFeedPosts, retrieveFeedPostsStart })(HomeScreen);

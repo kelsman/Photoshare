@@ -17,7 +17,6 @@ const CardMenu = () => {
 
                 <Icon.Heart
                     className="icon" />
-                <Icon.ThumbsDown className="icon" />
                 <Icon.MessageCircle className="icon" />
                 <Icon.Share className="icon" />
             </div>

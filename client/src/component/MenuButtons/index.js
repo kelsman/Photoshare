@@ -5,17 +5,20 @@ import './style.scss';
 
 import { useHistory } from 'react-router-dom';
 import * as Routes from '../routes'
+import { useSelector } from 'react-redux';
+import NewPostButton from '../NewPost/NewPostButton';
 
 
 const Menu = () => {
     const history = useHistory()
-
+    const user = useSelector(({ user }) => user.currentUser)
     return (
         <div className="menu">
             <Icon.Home className="icon" />
             <Icon.Compass className="icon" onClick={() => { history.push(Routes.Explore) }} />
             <Icon.Heart className="icon" />
-            <ProfileIcon iconSize="medium" />
+            <NewPostButton />
+            <ProfileIcon iconSize="medium" image={user && user.avatar} />
             {/* profile icon */}
 
         </div>

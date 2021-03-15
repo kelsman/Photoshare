@@ -3,13 +3,13 @@ import Avatar from '../../assets/default-avatar.png'
 import { connect } from 'react-redux'
 import './style.scss';
 
-const ProfileIcon = ({ user, iconSize, storyBorder }) => {
+const ProfileIcon = ({ user, iconSize, storyBorder, image }) => {
 
 
     return (
         <div className={storyBorder ? "storyBorder" : ""}>
             <img
-                src={user && user.avatar ? user.avatar : Avatar}
+                src={image ? image : Avatar}
                 className={`profileIcon ${iconSize}`}
                 alt=""
             />
