@@ -13,28 +13,28 @@ const ExploreCardMenu = ({ focus, likeFunc, userpost, user }) => {
     useEffect(() => {
         let sub = true;
         if (sub) {
-            if (userpost && userpost.likes) {
+            if (user && userpost && userpost.likes && userpost.likes.length) {
                 const doesLiked = userpost.likes.find((like) => {
                     return like._user == user._id
                 });
                 if (doesLiked) {
                     setIsLiked(true)
-                } else {
-                    setIsLiked(false)
                 }
             }
 
         }
-        return () => sub = null;
+        return () => null;
 
-    }, [userpost])
+    }, [likeFunc])
+
+
 
     return (
         <div className="cardMenu">
             <div className="interactions">
 
                 <Icon.Heart
-                    className="icon" onClick={likeFunc} fill={isLiked ? 'tomato' : 'transparent'} />
+                    className="icon__heart" onClick={likeFunc} fill={isLiked ? 'tomato' : 'transparent'} />
                 {/*   <Icon.ThumbsDown className="icon" onClick={unlikeFunc} /> */}
                 <Icon.MessageCircle className="icon" onClick={focus} />
                 <Icon.Share className="icon" />

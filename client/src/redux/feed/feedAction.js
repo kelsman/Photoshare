@@ -21,11 +21,11 @@ export const retrieveFeedPostsStart = (history) => async dispatch => {
         await setToken(token)
     };
     try {
-        console.log('isFetching')
+
         const response = await axios.get(`api/route/post/retrieveFeedPosts`, config)
         if (response) {
             dispatch({ type: feedTypes.FETCH_POSTS_SUCCESS, payload: response.data.posts })
-            console.log(response.data)
+
         }
     } catch (error) {
         if (error.response) {

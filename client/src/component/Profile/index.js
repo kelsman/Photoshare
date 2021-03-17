@@ -2,7 +2,9 @@ import React from 'react';
 import './style.scss';
 import ProfileIcon from '../ProfileIcon'
 import './style.scss';
+
 import Avatar from '../../assets/default-avatar.png'
+
 
 
 
@@ -11,6 +13,8 @@ const Profile = (props) => {
         username,
         caption,
         urlText,
+        userId,
+        authorUsername,
         iconSize,
         captionSize,
         storyBorder,
@@ -31,6 +35,8 @@ const Profile = (props) => {
                 storyBorder={storyBorder}
                 image={image}
                 iconSize="medium"
+                authorUsername={authorUsername}
+
             />
             {(accountName || caption) && !hideAccountName && (
                 <div className="textContainer">
@@ -38,7 +44,8 @@ const Profile = (props) => {
                     <span className={`caption ${captionSize}`}>{caption}</span>
                 </div>
             )}
-            <a>{urlText}</a>
+
+
         </div>
 
     )

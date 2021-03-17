@@ -19,10 +19,14 @@ import ErrorBoundary from './component/ErrorBounday';
 // import UserProfile from './screens/UserProfile';
 
 import { connectSocketIo } from './redux/Socket/socketActions'
+import ProfilePage from './screens/ProfilePage';
+import NavigationHeader from './component/NavigationHeader';
 
 const token = localStorage.getItem('authToken')
-
 function App({ loaduser, connectSocketIo }) {
+
+  const { history, location: { pathname } } = useHistory();
+
   useEffect(() => {
     let subscribe = true;
     if (subscribe) {
@@ -39,7 +43,7 @@ function App({ loaduser, connectSocketIo }) {
     if (subscribe) {
       if (token) {
 
-        loaduser()
+        loaduser(history)
       }
     }
     return () => subscribe = null;
@@ -48,7 +52,7 @@ function App({ loaduser, connectSocketIo }) {
   return (
 
     <div className="App">
-
+      {pathname !== Routes.Login && pathname !== Routes.SignUp && pathname !== Routes.NewPostPage && <NavigationHeader />}
       <Switch>
         <ErrorBoundary>
           <Route exact path={Routes.Login} render={() => <LoginScreen />} />
@@ -58,6 +62,7 @@ function App({ loaduser, connectSocketIo }) {
 
           <Route exact path={Routes.NewPostPage} component={NewPostPage} />
           <Route exact path={`${Routes.PostPage}/:postId`} component={PostPage} />
+          <Route exact path={`${Routes.ProfilePage}/:username`} component={ProfilePage} />
           {/* <Route exact path={Routes.ProfilePage} component={UserProfile} /> */}
         </ErrorBoundary>
         <Route component={Error404} />

@@ -12,6 +12,7 @@ import { useHistory } from 'react-router-dom';
 
 import * as Routes from '../../component/routes';
 import { v4 as uuidv4 } from 'uuid';
+import Loader from '../../component/Loader';
 
 
 const ExploreScreen = ({ getPosts, posts, location }) => {
@@ -24,6 +25,10 @@ const ExploreScreen = ({ getPosts, posts, location }) => {
         }
         return () => subscirbe = null
     }, [getPosts]);
+
+    if (!posts) {
+        return <Loader />
+    }
 
     return (
 

@@ -1,0 +1,18 @@
+@import '../../Sass/variables';
+
+.follow_btn{
+    width: 150px !important;
+    height: 45px !important;
+    background-color: $link-color !important;
+    position: relative;
+    text-align: center;
+    color: $font-color-primary;
+    border: 0;
+    outline: 0;
+    border-radius: 7px;
+    :focus{
+        outline: 0;
+    }
+
+
+}

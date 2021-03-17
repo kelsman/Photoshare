@@ -7,7 +7,7 @@ const Following = require('../models/Following')
 const Followers = require('../models/Follower');
 const mongoose = require('mongoose')
 
-const ObjectId = mongoose.Schema.Types.ObjectId
+const ObjectId = mongoose.Types.ObjectId
 const { cloudinary } = require('../utils/cloudinary');
 
 
@@ -92,7 +92,48 @@ exports.signIn = async (req, res, next) => {
 exports.getUser = async (req, res, next) => {
     try {
 
-        const user = await User.findById(req.user.id).select('-password');
+        // const user = await User.findById(req.user.id).select('-password');
+
+        const unwantedFields = [
+            "password",
+            'cloudinary_id',
+            'DateCreated',
+            'resetPasswordToken',
+            '__v'
+        ]
+        const user = await User.aggregate([
+            {
+                $match: {
+                    _id: ObjectId(req.user.id)
+                }
+            },
+            {
+                $lookup: {
+                    from: 'followings',
+                    localField: '_id',
+                    foreignField: '_user',
+                    as: 'following',
+                }
+            },
+            {
+                $lookup: {
+                    from: 'followers',
+                    localField: '_id',
+                    foreignField: '_user',
+                    as: 'followers'
+                }
+            },
+            { $unwind: { "path": "$following", "preserveNullAndEmptyArrays": true } },
+            { $unwind: { "path": "$followers", "preserveNullAndEmptyArrays": true } },
+            {
+                $addFields: {
+                    "followers": "$followers._followers",
+                    "following": "$following._following"
+                }
+            },
+            { $unset: [...unwantedFields] }
+
+        ]);
         if (!user) {
             return res.status(404).json({ success: false, msg: "unauthorised" })
         };
@@ -103,9 +144,6 @@ exports.getUser = async (req, res, next) => {
         next(error)
     }
 };
-
-
-
 
 
 //@forget password
@@ -293,7 +331,7 @@ exports.unFollowUser = async (req, res, next) => {
 
 
 
-        return res.send("unfollow success");
+        return res.json({ msg: "unfollow success" });
         // return res.status(200).json({ success: true, msg: "unfollow user success" })
     } catch (error) {
         console.log(error.message)
@@ -305,4 +343,51 @@ exports.unFollowUser = async (req, res, next) => {
 
 
 
+
+//  @ get suggested users 
+
+exports.getSuggestedUsers = async (req, res, next) => {
+
+
+    const unwantedFields = [
+        "__v",
+        "password",
+        "cloudinary_id",
+        "DateCreated"
+    ]
+    try {
+
+        const users = await User.aggregate([
+            {
+                $match: {
+                    _id: { $ne: ObjectId(req.user.id) }
+                }
+            },
+
+            {
+                $lookup: {
+                    from: 'followers',
+                    localField: '_id',
+                    foreignField: '_user',
+                    as: 'followers'
+                }
+            },
+
+            { $sample: { size: 5 } },
+            { $unwind: { path: "$followers", preserveNullAndEmptyArrays: true } },
+
+
+            { $unset: [...unwantedFields] }
+
+        ]);
+        if (!users) {
+            return res.status(400).json({ msg: "users not found" })
+        }
+        return res.json({ users })
+    } catch (error) {
+        console.log(error.message)
+        return res.status(500).json({ msg: 'server error' });
+        next(err)
+    }
+}
 

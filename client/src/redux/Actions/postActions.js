@@ -29,7 +29,6 @@ export const createPostFunc = (data, history) => {
             const response = await axios.post('/api/route/post/createPost', data, config)
             if (response) {
                 await dispatch({ type: postActionTypes.CREATE_POST_SUCCESS, payload: response.data.msg });
-
                 cogoToast.success('post created')
             }
         } catch (error) {

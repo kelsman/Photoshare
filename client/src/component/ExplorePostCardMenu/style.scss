@@ -20,6 +20,15 @@
         cursor: pointer;
       }
     }
+    .icon__heart{
+      margin: 0, 10px;
+      width: 23px;
+      height: 23px;
+      &:focus{
+        fill: "tomato";
+       
+      }
+    }
  
    
   }

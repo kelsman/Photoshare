@@ -1,6 +1,6 @@
 import { userActionTypes } from '../Constants/userConstants';
 import { setToken } from '../../utils'
-
+import { Redirect } from 'react-router-dom';
 
 import axios from 'axios';
 import cogoToast from 'cogo-toast';
@@ -69,20 +69,17 @@ export const loaduser = (history) => {
             if (token) { setToken(token) }
             const response = await axios.get("/api/route/user/getUser");
             if (response) {
-                await dispatch({ type: userActionTypes.LOAD_USER_SUCCESS, payload: response.data.user })
+                await dispatch({ type: userActionTypes.LOAD_USER_SUCCESS, payload: response.data.user[0] })
 
             }
         } catch (error) {
             if (error.response) {
                 await dispatch({ type: userActionTypes.LOAD_USER_FAIL, payload: error.response.data })
                 cogoToast.warn(`${error.response.data.msg}`, { position: "top-right" });
-                if (error.response.data.msg.includes(`you're not authorised`)) {
-                    await cogoToast.info('redirected to login');
-                    history.push(Routes.Login);
-                }
-                if (error.response.data.msg.includes(`jwt expired`)) {
+                if (error.response.data.msg === "jwt expired" || error.response.data.msg === `you're not authorised`) {
+                    history.push('/')
                     localStorage.removeItem('authToken');
-                    history.push(Routes.Login);
+                    cogoToast.info('session expired');
                 }
             }
 

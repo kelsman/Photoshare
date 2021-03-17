@@ -71,9 +71,8 @@ function PostPage({ commentPost, socket, user, userpost, getSinglePost, history,
         event.preventDefault();
         console.info('submitting btn')
         try {
-            await commentPost(userpost._id, commentText, socket, history);
+            await commentPost(userpost._id, commentText, history);
             setCommentText('');
-
 
         } catch (error) {
             console.log(error.message)

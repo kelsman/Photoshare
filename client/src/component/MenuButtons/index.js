@@ -18,7 +18,7 @@ const Menu = () => {
             <Icon.Compass className="icon" onClick={() => { history.push(Routes.Explore) }} />
             <Icon.Heart className="icon" />
             <NewPostButton />
-            <ProfileIcon iconSize="medium" image={user && user.avatar} />
+            <ProfileIcon iconSize="medium" image={user && user.avatar} authorUsername={user && user.username} user={user} />
             {/* profile icon */}
 
         </div>

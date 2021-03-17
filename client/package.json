@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^12.1.10",
     "axios": "^0.21.1",
     "cogo-toast": "^4.2.3",
+    "dayjs": "^1.10.4",
     "formik": "^2.2.6",
     "gsap": "^3.6.0",
     "moment": "^2.29.1",

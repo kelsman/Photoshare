@@ -12,7 +12,7 @@ const SideBar = ({ user }) => {
             <div className="sideBar">
                 {/*  profile */}
                 <div className="profile">
-                    <ProfileIcon iconSize="big" />
+                    <ProfileIcon iconSize="big" image={user && user.avatar} authorUsername={user && user.username} />
                     <div className="text-container">
                         <span className="username">{user && user.username}</span>
                         <span className="name">{user && user.name}</span>

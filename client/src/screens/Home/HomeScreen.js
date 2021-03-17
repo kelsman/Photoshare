@@ -13,10 +13,11 @@ import Menu from '../../component/MenuButtons';
 import NavigationHeader from '../../component/NavigationHeader';
 import SideBar from '../../component/SideBar';
 import Cards from '../../component/Cards';
+import Loader from '../../component/Loader';
 
 const token = localStorage.getItem('authToken');
 
-const HomeScreen = ({ loaduser, currentUser, retrieveFeedPosts, retrieveFeedPostsStart, feeds }) => {
+const HomeScreen = ({ loaduser, currentUser, retrieveFeedPosts, retrieveFeedPostsStart, posts }) => {
 
 
     const [isFetching, setIsFetching] = React.useState(true)
@@ -36,6 +37,10 @@ const HomeScreen = ({ loaduser, currentUser, retrieveFeedPosts, retrieveFeedPost
         return () => subscribe = null
     }, [retrieveFeedPostsStart])
 
+
+    if (!posts && isFetching === true) {
+        return <Loader />
+    }
 
     return (
         <div className="homeScreen">

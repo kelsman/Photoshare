@@ -13,20 +13,17 @@ const NewPostButton = ({ iconName, children }) => {
     useEffect(() => {
         if (fileSelected) {
             history.push(Routes.NewPostPage, { fileSelected })
-
             fileinput.current.value = ""
         }
         return () => null
     }, [fileSelected])
 
-    console.log(fileSelected)
     return (
 
         <Fragment>
             <form encType="multipart/form-data">
                 <label htmlFor="file-upload">
                     {!iconName && <Icon.Camera className="icon" />}
-
                 </label>
                 <input
                     ref={fileinput}

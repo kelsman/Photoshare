@@ -29,6 +29,6 @@ router.get('/retrieveExplorePost', authMiddleWare, postController.retrieveExplor
 router.get('/retrieveFeedPosts', authMiddleWare, postController.retrieveFeedPosts)
 
 //  get followers post 
-router.get('/followerPosts', authMiddleWare, postController.followersPosts)
+// router.get('/followerPosts', authMiddleWare, postController.followersPosts)
 
 module.exports = router;

@@ -479,6 +479,7 @@ exports.retrieveFeedPosts = async (req, res, next) => {
                 $project: {
                     _id: 1,
                     'author': 1,
+                    'date': 1,
                     postMedia: 1,
                     likes: '$postLikes.likes',
                     comments: '$postComments.comments'
@@ -499,15 +500,15 @@ exports.retrieveFeedPosts = async (req, res, next) => {
 
 //  get post based on followers 
 
-exports.followersPosts = async (req, res, next) => {
-    try {
-        const user = await User.findById(req.user.id);
-    } catch (error) {
-        console.log(error.message);
-        return res.status(500).send('Server Error');
-        next(error);
-    }
+// exports.followersPosts = async (req, res, next) => {
+//     try {
+//         const user = await User.findById(req.user.id);
+//     } catch (error) {
+//         console.log(error.message);
+//         return res.status(500).send('Server Error');
+//         next(error);
+//     }
 
-}
+// }
 
 // retrive explore posts 

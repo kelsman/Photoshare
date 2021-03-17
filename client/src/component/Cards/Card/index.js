@@ -5,6 +5,7 @@ import CardMenu from '../CardMenu';
 import CommentList from '../../CommentList';
 import Profile from '../../Profile';
 import moment from 'moment';
+import dayjs from 'dayjs';
 import ExploreCardMenu from '../../ExplorePostCardMenu'
 import { commentPost } from '../../../redux/Actions/postActions';
 import { useDispatch } from 'react-redux'
@@ -29,6 +30,11 @@ function Card(props) {
         hours,
     } = props;
 
+
+    React.useEffect(() => {
+
+        return () => null
+    })
     const handlePost = async (e) => {
         try {
             e.preventDefault();
@@ -53,7 +59,7 @@ function Card(props) {
     return (
         <div className="card">
             <header>
-                <Profile iconSize="medium" image={avatar} username={accountName} storyBorder={storyBorder} />
+                <Profile iconSize="medium" image={avatar} authorUsername={feed.author.username} username={accountName} storyBorder={storyBorder} />
                 <CardButton className="cardButton" />
             </header>
             <img className="cardImage" src={image} alt="card content" />
@@ -92,7 +98,7 @@ function Card(props) {
                     );
                 })}
             </div>
-            <div className="timePosted">{hours} HOURS AGO</div>
+            <div className="timePosted">{moment(feed.date).fromNow()} </div>
             <form onSubmit={handlePost} className="addComment">
                 <input ref={inputRef} value={commentText} onChange={(e) => setCommentText(e.target.value)} type="text" placeholder="Add a comment..." className="commentText" />
                 <button type='submit' disabled={commentText ? false : true} className="postText-btn" onSubmit={handlePost}>Post</button>
