@@ -1,0 +1,53 @@
+@import '../../Sass/variables';
+
+.form__container{
+    width: 100%;
+    height: 100%;
+    border: 10px solid blue;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.newPassword__form{
+    width: 100%;
+
+    .profile__header{
+        width: 60%;
+        margin: 0px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+   
+    }
+    input{
+        padding: 15px;
+        height: 40px;
+        border: 1px solid $font-color-secondary;
+        background-color: $background-grey;
+        margin: 10px 0px;
+        width: 200px;
+
+    }
+    button{
+
+         padding: 10px;
+          border: none;
+          outline: none;
+        
+          color: $background-white;
+          background-color: $link-color;
+          border-radius: 5px;
+          position: relative;
+      
+          &:focus{
+              outline: 0;
+    
+          }
+    }
+    .forgot__pasword__link{
+        color: $link-color;
+        margin: 10px 0px;
+    }
+}

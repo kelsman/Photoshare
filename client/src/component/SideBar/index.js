@@ -7,31 +7,34 @@ import Suggestions from '../SuggestionsFollow';
 import Footer from '../Footer';
 
 const SideBar = ({ user }) => {
-    return (
-        <Sticky topOffset={-80}>
-            <div className="sideBar">
-                {/*  profile */}
-                <div className="profile">
-                    <ProfileIcon iconSize="big" image={user && user.avatar} authorUsername={user && user.username} />
-                    <div className="text-container">
-                        <span className="username">{user && user.username}</span>
-                        <span className="name">{user && user.name}</span>
-                    </div>
-                </div>
-                {/*  suggestions */}
-                <Suggestions />
+  return (
+    <Sticky topOffset={-80}>
+      <div className="sideBar">
+        {/*  profile */}
+        <div className="profile">
+          <ProfileIcon
+            iconSize="big"
+            image={user && user.avatar}
+            authorUsername={user && user.username}
+          />
+          <div className="text-container">
+            <span className="username">{user && user.username}</span>
+            <span className="name">{user && user.name}</span>
+          </div>
+        </div>
+        {/*  suggestions */}
+        <Suggestions />
 
-                {/* Footer */}
-                <Footer />
-            </div>
-        </Sticky>
-    )
+        {/* Footer */}
+        <Footer />
+      </div>
+    </Sticky>
+  );
 };
 
-
 const mapStateToProps = ({ user }) => {
-    return {
-        user: user.currentUser
-    }
-}
+  return {
+    user: user.currentUser,
+  };
+};
 export default connect(mapStateToProps, null)(SideBar);

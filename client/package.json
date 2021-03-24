@@ -10,6 +10,7 @@
     "axios": "^0.21.1",
     "cogo-toast": "^4.2.3",
     "dayjs": "^1.10.4",
+    "eslint": "^7.22.0",
     "formik": "^2.2.6",
     "gsap": "^3.6.0",
     "moment": "^2.29.1",
@@ -58,5 +59,16 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.6",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-react": "^7.23.1",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "prettier": "^2.2.1",
+    "prettier-eslint": "^12.0.0",
+    "prettier-eslint-cli": "^5.0.1"
   }
 }

@@ -367,6 +367,7 @@ exports.getSuggestedUsers = async (req, res, next) => {
             {
                 $lookup: {
                     from: 'followers',
+
                     localField: '_id',
                     foreignField: '_user',
                     as: 'followers'
@@ -391,3 +392,40 @@ exports.getSuggestedUsers = async (req, res, next) => {
     }
 }
 
+exports.searchUsers = async (req, res, next) => {
+    const { query } = req.params;
+    try {
+        const users = await User.aggregate([
+            { $match: { username: { $regex: new RegExp("^" + query), $options: 'i' } } },
+
+            {
+                $lookup: {
+                    from: 'followers',
+                    localField: '_id',
+                    foreignField: "_user",
+                    as: 'followers'
+                }
+            },
+            { $unwind: { path: "$followers", preserveNullAndEmptyArrays: true } },
+            // { $sort: { DateCreated: "-1" } },
+            {
+                $project: {
+                    _id: 1,
+                    avatar: 1,
+                    username: 1,
+                    followers: "$followers",
+                    name: 1
+                }
+            }
+        ]);
+        if (users.length === 0) {
+            return res.status(404)
+                .json({ msg: 'Could not find any users matching the criteria.' });
+        };
+        console.log(users)
+        return res.json({ users })
+    } catch (error) {
+        console.log(error.message)
+        next(error)
+    }
+}

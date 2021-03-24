@@ -1,0 +1,59 @@
+@import '../../Sass/variables';
+.Edit_wrapper{
+    width: 100%;
+    // padding-top: 10vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+
+    
+    
+} 
+.form_container{
+    width: 80%;
+    background-color: $background-white;
+    height:600px;
+    border: 1px solid $font-color-secondary;
+    display: flex;
+    @media screen and (max-width: 760px){
+        width: 100%;
+    }
+    .nav_links{
+        width: 200px;
+        border-right: 1px solid black;
+        ul{
+            list-style-type: none;
+            margin: 0;
+           
+            // #change__password__link{
+                
+            //     &:focus{
+            //         border-left: 4px solid black;
+            //     }
+            // }
+        }
+        li{
+            // width: 150px;
+            height: 50px;
+            cursor: pointer;
+            text-align: center;
+            color: $link-color;
+            padding: 1.5rem 2.5rem;
+        
+            a{
+                &:focus{
+                    li{
+                        border-left: 5px solid black;
+                    }
+                }
+            }
+        }
+    }
+    .switch_container{
+        flex: 3;
+        padding-left: 10px;
+        // border: 10px solid blue;
+    }
+}

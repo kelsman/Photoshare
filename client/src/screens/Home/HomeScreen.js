@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
 import './style.scss';
 
 import { connect } from 'react-redux';
-import { useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom';
 import { loaduser } from '../../redux/Actions/userActions';
 import { retrieveFeedPosts } from '../../redux/Actions/postActions';
 import { retrieveFeedPostsStart } from '../../redux/feed/feedAction';
@@ -17,57 +17,56 @@ import Loader from '../../component/Loader';
 
 const token = localStorage.getItem('authToken');
 
-const HomeScreen = ({ loaduser, currentUser, retrieveFeedPosts, retrieveFeedPostsStart, posts }) => {
+const HomeScreen = ({
+  loaduser,
+  currentUser,
+  retrieveFeedPosts,
+  retrieveFeedPostsStart,
+  posts,
+}) => {
+  const [isFetching, setIsFetching] = React.useState(true);
 
+  const history = useHistory();
 
-    const [isFetching, setIsFetching] = React.useState(true)
-
-    const history = useHistory();
-
-    useEffect(() => {
-        let subscribe = true;
-        const retrivefeed = async () => {
-            await retrieveFeedPostsStart(history)
-            setIsFetching(false)
-        }
-        if (subscribe) {
-            retrivefeed()
-
-        }
-        return () => subscribe = null
-    }, [retrieveFeedPostsStart])
-
-
-    if (!posts && isFetching === true) {
-        return <Loader />
+  useEffect(() => {
+    let subscribe = true;
+    const retrivefeed = async () => {
+      await retrieveFeedPostsStart(history);
+      setIsFetching(false);
+    };
+    if (subscribe) {
+      retrivefeed();
     }
+    return () => (subscribe = null);
+  }, [retrieveFeedPostsStart]);
 
-    return (
-        <div className="homeScreen">
-            {/*  the navigation Header */}
-            <NavigationHeader />
+  if (!posts && isFetching === true) {
+    return <Loader />;
+  }
 
-            {/* main */}
-            <main>
-                <div className="container">
-                    <Cards isFetching={isFetching} />
-                    <SideBar />
-                </div>
+  return (
+    <div className="homeScreen">
+      {/*  the navigation Header */}
+      <NavigationHeader />
 
-            </main>
-
-
-
+      {/* main */}
+      <main>
+        <div className="container">
+          <Cards isFetching={isFetching} />
+          <SideBar />
         </div>
-    )
-
-}
+      </main>
+    </div>
+  );
+};
 
 const mapStateToProps = ({ user, post, feed }) => {
-    return {
-        currentUser: user.currentUser,
-        posts: feed.posts
-    }
-}
+  return {
+    currentUser: user.currentUser,
+    posts: feed.posts,
+  };
+};
 
-export default connect(mapStateToProps, { loaduser, retrieveFeedPosts, retrieveFeedPostsStart })(HomeScreen);
+export default connect(mapStateToProps, { loaduser, retrieveFeedPosts, retrieveFeedPostsStart })(
+  HomeScreen,
+);
