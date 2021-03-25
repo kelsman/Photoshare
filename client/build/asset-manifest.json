@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/static/css/main.92a9cfd7.chunk.css",
+    "main.js": "/static/js/main.91aef886.chunk.js",
+    "main.js.map": "/static/js/main.91aef886.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.f53f5254.js",
+    "runtime-main.js.map": "/static/js/runtime-main.f53f5254.js.map",
+    "static/js/2.c330307b.chunk.js": "/static/js/2.c330307b.chunk.js",
+    "static/js/2.c330307b.chunk.js.map": "/static/js/2.c330307b.chunk.js.map",
+    "static/js/3.3740274f.chunk.js": "/static/js/3.3740274f.chunk.js",
+    "static/js/3.3740274f.chunk.js.map": "/static/js/3.3740274f.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/main.92a9cfd7.chunk.css.map": "/static/css/main.92a9cfd7.chunk.css.map",
+    "static/js/2.c330307b.chunk.js.LICENSE.txt": "/static/js/2.c330307b.chunk.js.LICENSE.txt",
+    "static/media/OBJECTS.06804dc5.png": "/static/media/OBJECTS.06804dc5.png",
+    "static/media/Scarecrow.63343086.png": "/static/media/Scarecrow.63343086.png",
+    "static/media/cardButton.3ea56b27.svg": "/static/media/cardButton.3ea56b27.svg",
+    "static/media/default-avatar.png": "/static/media/default-avatar.522560c8.png",
+    "static/media/loader.24d21724.svg": "/static/media/loader.24d21724.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.f53f5254.js",
+    "static/js/2.c330307b.chunk.js",
+    "static/css/main.92a9cfd7.chunk.css",
+    "static/js/main.91aef886.chunk.js"
+  ]
+}
