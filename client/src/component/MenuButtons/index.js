@@ -14,7 +14,7 @@ const Menu = () => {
 
   return (
     <div className="menu">
-      <Icon.Home className="icon" />
+      {/* <Icon.Home className="icon" /> */}
       <Icon.Compass
         className="icon"
         onClick={() => {

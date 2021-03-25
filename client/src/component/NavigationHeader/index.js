@@ -19,7 +19,9 @@ const NavigationHeader = () => {
         <div className="search">
           <SearchBox />
         </div>
-        <Menu />
+        <span className="menu__btn__wrapper">
+          <Menu />
+        </span>
       </div>
     </div>
   );

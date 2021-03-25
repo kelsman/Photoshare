@@ -11,9 +11,10 @@ import { commentPost } from '../../../redux/Actions/postActions';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { likePost } from '../../../redux/Actions/postActions';
-
+import Loader from '../../Loader'
 function Card(props) {
   const [commentText, setCommentText] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const history = useHistory();
   const dispatch = useDispatch();
   const inputRef = useRef();
@@ -34,10 +35,12 @@ function Card(props) {
     return () => null;
   });
   const handlePost = async (e) => {
+    e.preventDefault();
     try {
-      e.preventDefault();
+      setIsSubmitting(true)
       await dispatch(commentPost(feed._id, commentText, history));
       setCommentText('');
+      setIsSubmitting(false)
     } catch (error) {
       console.log(error.message);
     }
@@ -113,6 +116,7 @@ function Card(props) {
           placeholder="Add a comment..."
           className="commentText"
         />
+        {isSubmitting && <Loader />}
         <button
           type="submit"
           disabled={commentText ? false : true}

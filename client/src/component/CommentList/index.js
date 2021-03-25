@@ -55,7 +55,7 @@ const CommentList = ({
         )}
       </div>
 
-      <h3 className="comment-time"> {moment(commentTime).fromNow(true)}</h3>
+      {/* <h3 className="comment-time"> {moment(commentTime).fromNow(true)}</h3> */}
     </React.Fragment>
   );
 };

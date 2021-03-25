@@ -396,7 +396,7 @@ exports.searchUsers = async (req, res, next) => {
     const { query } = req.params;
     try {
         const users = await User.aggregate([
-            { $match: { username: { $regex: new RegExp("^" + query), $options: 'i' } } },
+            { $match: { username: { $regex: new RegExp(query), $options: 'i' } } },
 
             {
                 $lookup: {
@@ -420,7 +420,7 @@ exports.searchUsers = async (req, res, next) => {
         ]);
         if (users.length === 0) {
             return res.status(404)
-                .json({ msg: 'Could not find any users matching the criteria.' });
+                .json({ msg: 'No Match' });
         };
         console.log(users)
         return res.json({ users })

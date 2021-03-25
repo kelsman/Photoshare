@@ -7,6 +7,7 @@ import Avatar from '../../assets/default-avatar.png';
 import * as Icon from 'react-feather';
 import ChangePasswordForm from '../../component/changePasswordForm';
 import EditProFileForm from '../../component/EditProfileForm';
+import Footer from '../../component/Footer'
 
 function EditProfilePage() {
     // useEffect(() => {
@@ -19,9 +20,6 @@ function EditProfilePage() {
     const [website, setWebsite] = useState('');
     const [bio, setBio] = useState('');
 
-    if (window.outerWidth < 640) {
-        document.querySelector('.navigation').style.display = 'none';
-    }
 
     const handleFormSubmit = (e) => {
         e.preventDefaut();
@@ -51,6 +49,7 @@ function EditProfilePage() {
                     </Switch>
                 </div>
             </div>
+            <Footer />
         </div>
     );
 }

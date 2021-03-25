@@ -20,7 +20,11 @@ import ErrorBoundary from './component/ErrorBounday';
 
 import { connectSocketIo } from './redux/Socket/socketActions';
 import ProfilePage from './screens/ProfilePage';
+// components
 import NavigationHeader from './component/NavigationHeader';
+import MobileTabMenu from './component/MobileTabMenu';
+import Footer from './component/Footer';
+
 
 const token = localStorage.getItem('authToken');
 function App({ loaduser, connectSocketIo }) {
@@ -50,11 +54,12 @@ function App({ loaduser, connectSocketIo }) {
   // }, [loaduser]);
 
   return (
-    <div className="App">
-      {pathname !== Routes.Login &&
-        pathname !== Routes.SignUp &&
-        pathname !== Routes.NewPostPage && <NavigationHeader />}
-      <ErrorBoundary>
+    <ErrorBoundary>
+      <div className="App">
+        {pathname !== '/' &&
+          pathname !== Routes.SignUp &&
+          pathname !== Routes.NewPostPage && <NavigationHeader />}
+
         <Switch>
           <Route exact path={Routes.Login} render={() => <LoginScreen />} />
           <Route exact path={Routes.SignUp} render={() => <SignUpScreen />} />
@@ -68,8 +73,14 @@ function App({ loaduser, connectSocketIo }) {
           {/* <Route exact path={Routes.ProfilePage} component={UserProfile} /> */}
           <Route component={Error404} />
         </Switch>
-      </ErrorBoundary>
-    </div>
+
+        {
+          pathname !== Routes.SignUp &&
+          pathname !== Routes.NewPostPage &&
+          < MobileTabMenu />}
+
+      </div>
+    </ErrorBoundary>
   );
 }
 

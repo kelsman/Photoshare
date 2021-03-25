@@ -5,17 +5,25 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Avatar from '../../assets/default-avatar.png';
 import * as Routes from '../routes';
+import Loader from '../Loader';
+
 
 
 function ChangePasswordForm() {
+  const user = useSelector(({ user }) => user.currentUser);
+
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
-  const user = useSelector(({ user }) => user.currentUser);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setIsLoading(true)
+      await cogoToast.info('button has been clicked')
+      setIsLoading(false)
     } catch (error) {
       console.log(error);
     }
@@ -53,7 +61,10 @@ function ChangePasswordForm() {
           value={confirmNewPassword}
           onChange={(e) => setConfirmNewPassword(e.target.value)}
         />
-        <button type="submit"> Change password</button>
+        <button type="submit">
+          Change password
+        {isLoading && <Loader />}
+        </button>
         {/*  <Link className="forgot__pasword__link">Forgot Password?</Link> */}
       </form>
     </div>

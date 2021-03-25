@@ -1,0 +1,23 @@
+@import '../../Sass/variables';
+
+.pop__up__card{
+    position: absolute;
+    top: 100%;
+    border: none;
+    min-width: 15rem;
+    
+    background: $background-white;
+    max-height: 25rem;
+
+    &::before {
+        content: '';
+        // @include horizontalAbsoluteCenter;
+        width: 2.5rem;
+        height: 1rem;
+        bottom: 100%;
+        background-color: black;
+     clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        box-shadow: 0 0 30px 0px $background-grey;
+      }
+
+}

@@ -5,65 +5,47 @@ var bodyParser = require('body-parser')
 const cors = require('cors')
 const connectDb = require('./db');
 const app = express();
-const jwt = require('jsonwebtoken')
 const socket = require('socket.io');
-
+const path = require('path')
 const Port = process.env.Port || 9000
 
 // app configuration
 app.set('port', Port);
-
-
-//load app middlewares
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 app.use(cors());
-if (app.get('env') === "development") {
-    app.use(morgan('dev'));
+
+if (process.env.NODE_ENV !== "production") {
+    app.use(morgan('tiny'));
+
 }
-// data parsing
-//  parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static(path.join(__dirname, 'client/build')))
+    app.get('*', function (req, res) {
+        res.sendFile(path.join(__dirname, 'client/build', 'index.html'))
+    })
+}
 
-// parse application/json
-app.use(bodyParser.json())
-
-
-
-// connect to mongodb 
+//@ connect to mongodb 
 connectDb();
 
-
-//load Api routes
-// app.use('/api/route/user', require('./api/routes/user'));
-app.use('/api/route/user', require('./api/routes/user'));
-app.use('/api/route/post', require('./api/routes/post'));
 //establish http server connections
 
-if (process.env.NODE_ENV === "production") {
-    app.use(express.static(path.join(__dirname, '/build')))
-}
-
-const server = app.listen(Port, () => {
+const server = app.listen(Port, (err) => {
+    if (err) throw err
     return console.log(`server running on port ${Port}`);
 });
 
+//@load Api routes
+// app.use('/api/route/user', require('./api/routes/user'));
+app.use('/api/route/user', require('./api/routes/user'));
+app.use('/api/route/post', require('./api/routes/post'));
+
+
+
 const io = socket(server);
 app.set('socketio', io);
-// io.use((socket, next) => {
-//     const token = socket.handshake.auth.token;
-//     try {
 
-//         if (token) {
-//             const user = jwt.decode(token, process.env.JwtSecret)
-//             if (!user) {
-//                 return next(new Error('not authorised'))
-//             }
-//             socket.user = user;
-//             return next()
-//         }
-//     } catch (error) {
-//         next(error)
-//     }
-// });
 io.on('connection', (socket) => {
     console.log('made socket connection');
 

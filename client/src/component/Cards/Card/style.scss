@@ -43,6 +43,8 @@
 
   .comments {
     margin-bottom: 0.75em;
+    max-height: 300px;
+    overflow-y: auto;
   }
 
   .timePosted {
@@ -58,13 +60,14 @@
     justify-content: space-between;
     font-size: 0.85em;
     padding: 1.5em 1.25em;
+    position: relative;
 
     .commentText {
       color: $font-color-primary;
     }
 
     .postText-btn {
-      color: $link-color-secondary;
+      color: $link-color;
       font-weight: 400;
       cursor: pointer;
       border: 0;
@@ -80,11 +83,22 @@
   .card {
     border: none;
     background-color: $background-grey;
-    margin-bottom: 0.75em;
+    // margin-bottom: 0.75em;
+     margin-top: 15px;
 
-    .addComment {
-      display: none;
+     .cardImage {
+      width: 100%;
+      height: 400px;
+      display: block;
+      object-fit: cover;
+      object-position: contain;
     }
+     
+     
+
+    // .addComment {
+    //   display: none;
+    // }
 
     .timePosted {
       border: none;

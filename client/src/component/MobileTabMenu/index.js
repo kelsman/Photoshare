@@ -6,46 +6,33 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import * as Routes from '../routes';
-const Wrapper = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  background-color: #ffffff;
-  position: fixed;
-  z-index: 4;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 50px;
-`;
+import NewPostButton from '../NewPost/NewPostButton'
+
 
 const MobileTabMenu = ({ user }) => {
   const history = useHistory();
   // console.log(history);
   const { location } = history;
   return (
-    <Wrapper>
+    <nav className="mobile__nav">
       <Link to={Routes.Dashboard}>
         <Icon.Home size={26} />
       </Link>
       <Link to={Routes.Explore}>
         <Icon.Search className="icon__search" size={26} />
       </Link>
-      <div>
-        <label htmlFor="file" style={{ cursor: 'pointer' }}>
-          <Icon.PlusCircle className="icon__plus" size={26} />
-        </label>
-        <input accept="image/*" type="file" id="file" style={{ display: 'none' }} />
-      </div>
+
+      <NewPostButton />
+
+
       <Icon.Heart className="icon__heart" fill={'black'} size={26} />
 
       {user && user.avatar && (
-        <Link to={Routes.ProfilePage}>
+        <Link to={Routes.ProfilePage + `/${user.username}`}>
           <img src={user.avatar} alt="avatar" width="26px" height="26px" />
         </Link>
       )}
-    </Wrapper>
+    </nav>
   );
 };
 

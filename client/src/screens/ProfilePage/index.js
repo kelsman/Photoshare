@@ -129,9 +129,6 @@ const ProfilePage = () => {
         <h4> no posts to show </h4>
       )}
 
-      <footer>
-        <Footer />
-      </footer>
     </div>
   );
 };

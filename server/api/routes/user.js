@@ -32,6 +32,6 @@ router.get('/userprofile/:username', authMiddleWare, profileController.getUserPr
 
 // search users 
 
-router.post('/search-users/:query', authMiddleWare, authController.searchUsers);
+router.get('/search-users/:query', authMiddleWare, authController.searchUsers);
 
 module.exports = router;

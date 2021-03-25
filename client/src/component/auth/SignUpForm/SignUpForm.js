@@ -54,7 +54,7 @@ function SignUpForm({ history, signup }) {
   const { values, errors, handleChange, handleSubmit, setFieldValue } = formik;
   return (
     <Fragment>
-      <form encType="multipart/form-data" onSubmit={handleSubmit}>
+      <form className="sign__up__form" encType="multipart/form-data" onSubmit={handleSubmit}>
         <h2>Sign up</h2>
         <div className="name-input">
           <input

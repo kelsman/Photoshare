@@ -1,3 +1,5 @@
+@import '../../Sass/variables';
+
 .search-box{
     position: relative;
     width: 100%;
@@ -6,8 +8,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: inherit;
+  
     padding: 15px 0;
+    
     // border: 10px solid red;
    
    
@@ -20,7 +23,7 @@
         background-color: inherit;
         width: 90%;
         height: 40px;
-       
+        background-color: $background-grey;
         text-align: center;
         color: #999;
       
@@ -41,4 +44,20 @@
         // border: 3px solid pink;
     }
 
-}
+  }
+  .search__list{
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    img{
+      border-radius: 50%;
+    }
+    div{
+      margin: 0px 10px;
+      h6{
+        font-weight: 200;
+      }
+    }
+  }

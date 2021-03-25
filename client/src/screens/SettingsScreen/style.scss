@@ -1,15 +1,14 @@
 @import '../../Sass/variables';
 .Edit_wrapper{
     width: 100%;
-    // padding-top: 10vh;
+    padding-top: 9vh;
+    padding-bottom: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100vh;
-
-    
-    
+    position: relative;  
 } 
 .form_container{
     width: 80%;
