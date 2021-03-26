@@ -7,7 +7,8 @@ const connectDb = require('./db');
 const app = express();
 const socket = require('socket.io');
 const path = require('path')
-const Port = process.env.Port || 9000
+
+const PORT = process.env.PORT || 9000
 
 // app configuration
 
@@ -21,9 +22,9 @@ if (process.env.NODE_ENV !== "production") {
 }
 if (process.env.NODE_ENV === "production") {
     app.use(express.static('client/build'))
-    app.get('*', function (req, res) {
-        res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'))
-    })
+    // app.get('*', function (req, res) {
+    //     res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'))
+    // })
 }
 
 //@ connect to mongodb 
@@ -31,7 +32,7 @@ connectDb();
 
 //establish http server connections
 
-const server = app.listen(Port, (err) => {
+const server = app.listen(PORT, (err) => {
     if (err) throw err
     return console.log(`server running on port ${Port}`);
 });
