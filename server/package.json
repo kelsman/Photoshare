@@ -9,10 +9,10 @@
   },
   "scripts": {
     "build": "cd ../client && npm run build",
-    "install-client": " cd ../client && npm install",
+    "install-client": "cd ../client && npm install",
     "heroku-postbuild": "npm run install-client && npm run build",
     "start": "node index.js",
-    "server": "  nodemon index.js"
+    "server": "nodemon index.js"
   },
   "author": "",
   "license": "ISC",
