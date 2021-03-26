@@ -7,7 +7,7 @@ import * as Routes from '../../component/routes';
 
 const token = localStorage.getItem('authToken');
 
-const baseUrl = process.env.REACT_APP_BASE_URL || 'http://localhost:9000';
+
 
 // @create post
 
@@ -56,6 +56,7 @@ export const getPosts = (history) => {
       }
 
       const response = await axios.get(`/api/route/post/retrieveExplorePost`);
+      console.log(response)
       if (response) {
         dispatch({ type: postActionTypes.GET_POSTS_SUCCESS, payload: response.data.posts });
       }

@@ -7,8 +7,8 @@ const connectDb = require('./db');
 const app = express();
 const socket = require('socket.io');
 const path = require('path')
-const userRouter = require('./api/routes/user');
-const postRouter = require('./api/routes/post');
+// const userRouter = require('./api/routes/user');
+// const postRouter = require('./api/routes/post');
 
 const PORT = process.env.PORT || 9000
 
@@ -23,9 +23,9 @@ if (process.env.NODE_ENV !== "production") {
 
 }
 if (process.env.NODE_ENV === "production") {
-    app.use(express.static('client/build'))
+    app.use(express.static(path.join(__dirname, 'client/build')))
     app.get('*', function (req, res) {
-        res.sendFile(path.join(__dirname, 'client/build/index.html'))
+        res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'))
     })
 }
 
@@ -41,8 +41,8 @@ const server = app.listen(PORT, (err) => {
 
 //@load Api routes
 // app.use('/api/route/user', require('./api/routes/user'));
-app.use('/api/route/user', userRouter);
-app.use('/api/route/post', postRouter);
+app.use('/api/route/user', require('./api/routes/user'));
+app.use('/api/route/post', require('./api/routes/post'));
 
 
 

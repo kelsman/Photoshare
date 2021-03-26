@@ -16,7 +16,7 @@ const Cards = ({ isFetching }) => {
   return (
     <div className="cards">
       {/* stories components for later */}
-      {!posts.length && (
+      { posts && posts.length < 1 && (
         <div style={{ marginTop: '20px' }}>
           {' '}
           <p> you have no posts yet follow more people to see their posts</p>{' '}
