@@ -34,26 +34,8 @@ function Card(props) {
     hours,
   } = props;
 
-  // React.useEffect(() => {
-  //   return () => null;
-  // });
-
   // query client
   const queryClient = useQueryClient();
-
-
-
-  // const handlePost = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     setIsSubmitting(true)
-  //     await dispatch(commentPost(feed._id, commentText, history));
-  //     setCommentText('');
-  //     setIsSubmitting(false)
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
-  // };
 
   const likeMutation = useMutation(() => likePost(feed._id), {
     onSuccess: () => {

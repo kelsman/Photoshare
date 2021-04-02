@@ -1,5 +1,4 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import Modal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import './style.scss';
 import * as Routes from '../../routes';
@@ -9,6 +8,12 @@ import { createPostFunc } from '../../../redux/Actions/postActions';
 
 import * as Icon from 'react-feather';
 import cogoToast from 'cogo-toast';
+
+// modal
+import 'react-responsive-modal/styles.css';
+import { Modal } from 'react-responsive-modal';
+
+import ImageFilter from 'react-image-filter';
 
 const NewPostModal = ({ file }) => {
   const modalIsOpen = useSelector(({ modal }) => modal.showModal);
@@ -59,10 +64,20 @@ const NewPostModal = ({ file }) => {
   return (
     <div className="modal__wrapper">
       <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
+        open={modalIsOpen}
+        onClose={closeModal}
         className="modal"
         overlayClassName="overlay"
+        showCloseIcon={false}
+        blockScroll
+        focusTrapped
+
+        classNames={
+          {
+            overlay: 'newPostoverlay',
+            modal: 'newPostModal',
+          }
+        }
       >
         <div className="modal__header">
           <button className="goback__btn" onClick={closeModal}>
@@ -89,9 +104,21 @@ const NewPostModal = ({ file }) => {
         {/* preview image */}
 
         {previewImage && (
-          <div className="preview__wrapper">
-            <img src={previewImage} className="preview" alt="image" />
-          </div>
+          <>
+            <div className="preview__wrapper">
+              <figure className="aden">
+                <img src={previewImage} className="preview" alt="image" />
+              </figure>
+            </div>
+
+            <ImageFilter
+              image={previewImage}
+              // filter={'sepia'} // see docs beneath
+              colorOne={[40, 250, 250]}
+              colorTwo={[250, 150, 30]}
+
+            />
+          </>
         )}
       </Modal>
     </div>

@@ -28,7 +28,11 @@
   .cardImage {
     width: 100%;
     display: block;
+    object-fit: cover;
+    height: 500px;
+    object-position: center;
   }
+
 
   .likedBy {
     display: flex;
@@ -90,9 +94,10 @@
 @media only screen and (max-width: 640px) {
   .card {
     border: none;
-    background-color: $background-grey;
+    border-bottom: 1px solid $border-color-grey;
+    // background-color: $background-grey;
     // margin-bottom: 0.75em;
-     margin-top: 15px;
+     margin: 40px 0px;
 
      .cardImage {
       width: 100%;
@@ -103,13 +108,5 @@
     }
      
      
-
-    // .addComment {
-    //   display: none;
-    // }
-
-    .timePosted {
-      border: none;
-    }
   }
 }

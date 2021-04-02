@@ -1,7 +1,6 @@
 import React from 'react';
 import { useHistory, Redirect } from 'react-router-dom';
 import NewPost from '../../component/NewPost/NewPost';
-import NewPostModal from '../../component/NewPost/NewPostModal';
 import * as Routes from '../../component/routes';
 
 const NewPostPage = ({ location }) => {

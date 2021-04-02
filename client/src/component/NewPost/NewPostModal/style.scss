@@ -1,36 +1,30 @@
 @import '../../../Sass/variables';
 
-.overlay {
-    background: $background-grey;
+
+.modal__wrapper{
+    width: 100vw;
+    height: 100%;
+   
 }
 
-.modal{
-    position: absolute;
-    width: 600px;
-    height: 400px;
-    top: 50%;
-    left: 50%;
-    right: auto;
-    bottom: auto;
-    transform  : translate(-50%, -50%);
-    border: 1px solid $border-color-grey-secondary;
-
-    &:focus{
-      
-        outline: 0;
+.newPostModal{
+    width: 400px;
+    min-height: 500px;
+    @media screen and (max-width: 320px){
+        width: 280px;
+        
     }
-  
-}
 
+}
 .caption__box{
      width: 100%;
      margin: 10px 0px;
      border-bottom:  1px solid $border-color-grey;
      padding: 10px;
 
-     &:focus{
-         border: none;
-     }
+    //  &:focus{
+    //     //  border: none;
+    //  }
     &::placeholder{
         color: $border-color-grey;
         font-weight: 600;
@@ -43,6 +37,7 @@
     align-items: center;
     justify-content: space-between;
     margin: 5px 0;
+    border-bottom: 1px solid $border-color-grey;
     button{
         margin: 0 5px;
         border: 0px;
@@ -59,18 +54,30 @@
 
 }
 .preview__wrapper{
-    width: 100px;
-    height: 100px;
-    background: $background-white;
-    padding: 10px;
-    margin: 20px;
-}
-.preview{
-    width: 90px;
-    height: 90px;
-    object-fit: contain;
-    margin-left: auto;
-    
+  
+    width: 100%;
+    border: 1px solid red;
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    figure{
+        width: 350px;
+        display: block;
+        height: 300px;
+        object-fit: contain;
+        object-position: center;
+        margin: 3px 0px;
+    }
+    .preview{
+        width: 350px;
+        display: block;
+        height: 300px;
+        object-fit: contain;
+        object-position: center;
+        margin: 3px 0px;
+       
+        
+    }
 }
 @media screen and (max-width: 600px){
     .modal{
