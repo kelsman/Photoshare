@@ -83,3 +83,29 @@ export const deleteComment = async (postid, commentid) => {
         console.log(error.response.message)
     }
 }
+
+export const retrieveFeedPosts = async (history) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    };
+    try {
+        const res = await axios.get(`api/route/post/retrieveFeedPosts`, config);
+        return res.data.posts
+
+    } catch (error) {
+        if (error.response) {
+            console.log(error.response.data);
+
+            cogoToast.info(`${error.response.data.msg}`, { position: 'top-center' });
+            if (
+                error.response.data.msg === 'jwt expired' ||
+                error.response.data.msg === `you're not authorised`
+            ) {
+                history.push('/');
+                localStorage.removeItem('authToken');
+            }
+        }
+    }
+};

@@ -7,8 +7,6 @@ import * as Routes from '../../component/routes';
 
 const token = localStorage.getItem('authToken');
 
-
-
 // @create post
 
 export const createPostFunc = (data, history) => {

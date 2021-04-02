@@ -4,9 +4,7 @@ import './style.scss';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { loaduser } from '../../redux/Actions/userActions';
-import { retrieveFeedPosts } from '../../redux/Actions/postActions';
-import { retrieveFeedPostsStart } from '../../redux/feed/feedAction';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 
 
 // import Header from '../../component/Header';
@@ -16,41 +14,28 @@ import NavigationHeader from '../../component/NavigationHeader';
 import SideBar from '../../component/SideBar';
 import Cards from '../../component/Cards';
 import Loader from '../../component/Loader';
+import { retrieveFeedPosts } from '../../api/posts.api';
+
 
 const token = localStorage.getItem('authToken');
 
-const HomeScreen = ({
-  loaduser,
-  currentUser,
-  retrieveFeedPosts,
-  retrieveFeedPostsStart,
-  posts,
-}) => {
-  const [isFetching, setIsFetching] = React.useState(true);
+const HomeScreen = () => {
 
   const history = useHistory();
 
-  // const { data, isLoading, isError, isSuccess } = useQuery('fetchfeeds', retrieveFeedPosts)
+  const { data, isLoading, isError, isSuccess } = useQuery('fetchfeeds', () => retrieveFeedPosts(history))
   // console.log(data);
 
   if (!token) {
     history.push('/');
   }
 
-  useEffect(() => {
 
-    (async function () {
-      // body of the function
-      await retrieveFeedPostsStart(history);
-      setIsFetching(false);
-    }());
 
-    return () => null;
-  }, [retrieveFeedPostsStart]);
-
-  if (!posts && isFetching === true) {
+  if (isLoading) {
     return <Loader />;
   }
+
 
   return (
     <div className="homeScreen">
@@ -60,7 +45,7 @@ const HomeScreen = ({
       {/* main */}
       <main>
         <div className="container">
-          <Cards isFetching={isFetching} />
+          <Cards posts={data} />
           <SideBar />
         </div>
       </main>
@@ -75,6 +60,6 @@ const mapStateToProps = ({ user, post, feed }) => {
   };
 };
 
-export default connect(mapStateToProps, { loaduser, retrieveFeedPosts, retrieveFeedPostsStart })(
+export default connect(mapStateToProps, null)(
   HomeScreen,
 );

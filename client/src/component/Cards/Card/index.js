@@ -7,11 +7,14 @@ import Profile from '../../Profile';
 import moment from 'moment';
 import dayjs from 'dayjs';
 import ExploreCardMenu from '../../ExplorePostCardMenu';
-import { commentPost } from '../../../redux/Actions/postActions';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { likePost } from '../../../redux/Actions/postActions';
+import { likePost, CommentPost } from '../../../api/posts.api'
 import Loader from '../../Loader'
+import { v4 as uuidv4 } from 'uuid';
+import { useQueryClient, useMutation, useQuery } from 'react-query';
+
+
 function Card(props) {
   const [commentText, setCommentText] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -31,28 +34,76 @@ function Card(props) {
     hours,
   } = props;
 
-  React.useEffect(() => {
-    return () => null;
+  // React.useEffect(() => {
+  //   return () => null;
+  // });
+
+  // query client
+  const queryClient = useQueryClient();
+
+
+
+  // const handlePost = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     setIsSubmitting(true)
+  //     await dispatch(commentPost(feed._id, commentText, history));
+  //     setCommentText('');
+  //     setIsSubmitting(false)
+  //   } catch (error) {
+  //     console.log(error.message);
+  //   }
+  // };
+
+  const likeMutation = useMutation(() => likePost(feed._id), {
+    onSuccess: () => {
+      queryClient.invalidateQueries('fetchfeeds')
+    },
+
   });
-  const handlePost = async (e) => {
-    e.preventDefault();
-    try {
-      setIsSubmitting(true)
-      await dispatch(commentPost(feed._id, commentText, history));
-      setCommentText('');
-      setIsSubmitting(false)
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
+
+  const commentPostMutation = useMutation(() => CommentPost(feed._id, commentText), {
+
+    xonMutate: () => {
+
+      //  take snapshot of the data
+
+    },
+    onSuccess: (data) => {
+
+      queryClient.setQueryData('fetchfeeds', (prevData) => {
+
+        const postToUpdate = prevData.find((post) => {
+          return post._id === feed._id
+        })
+        postToUpdate.comments = [...postToUpdate.comments, data.newComment]
+
+
+      })
+      setCommentText('')
+    },
+    onError: (error, variables, context) => { throw new Error(error) },
+    // onSettled: () => {
+    //   queryClient.invalidateQueries('fetchfeeds')
+    // }
+  })
   const likeFunc = async () => {
     try {
-      await dispatch(likePost(feed._id, history));
+      await likeMutation.mutateAsync()
       // setIsLikedButtonClicked(true)
     } catch (error) {
       console.log(error);
     }
   };
+
+  const commentPostFunc = async () => {
+    try {
+      await commentPostMutation.mutateAsync()
+      // setIsLikedButtonClicked(true)
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const focus = () => {
     inputRef.current.focus();
@@ -91,9 +142,7 @@ function Card(props) {
           comments.map((comment) => {
             return (
               <CommentList
-                key={comment._id}
-                accountName={comment.user}
-                comment={comment}
+                key={uuidv4()}
                 commentId={comment._id}
                 commentuser={comment._user}
                 commentText={comment.commentText}
@@ -107,7 +156,11 @@ function Card(props) {
           })}
       </div>
       <div className="timePosted">{moment(feed.date).fromNow()} </div>
-      <form onSubmit={handlePost} className="addComment">
+      <form onSubmit={(event) => {
+        event.preventDefault();
+        commentPostFunc()
+
+      }} className="addComment">
         <input
           ref={inputRef}
           value={commentText}
@@ -116,12 +169,12 @@ function Card(props) {
           placeholder="Add a comment..."
           className="commentText"
         />
-        {isSubmitting && <Loader />}
+        {commentPostMutation.isLoading && <Loader />}
         <button
           type="submit"
           disabled={commentText ? false : true}
           className="postText-btn"
-          onSubmit={handlePost}
+
         >
           Post
         </button>

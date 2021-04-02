@@ -6,13 +6,13 @@ import Divider from '../Divider'
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import * as Icon from 'react-feather';
+import { useQueryClient } from 'react-query';
 
 const Cards = ({ isFetching }) => {
-  const posts = useSelector(({ feed }) => feed.posts);
 
-  if (isFetching) {
-    return <p> Loading</p>;
-  }
+  const queryClient = useQueryClient();
+  const posts = queryClient.getQueryData('fetchfeeds')
+
 
   return (
     <div className="cards">
@@ -37,7 +37,7 @@ const Cards = ({ isFetching }) => {
               comments={post.comments ? post.comments : null}
               likedByText={post.postLikes ? post.likes.username : null}
               // likedByNumber={feed.postLikes && feed.postLikes.likes ? feed.postLikes.likes.length : "Be the first to Like this"}
-              hours={16}
+              hours={post.date}
             />
 
 

@@ -9,7 +9,9 @@ import { useHistory } from 'react-router-dom';
 import { useMutation, useQueryClient } from 'react-query';
 import { deleteComment } from '../../api/posts.api'
 import { ReactComponent as LoaderSvg } from '../../assets/loader.svg';
+import Loader from 'react-loader-spinner';
 import * as Routes from '../routes'
+
 moment.relativeTimeThreshold('d', 30 * 12);
 moment.updateLocale('en', {
   relativeTime: {
@@ -31,17 +33,11 @@ const CommentList = ({
   const history = useHistory();
   const queryClient = useQueryClient();
 
-  // const handleDelete = async () => {
-  //   try {
-  //     await dispatch(deleteComment(userpost._id, commentId, history));
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
   const { mutateAsync, isLoading } = useMutation(() => deleteComment(userpost._id, commentId), {
 
     onSuccess: () => {
       queryClient.invalidateQueries('fetchsinglePost')
+      queryClient.invalidateQueries('fetchfeeds');
     }
   })
 
@@ -66,6 +62,12 @@ const CommentList = ({
 
         {userData && commentuser == userData._id && (
           <span onClick={deleteCommentFunc} className="deletebtn">
+            {isLoading && <Loader
+              type="Oval"
+              color="black"
+              height={30}
+              width={30}
+            />}
             <Icon.Trash2 size={13} />
           </span>
         )}

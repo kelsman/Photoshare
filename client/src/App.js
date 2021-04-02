@@ -34,6 +34,7 @@ const ProfilePage = lazy(() => import('./screens/ProfilePage'));
 const token = localStorage.getItem('authToken');
 // Create a client
 const queryClient = new QueryClient();
+
 function App({ loaduser, connectSocketIo }) {
   const {
     history,
