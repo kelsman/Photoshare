@@ -58,12 +58,20 @@
   .addComment {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     font-size: 0.85em;
     padding: 1.5em 1.25em;
     position: relative;
+    width: 100%;
 
     .commentText {
       color: $font-color-primary;
+      border: none;
+      width: 80%;
+      outline: 0;
+      height: 30px;
+      padding: 0px 1em;
+      
     }
 
     .postText-btn {

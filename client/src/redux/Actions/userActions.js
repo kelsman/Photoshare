@@ -13,14 +13,14 @@ export const signup = (data, history) => {
     try {
       const config = {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
         },
       };
       cogoToast.loading('Registering....');
-      const response = await axios.post(`/api/route/user/register`, config, data);
+      const response = await axios.post(`/api/route/user/register`, data, config);
       if (response) {
         await dispatch({ type: userActionTypes.SIGN_UP_SUCESS, payload: response.data });
-        cogoToast.success('Register successfully');
+        cogoToast.success('signup success');
         history.push('/');
       }
     } catch (error) {
@@ -45,7 +45,7 @@ export const signin = (data, history) => {
       if (response) {
         await dispatch({ type: userActionTypes.LOG_IN_SUCCESS, payload: response.data });
         await localStorage.setItem('authToken', response.data.jwtToken);
-        await cogoToast.success('sign in success', { position: 'bottom-right' });
+        cogoToast.success('sign in success', { position: 'bottom-right' });
         history.push(Routes.Dashboard);
       }
     } catch (error) {
@@ -57,7 +57,7 @@ export const signin = (data, history) => {
   };
 };
 
-export const loaduser = (history) => {
+export const loaduser = () => {
   return async (dispatch) => {
     const token = localStorage.getItem('authToken');
 
@@ -77,9 +77,8 @@ export const loaduser = (history) => {
           error.response.data.msg === 'jwt expired' ||
           error.response.data.msg === `you're not authorised`
         ) {
-          history.push('/');
-          localStorage.removeItem('authToken');
           cogoToast.info('session expired');
+          localStorage.removeItem('authToken');
         }
       }
     }

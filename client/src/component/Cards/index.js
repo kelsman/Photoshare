@@ -6,6 +6,7 @@ import Divider from '../Divider'
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import * as Icon from 'react-feather';
+
 const Cards = ({ isFetching }) => {
   const posts = useSelector(({ feed }) => feed.posts);
 
@@ -48,7 +49,7 @@ const Cards = ({ isFetching }) => {
           <Icon.CheckCircle
             color="blue"
             size={40}
-            className="feed__bottom-icon icon--larger"
+
           />
         </Divider>
         <h2 style={{ textAlign: "center" }}>You're All Caught Up</h2>

@@ -1,100 +1,176 @@
 @import url('https://fonts.googleapis.com/css2?family=Akaya+Telivigala&display=swap');
-div{
-    margin: 0;
-    padding: 0;
-}
-.logo{
-    font-family: 'Akaya Telivigala', cursive;
-    text-align: center;
-    line-height: 12.53px;
-    margin-bottom: 15px;  
- 
-}
+@import '../../../Sass/variables';
+
+
+
 .login-form{
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    // justify-content: space-evenly;
-    width: 411px;
-    height: 600px;
-    background-color: #E5E5E5;
-    margin-top: 0.82em;
+  flex-direction: column;
+  align-items: center;
+   width: fit-content;
+   height: auto;
+   padding: 20px;
+// color: white;
+    background: $background-white;
+    .logo{
+        font-family: 'Akaya Telivigala', cursive;
+        text-align: center;
+        line-height: 12.53px;
+        margin: 0 0 24px 0;
+    }
+
     
-  
-}
-.error{
- 
-    margin-top: 0.82em;
-    max-width: 300px;
-    text-align: left;
-    display: block;
-    margin-left: 2em;
-}
-.email-container, .password-container{
-    height: 48px;
-    width: 300px;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    outline: 0;
-    background-color: #F2F5FA;
-    border: none;
-    padding: 0 10px; 
-    // margin: 16px 0;
-   
-
-}
-input{
-    border: none;
-    outline: none;
-    flex: 1;
-    background: inherit;
-}
-
-.react-icons{
-    vertical-align: middle;
-}
-.submit-btn{
-    border: 0;
-    outline: 0;
-    height: 46px;
-    color: #ffffff;
-    width: 300px;
-    border-radius: 5px;
-    background-image: linear-gradient(90deg, #59A1FF 19.89%, #3D67F2 100%);
-
-   
-}
-.password-reset-link{
-    color: blue;
-    text-decoration: none;
-    font-weight: 300;
-}
-.password-reset-link.reset-password{
-    color: blue;
-    text-decoration: none;
-    font-weight: 300;
-    display: block;
-    max-width: 300px;
-    margin: 0 auto;
-    text-align: right;
-   
-}
-
-@media screen and (max-width: 600px){
-    .login-form{
-        width: 98%;
-        min-width: 300px;
-        max-width: 350px;
-
-    }
     .email-container, .password-container{
-        width: 250px;
-        
+        height: 48px;
+        width: 300px;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        outline: 0;
+        background-color: #F2F5FA;
+        border: none;
+        padding: 0 10px; 
+       margin: 10px 0px;
+
+        input{
+            border: none;
+            outline: none;
+            flex: 1;
+            background: inherit;
+            padding: 0px 10px;
+        }
+       
+    
     }
-    .submit-btn{
-        width: 250px;
+    .password-reset-link{
+        display: block;
+        width: 100%;
+        text-align: right;
+        margin: 5px 0px;
+        font-size: smaller;
+        color: $link-color-secondary;
+    }
+
+    .login-btn{
+        height: 30px;
+        width: 300px;
+        margin: 15px 0px;
+    }
+
+    h6{
+        width:  100%;
+    }
+
+}
+
+.new_user_link{
+    border: 1px solid $border-color-grey;
+    background: #FFFFFF;
+    margin: 10px 0px;
+    padding: 15px 0px ;
+
+    span{
+        font-size: smaller;
+        font-weight: 100;
+    }
+    .sign-up-link{
+        font-size: 16px;
+    }
+    a{
+        color: $link-color;
     }
 }
+
+
+// .login-form{
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     // justify-content: space-evenly;
+//     width: 411px;
+//     height: 600px;
+//     background-color: #E5E5E5;
+//     margin-top: 0.82em;
+//     border: 5px solid red;
+
+//     .error{
+     
+//         margin-top: 0.82em;
+//         max-width: 300px;
+//         text-align: left;
+//         display: block;
+//         margin-left: 2em;
+//     }
+
+//     .email-container, .password-container{
+//         height: 48px;
+//         width: 300px;
+//         border-radius: 10px;
+//         display: flex;
+//         flex-direction: row;
+//         align-items: center;
+//         justify-content: space-between;
+//         outline: 0;
+//         background-color: #F2F5FA;
+//         border: none;
+//         padding: 0 10px; 
+//         // margin: 16px 0;
+       
+    
+//     }
+// }
+
+// input{
+//     border: none;
+//     outline: none;
+//     flex: 1;
+//     background: inherit;
+// }
+
+// .react-icons{
+//     vertical-align: middle;
+// }
+// .submit-btn{
+//     border: 0;
+//     outline: 0;
+//     height: 46px;
+//     color: #ffffff;
+//     width: 300px;
+//     border-radius: 5px;
+//     background-image: linear-gradient(90deg, #59A1FF 19.89%, #3D67F2 100%);
+
+   
+// }
+// .password-reset-link{
+//     color: blue;
+//     text-decoration: none;
+//     font-weight: 300;
+// }
+// .password-reset-link.reset-password{
+//     color: blue;
+//     text-decoration: none;
+//     font-weight: 300;
+//     display: block;
+//     max-width: 300px;
+//     margin: 0 auto;
+//     text-align: right;
+   
+// }
+
+// @media screen and (max-width: 600px){
+//     .login-form{
+//         width: 98%;
+//         min-width: 300px;
+//         max-width: 350px;
+
+//     }
+//     .email-container, .password-container{
+//         width: 250px;
+        
+//     }
+//     .submit-btn{
+//         width: 250px;
+//     }
+// }

@@ -3,22 +3,24 @@
 
 .cards{
     width: 600px;
-}
-.feed__bottom{
-    text-align: center;
-    padding: 2rem;
-    &::after {
-        content: '';
+    height: 100%;
+   background: $background-grey;
+    .feed__bottom{
+        text-align: center;
+        padding: 2rem;
+        &::after {
+            content: '';
+            
+            height: 30px;
+            display: block;
+          }
+      
+        h2{
+         
+            margin-top: 0px;
+        }
         
-        height: 30px;
-        display: block;
-      }
-  
-    h2{
-     
-        margin-top: 0px;
     }
-    
 }
 @media screen and (max-width: 640px){
     .cards{

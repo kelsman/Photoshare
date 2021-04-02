@@ -45,9 +45,6 @@ const NewPostModal = ({ file }) => {
   const handlePost = async (e) => {
     e.preventDefault();
     try {
-      // if (!file) {
-      //     cogoToast.warn('no picture has been selected');
-      // }
 
       const data = await new FormData();
       data.append('postfile', file);

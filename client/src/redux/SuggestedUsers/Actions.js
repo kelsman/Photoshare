@@ -15,6 +15,7 @@ export const getSuggestedUser = () => async (dispatch) => {
         type: suggestedUserTypes.FETCH_SUGGESTED_USERS_SUCCESS,
         payload: response.data.users,
       });
+
     }
   } catch (error) {
     if (error.response) {

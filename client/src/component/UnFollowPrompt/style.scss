@@ -1,0 +1,36 @@
+@import '../../Sass/variables';
+
+  .unfollow__prompt{
+
+        padding: 2.5rem;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        border-bottom: 1px solid $border-color-grey;
+        background: $background-white;
+        width: 100%;
+
+        img{
+            width: 8rem;
+            height: 8rem;
+            border-radius: 100px;
+            border: 1px solid #dbdbdb;
+        }
+
+        .unfollow__btn{
+            width: 100%;
+            display: block;
+            height: 40px;
+            border: 0;
+            cursor: pointer;
+            color: $gradient-two;
+            background: transparent;
+            &:active{
+                outline: none;
+            }
+            &:focus{
+                outline: 0;
+            }
+        }
+  }

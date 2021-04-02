@@ -6,7 +6,7 @@ import SignUpForm from '../../component/auth/SignUpForm/SignUpForm';
 function SignUpScreen() {
   return (
     <div className="signup-screen">
-      {/*   <Header /> */}
+
       <section className="form-section">
         <SignUpForm />
       </section>

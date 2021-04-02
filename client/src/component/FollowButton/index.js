@@ -8,30 +8,31 @@ import CogoToast from 'cogo-toast';
 import { setToken } from '../../utils';
 import cogoToast from 'cogo-toast';
 import Loader from '../Loader';
+import ModalComponent from '../Modal/'
+import UnfollowPrompt from '../UnFollowPrompt';
+import { useQueryClient, useMutation } from 'react-query';
 const token = localStorage.getItem('authToken');
 
-const FollowButton = ({ userId }) => {
+
+const FollowButton = ({ userId, avatar, username, following }) => {
   const dispatch = useDispatch();
   const currentUser = useSelector(({ user }) => user.currentUser);
+  const [showModal, setShowModal] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(following);
 
-  const [following, setFollowed] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient()
 
   const handleUnfollow = async () => {
     if (token) {
       setToken(token);
     }
     try {
-      setLoading(true);
       const response = await axios.post(`/api/route/user/unfollow/${userId}`);
       if (response) {
         cogoToast.success(`${response.data.msg}`);
-        setLoading(false);
-        setFollowed(false);
+
       }
     } catch (error) {
-      console.log(error);
-      setLoading(false);
       if (error.response) {
         cogoToast.error(`${error.response.data.msg}`);
       }
@@ -42,54 +43,73 @@ const FollowButton = ({ userId }) => {
       setToken(token);
     }
     try {
-      setLoading(true);
       const response = await axios.post(`/api/route/user/follow/${userId}`);
       if (response) {
         cogoToast.success(`${response.data.msg}`);
-        setLoading(false);
-        setFollowed(true);
+
       }
     } catch (error) {
       console.log(error);
-      setLoading(false);
       if (error.response) {
         cogoToast.error(`${error.response.data.msg}`);
       }
     }
   };
-
-  useEffect(() => {
-    if (currentUser) {
-      const isFollowed = currentUser.following.find((follow) => follow.user === userId);
-      if (isFollowed) {
-        setFollowed(true);
-      } else {
-        setFollowed(false);
-      }
+  const unFollowMutation = useMutation(handleUnfollow, {
+    onSuccess: () => {
+      setIsFollowing(false)
+      queryClient.invalidateQueries('getProfileData')
     }
+  });
+  const followMutation = useMutation(handleFollow, {
+    onSuccess: () => {
+      setIsFollowing(true)
+      queryClient.invalidateQueries('getProfileData')
+    }
+  })
+  //  functions
 
-    return () => null;
-  }, []);
+  const unfollow = async () => {
+    const { mutateAsync } = unFollowMutation
+    await mutateAsync()
+
+  }
+
+  const follow = async () => {
+    const { mutateAsync } = followMutation
+    await mutateAsync()
+
+  }
+
 
   if (currentUser && currentUser._id == userId) {
     return <button disabled>follow</button>;
   }
-  if (following) {
-    return (
-      <button className="follow_btn" onClick={handleUnfollow}>
-        UnFollow
-        {loading && <LoaderSvg />}
-      </button>
-    );
-  }
+
+  const openModal = () => setShowModal(true)
+  const closeModal = () => setShowModal(false)
+
   return (
     <Fragment>
-      {!following && (
-        <button className="follow_btn" onClick={handleFollow}>
-          Follow
-          {loading && <LoaderSvg />}
-        </button>
-      )}
+      {
+        isFollowing ? (
+          <button className="Unfollow_btn" onClick={openModal}>
+            Following
+            {unFollowMutation.isLoading && <Loader />}
+          </button>
+        ) :
+          (
+            <button className="follow_btn" onClick={follow}>
+              Follow
+              {followMutation.isLoading && <Loader />}
+            </button>
+
+          )
+      }
+
+      <ModalComponent setModal={setShowModal} open={showModal} hide={closeModal}>
+        <UnfollowPrompt unfollow={unfollow} closeModal={closeModal} imagesrc={avatar} username={username} />
+      </ModalComponent>
     </Fragment>
   );
 };

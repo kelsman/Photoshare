@@ -4,8 +4,12 @@ import ProfileIcon from '../ProfileIcon';
 import moment from 'moment';
 import * as Icon from 'react-feather';
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteComment } from '../../redux/Actions/postActions';
+
 import { useHistory } from 'react-router-dom';
+import { useMutation, useQueryClient } from 'react-query';
+import { deleteComment } from '../../api/posts.api'
+import { ReactComponent as LoaderSvg } from '../../assets/loader.svg';
+import * as Routes from '../routes'
 moment.relativeTimeThreshold('d', 30 * 12);
 moment.updateLocale('en', {
   relativeTime: {
@@ -25,14 +29,25 @@ const CommentList = ({
   const userData = useSelector(({ user }) => user.currentUser);
   const dispatch = useDispatch();
   const history = useHistory();
+  const queryClient = useQueryClient();
 
-  const handleDelete = async () => {
-    try {
-      await dispatch(deleteComment(userpost._id, commentId, history));
-    } catch (error) {
-      console.log(error);
+  // const handleDelete = async () => {
+  //   try {
+  //     await dispatch(deleteComment(userpost._id, commentId, history));
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  const { mutateAsync, isLoading } = useMutation(() => deleteComment(userpost._id, commentId), {
+
+    onSuccess: () => {
+      queryClient.invalidateQueries('fetchsinglePost')
     }
-  };
+  })
+
+  const deleteCommentFunc = async () => {
+    await mutateAsync();
+  }
   return (
     <React.Fragment>
       <div className="commentContainer">
@@ -42,6 +57,7 @@ const CommentList = ({
               src={commentImage ? commentImage : require('../../assets/default-avatar.png')}
               alt="image"
               aria-label="poster-iamge"
+              onClick={() => history.push(Routes.ProfilePage + `/${accountName}`)}
             />
           </div>
         )}
@@ -49,7 +65,7 @@ const CommentList = ({
         <div className="comment">{commentText}</div>
 
         {userData && commentuser == userData._id && (
-          <span onClick={handleDelete} className="deletebtn">
+          <span onClick={deleteCommentFunc} className="deletebtn">
             <Icon.Trash2 size={13} />
           </span>
         )}

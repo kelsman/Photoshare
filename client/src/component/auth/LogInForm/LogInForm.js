@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import './style.scss';
 import * as Yup from 'yup';
+import * as Icon from 'react-feather'
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { signin, loaduser } from '../../../redux/Actions/userActions';
@@ -8,6 +9,7 @@ import { signin, loaduser } from '../../../redux/Actions/userActions';
 import { useFormik } from 'formik';
 import { AiOutlineLock, AiOutlineMail } from 'react-icons/ai';
 import { IconContext } from 'react-icons';
+import { ReactComponent as LoaderSpinner } from '../../../assets/loader.svg';
 // import cogoToast from 'cogo-toast';
 
 // Routes
@@ -29,7 +31,7 @@ const LogInForm = ({ signin }) => {
       setIsSubmitting(true);
       await signin(values, history);
       setIsSubmitting(false);
-      // history.push(Routes.Dashboard);
+
     } catch (error) {
       console.log(error.message);
       values.email = '';
@@ -46,24 +48,29 @@ const LogInForm = ({ signin }) => {
   });
 
   const { values, errors, handleChange, handleSubmit } = formik;
+
   return (
     <div>
       {/* <h1 className="logo">Photogram</h1> */}
       <form onSubmit={handleSubmit} className="login-form">
-        <h2> Log in</h2>
-        <div>
+        <h1 className="logo"> PhotoShare</h1>
+        <h6> Welcome Back</h6>
+        <h6> Sign in to continue</h6>
+        <div className="form__material">
           <div className="email-container">
-            <IconContext.Provider value={{ className: 'react-icons' }}>
-              <AiOutlineMail />
-            </IconContext.Provider>
+            <Icon.Mail size={15} />
             <input
               className="email-input"
+              id="email"
               type="email"
               name="email"
               value={formik.values.email}
               onChange={handleChange}
+              required
+              autoComplete="off"
               placeholder="email"
             />
+
           </div>
           {errors.email && (
             <small className="error" style={{ color: 'red', opacity: 0.7 }}>
@@ -74,17 +81,18 @@ const LogInForm = ({ signin }) => {
         </div>
         <div>
           <div className="password-container">
-            <IconContext.Provider value={{ className: 'react-icons' }}>
-              <AiOutlineLock />
-            </IconContext.Provider>
+            <Icon.Lock size={15} />
             <input
+              id="password"
               className="password-input"
               type="password"
               name="password"
               value={values.password}
               onChange={handleChange}
-              placeholder="password"
+              autoComplete="off"
+              placeholder="Password"
             />
+
           </div>
           {errors.password && (
             <small className="error" style={{ color: 'red', opacity: 0.7 }}>
@@ -93,28 +101,31 @@ const LogInForm = ({ signin }) => {
             </small>
           )}
         </div>
-        <Link className="password-reset-link reset-password" to="/accounts/password/reset">
-          Forgot your password?{' '}
+        <Link className="password-reset-link" to="/accounts/password/reset">
+          Forgot your password?{''}
         </Link>
 
-        <button type="submit" className="submit-btn" disabled={isSubmitting ? true : false}>
-          {isSubmitting ? 'Signing in..' : 'Log in'}
+        <button type="submit" className="login-btn" disabled={isSubmitting ? true : false}>
+          {isSubmitting ? <LoaderSpinner /> : 'Log in'}
         </button>
       </form>
-      <p>
+      <p className="new_user_link">
         {' '}
-        Don't have an account?{' '}
-        <Link className="password-reset-link" to="/accounts/signup">
+        <span> I'm a new user?</span>
+        {' '}
+        <Link className="sign-up-link" to="/accounts/signup">
           {' '}
-          Sign up
-        </Link>
+            Sign up
+          </Link>
       </p>
     </div>
   );
 };
+
 const mapStateToProps = ({ user }) => {
   return {
     loadUserErrorr: user.authError.loadUserError,
   };
 };
+
 export default connect(mapStateToProps, { signin, loaduser })(LogInForm);

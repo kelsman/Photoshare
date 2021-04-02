@@ -77,7 +77,7 @@ function Card(props) {
                     Liked by <strong>{likedByText}</strong> and{" "}
                     <strong>{likedByNumber} others</strong>
                 </span> */}
-        {!feed.likes ? (
+        {!feed.likes || feed.likes.length < 1 ? (
           <span className="like-title">
             {' '}
             Be the first to <b>like this</b>

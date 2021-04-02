@@ -6,6 +6,8 @@ import { useHistory } from 'react-router-dom';
 import { loaduser } from '../../redux/Actions/userActions';
 import { retrieveFeedPosts } from '../../redux/Actions/postActions';
 import { retrieveFeedPostsStart } from '../../redux/feed/feedAction';
+import { useQuery } from 'react-query';
+
 
 // import Header from '../../component/Header';
 
@@ -28,16 +30,22 @@ const HomeScreen = ({
 
   const history = useHistory();
 
+  // const { data, isLoading, isError, isSuccess } = useQuery('fetchfeeds', retrieveFeedPosts)
+  // console.log(data);
+
+  if (!token) {
+    history.push('/');
+  }
+
   useEffect(() => {
-    let subscribe = true;
-    const retrivefeed = async () => {
+
+    (async function () {
+      // body of the function
       await retrieveFeedPostsStart(history);
       setIsFetching(false);
-    };
-    if (subscribe) {
-      retrivefeed();
-    }
-    return () => (subscribe = null);
+    }());
+
+    return () => null;
   }, [retrieveFeedPostsStart]);
 
   if (!posts && isFetching === true) {

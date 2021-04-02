@@ -1,5 +1,8 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 
+// react-query
+import { useQueryClient, useMutation, useQuery } from 'react-query';
+
 import './style.scss';
 import { useHistory, useParams, withRouter } from 'react-router-dom';
 
@@ -10,6 +13,8 @@ import Profile from '../../component/Profile';
 import ExploreCardMenu from '../../component/ExplorePostCardMenu';
 import MobileTabMenu from '../../component/MobileTabMenu';
 import Card from '../../component/Cards/Card';
+import Footer from '../../component/Footer';
+import Loader from '../../component/Loader'
 
 // external liberires
 import * as Icon from 'react-feather';
@@ -17,60 +22,34 @@ import moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
 
 // redux imports
-import { commentPost, getPosts, getSinglePost, likePost } from '../../redux/Actions/postActions';
+// import { commentPost, getPosts, getSinglePost } from '../../redux/Actions/postActions';
 import { connect } from 'react-redux';
+// api
+import {
+  fetchSinglePost,
+  likePost,
+  CommentPost,
 
-function PostPage({ commentPost, socket, user, userpost, getSinglePost, history, likePost }) {
+
+} from '../../api/posts.api';
+
+
+
+function PostPage({ socket, user, history, }) {
   //    get postId from params
   const { postId } = useParams();
 
   //  states
   const [commentText, setCommentText] = React.useState('');
-  const [isLoading, setIsLoading] = useState(true);
   // const [isLikedButtonClicked, setIsLikedButtonClicked] = useState(false)
   const inputRef = useRef();
 
+  // query client
+  const queryClient = useQueryClient()
+
   const focus = () => {
     inputRef.current.focus();
-  };
-
-  useEffect(() => {
-    let subscribe = true;
-    if (subscribe) {
-      (async function () {
-        try {
-          await getSinglePost(postId, history);
-          await setIsLoading(false);
-        } catch (error) {
-          console.log(error.message);
-        }
-      }())
-
-    }
-    return () => (subscribe = null);
-  }, [getSinglePost, postId]);
-
-  //  @ functions  all functions defined here
-
-  const likeFunc = async () => {
-    try {
-      await likePost(userpost._id, socket, history);
-      // setIsLikedButtonClicked(true)
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleCommentPost = async (event) => {
-    event.preventDefault();
-    console.info('submitting btn');
-    try {
-      await commentPost(userpost._id, commentText, history);
-      setCommentText('');
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
+  }
 
   // const { location: { pathname, state } } = history;
 
@@ -78,16 +57,47 @@ function PostPage({ commentPost, socket, user, userpost, getSinglePost, history,
     setCommentText(e.target.value);
   };
 
-  if (isLoading && !userpost) {
+
+  //  react-query
+  const { isFetching, isLoading, data: userpost, error, isSuccess } = useQuery('fetchsinglePost', () => fetchSinglePost(postId))
+
+
+  const likeMutation = useMutation(() => likePost(userpost._id), {
+    onSuccess: () => {
+      queryClient.invalidateQueries('fetchsinglePost')
+    },
+
+  });
+
+  const commentMutation = useMutation(() => CommentPost(userpost._id, commentText), {
+    onSuccess: (data) => {
+      queryClient.invalidateQueries('fetchsinglePost')
+    }
+  })
+
+
+
+  const commentPostFunc = async (event) => {
+    event.preventDefault()
+    const { mutateAsync } = commentMutation
+    await mutateAsync();
+    setCommentText('');
+  }
+
+
+  const likeFunc = async () => {
+    const { mutateAsync } = likeMutation
+    await mutateAsync()
+  }
+
+
+
+  if (isLoading) {
     return <p>Loading...</p>;
   }
 
   return (
     <div className="post-page">
-      <header>
-        <NavigationHeader />
-      </header>
-
       <main>
         <div className="post_content">
           <div className="post_image">
@@ -144,16 +154,18 @@ function PostPage({ commentPost, socket, user, userpost, getSinglePost, history,
             </div>
 
             {/*  add a comment form */}
-            <form className="addComment" onSubmit={handleCommentPost}>
+            <form className="addComment" onSubmit={commentPostFunc}>
               <input
                 ref={inputRef}
                 value={commentText}
                 onChange={handleCommentTextChange}
                 type="text"
+                data-emoji="true"
                 placeholder="Add a comment..."
                 className="commentText"
                 name="commentText"
               />
+              {commentMutation.isLoading && <Loader />}
               <button disabled={commentText ? false : true} type="submit" className="postText-btn">
                 Post
               </button>
@@ -161,6 +173,7 @@ function PostPage({ commentPost, socket, user, userpost, getSinglePost, history,
           </div>
         </div>
       </main>
+
     </div>
   );
 }
@@ -171,6 +184,6 @@ const mapStateToProps = ({ socket, post, user }) => {
     user: user.currentUser,
   };
 };
-export default connect(mapStateToProps, { commentPost, getPosts, getSinglePost, likePost })(
+export default connect(mapStateToProps, {})(
   withRouter(PostPage),
 );

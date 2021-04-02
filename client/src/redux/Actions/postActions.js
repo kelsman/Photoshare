@@ -133,7 +133,6 @@ export const deleteComment = (postid, commentid, history) => async (dispatch) =>
       config,
     );
     if (response) {
-      console.log(response.data);
       dispatch({ type: postActionTypes.DELETE_COMMENT_SUCCESS, payload: response.data.data });
     }
   } catch (error) {

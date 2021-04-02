@@ -1,27 +1,30 @@
 @import '../../Sass/variables';
 
 .post-page{
- min-width: fit-content;
- min-height: 100%;
+  width: 100%;
+ height: 100vh;
  position: relative;
- 
-}
-main{
-    background: $background-grey;
-    max-width: 100%;
-    // padding-top: 3em;
-    display: flex;
-    height: 100vh;
-    align-items: center;
-    justify-content: center;
-   
+ background: $background-grey;
+
+ main{
+    
+     max-width: 100%;
+     // padding-top: 3em;
+     display: flex;
+     height: 100%;
+     align-items: center;
+     justify-content: center;
+     flex-direction: column;
+     width: 100vw;
+    
+ }
+
 }
 .post_content{
     width: 1000px;
     display: flex;
     margin: 3em 0;
-    // height: 400px;
-
+    max-height: 600px;
     @media screen and (min-width: 768px) and ( max-width: 1024px){
       width: 90%;
     }
@@ -91,12 +94,14 @@ main{
     border-top: 1px solid $border-color-grey;
     font-size: 0.85em;
     margin-top: auto;
+    position: relative;
 
     .commentText {
       color: $font-color-primary;
       width: 80%;
       height: 100%;
       padding-left: 10px;
+      border: 0;
     }
 
     .postText-btn {
@@ -105,7 +110,7 @@ main{
         cursor: pointer;
         background: transparent;
         margin: 0 10px;
-      color: $link-color-secondary;
+      color: $link-color;
       font-weight: 400;
       &:focus{
           outline: 0;

@@ -1,18 +1,37 @@
 @import '../../Sass/variables';
 
 .follow_btn{
-    width: 150px !important;
-    height: 45px !important;
-    background-color: $link-color !important;
+    width: 90%;
+    height: 30px;
+    color: #FFFFFF;
+    background-color: $link-color;
     position: relative;
     text-align: center;
-    color: $font-color-primary;
     border: 0;
     outline: 0;
-    border-radius: 7px;
-    :focus{
+    text-transform: capitalize;
+    border-radius: 5px;
+    cursor: pointer;
+    &:focus{
         outline: 0;
     }
 
-
+}
+.Unfollow_btn{
+    width: 100px;
+    height: 30px;
+    color: black;
+    text-transform: capitalize;
+    background-color: $background-grey;
+    border: 1px solid $font-color-primary;
+    text-align: center;
+    border-radius: 5px;
+    position: relative;
+    cursor: pointer;
+    &:focus{
+        outline: 0;
+    }
+    &:active{
+        outline: 0;
+    }
 }

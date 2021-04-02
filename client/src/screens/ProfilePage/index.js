@@ -14,22 +14,18 @@ import PostCard from '../../component/Explorepostcard/PostCard';
 import { v4 as uuidv4 } from 'uuid';
 import FollowButton from '../../component/FollowButton';
 
+// react-query
+import { useQuery } from "react-query"
+
 const token = localStorage.getItem('authToken');
 
 const ProfilePage = () => {
-  const [profile, setProfile] = useState(undefined);
+  // const [profile, setProfile] = useState(undefined);
   const { username } = useParams();
   const currentUser = useSelector(({ user }) => user.currentUser);
   const history = useHistory();
 
-  useEffect(() => {
-    let sub = true;
-    if (sub) {
-      getProfile();
-    }
 
-    return () => (sub = null);
-  }, []);
   const getProfile = async () => {
     if (token) {
       setToken(token);
@@ -39,36 +35,47 @@ const ProfilePage = () => {
         'Content-Type': 'applocation/json',
       },
     };
-    try {
-      const response = await axios.get(`/api/route/user/userprofile/${username}`, config);
-      if (response) {
-        const data = response.data.userProfile[0];
-        await setProfile(data);
-      }
-    } catch (error) {
-      if (error) {
-        cogoToast.error(`${error.message}`);
-      }
-      console.log(error);
-    }
+    const response = await axios.get(`/api/route/user/userprofile/${username}`, config);
+    // if (response) {
+    //   const data = response.data.userProfile[0];
+
+    // }
+    return response.data.userProfile[0]
+
   };
 
-  if (!profile) {
+  const { data: userProfile, isLoading, isError, error, isSuccess } = useQuery('getProfileData', getProfile)
+
+  if (isLoading) {
     return <Loader />;
   }
+  let isFollowing;
+
+  if (isSuccess) {
+    isFollowing = userProfile.followers.find((follow) => {
+      return follow.user === String(currentUser._id)
+    });
+  }
+
+
 
   return (
     <div className="profilepage__wrapper">
       <header className="header">
         <div className="header__content">
           <div className="profile__image">
-            <img src={profile.avatar ? profile.avatar : Avatar} alt="" />
+            <img src={userProfile.avatar ? userProfile.avatar : Avatar} alt="" />
           </div>
           <div className="profile__details">
             <div className="username">
-              <h2> {profile.username}</h2>
-              {currentUser && profile && profile._id !== currentUser._id ? (
-                <FollowButton userId={profile && profile._id} />
+              <h2> {userProfile.username}</h2>
+              {currentUser && userProfile && userProfile._id !== currentUser._id ? (
+                <FollowButton
+                  userId={userProfile && userProfile._id}
+                  avatar={userProfile.avatar}
+                  username={userProfile.username}
+                  following={isFollowing}
+                />
               ) : (
                 <Fragment>
                   <button
@@ -86,21 +93,21 @@ const ProfilePage = () => {
 
             <div className="follow__details">
               <small>
-                {profile.posts && profile.posts.length ? profile.posts.length : 0} posts
+                {userProfile.posts && userProfile.posts.length ? userProfile.posts.length : 0} posts
               </small>
               <small>
-                {profile.followers && profile.followers.length ? profile.followers.length : 0}{' '}
+                {userProfile.followers && userProfile.followers.length ? userProfile.followers.length : 0}{' '}
                 followers
               </small>
               <small>
                 {' '}
-                {profile.following && profile.following.length ? profile.following.length : 0}{' '}
+                {userProfile.following && userProfile.following.length ? userProfile.following.length : 0}{' '}
                 following
               </small>
             </div>
 
             <div className="name">
-              <p> {profile.name}</p>
+              <p> {userProfile.name}</p>
             </div>
           </div>
         </div>
@@ -112,9 +119,9 @@ const ProfilePage = () => {
         </div>
       </section>
 
-      {profile.posts ? (
+      {userProfile.posts ? (
         <div className="posts__gallery">
-          {profile.posts.map((post) => {
+          {userProfile.posts.map((post) => {
             return (
               <PostCard
                 // src={post.postMedia}
@@ -126,7 +133,13 @@ const ProfilePage = () => {
           })}
         </div>
       ) : (
-        <h4> no posts to show </h4>
+        <div>
+          no posts to show
+          <Icon.Camera size={30} />
+          <h1>Share Photos</h1>
+          <p>When you share Photos they will appear on your profile</p>
+
+        </div>
       )}
 
     </div>
