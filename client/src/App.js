@@ -61,16 +61,13 @@ function App({ loaduser, connectSocketIo }) {
     loaduser();
 
     // handle user logout on all tabs 
-    const handleLogOut = () => {
-      if (!localStorage.getItem('authToken')) {
-        dispatch(LogOut(history))
-      }
-    }
-    window.addEventListener('storage', handleLogOut)
-    return () => {
-      window.removeEventListener('storage', handleLogOut)
-      return null;
-    }
+    // const handleLogOut = () => {
+    //   if (!localStorage.getItem('authToken')) {
+    //     dispatch(LogOut(history))
+    //   }
+    // }
+    // window.addEventListener('storage', handleLogOut)
+    return () => null
   }, [])
 
   return (
