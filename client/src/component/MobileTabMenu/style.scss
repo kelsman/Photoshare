@@ -2,15 +2,14 @@
 
 .mobile__nav{
     display: flex;
-  align-items: center;
-  justify-content: space-around;
+    align-items: center;
+    justify-content: space-around;
     height: 2.5rem;
     background-color: $background-white;
     border-top: 1px solid $border-color-grey-secondary;
     position: fixed;
-     bottom:0;
+    bottom:0;
     z-index: 2;
-    background-color: $background-white;
     width: 100%;
 
     a{
@@ -31,6 +30,7 @@
 
 .icon__heart,.icon_search, .icon_heart{
     cursor: pointer;
+    size: 30;
     &:focus{
         fill: black;
     }

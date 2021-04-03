@@ -16,16 +16,16 @@ const MobileTabMenu = ({ user }) => {
   return (
     <nav className="mobile__nav">
       <Link to={Routes.Dashboard}>
-        <Icon.Home size={26} />
+        <Icon.Home size={30} />
       </Link>
       <Link to={Routes.Explore}>
-        <Icon.Search className="icon__search" size={26} />
+        <Icon.Search className="icon__search" size={30} />
       </Link>
 
       <NewPostButton />
 
 
-      <Icon.Heart className="icon__heart" fill={'black'} size={26} />
+      <Icon.Heart className="icon__heart" fill={'black'} size={30} />
 
       {user && user.avatar && (
         <Link to={Routes.ProfilePage + `/${user.username}`}>

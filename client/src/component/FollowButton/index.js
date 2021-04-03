@@ -12,7 +12,7 @@ import ModalComponent from '../Modal/'
 import UnfollowPrompt from '../UnFollowPrompt';
 import { useQueryClient, useMutation } from 'react-query';
 const token = localStorage.getItem('authToken');
-
+const baseUrl = process.env.REACT_APP_BASE_URL
 
 const FollowButton = ({ userId, avatar, username, following }) => {
   const dispatch = useDispatch();
@@ -27,7 +27,7 @@ const FollowButton = ({ userId, avatar, username, following }) => {
       setToken(token);
     }
     try {
-      const response = await axios.post(`/api/route/user/unfollow/${userId}`);
+      const response = await axios.post(`${baseUrl}/api/route/user/unfollow/${userId}`);
       if (response) {
         cogoToast.success(`${response.data.msg}`);
 
@@ -43,7 +43,7 @@ const FollowButton = ({ userId, avatar, username, following }) => {
       setToken(token);
     }
     try {
-      const response = await axios.post(`/api/route/user/follow/${userId}`);
+      const response = await axios.post(`${baseUrl}/api/route/user/follow/${userId}`);
       if (response) {
         cogoToast.success(`${response.data.msg}`);
 

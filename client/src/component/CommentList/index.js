@@ -62,13 +62,13 @@ const CommentList = ({
 
         {userData && commentuser == userData._id && (
           <span onClick={deleteCommentFunc} className="deletebtn">
-            {isLoading && <Loader
+            {isLoading ? <Loader
               type="Oval"
               color="black"
-              height={30}
+              height={10}
               width={30}
-            />}
-            <Icon.Trash2 size={13} />
+            /> :
+              <Icon.Trash2 size={13} />}
           </span>
         )}
       </div>

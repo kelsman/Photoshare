@@ -32,6 +32,7 @@ function Card(props) {
     accountName,
     avatar,
     hours,
+    invalidate
   } = props;
 
   // query client
@@ -40,6 +41,7 @@ function Card(props) {
   const likeMutation = useMutation(() => likePost(feed._id), {
     onSuccess: () => {
       queryClient.invalidateQueries('fetchfeeds')
+      invalidate()
     },
 
   });
@@ -48,6 +50,7 @@ function Card(props) {
 
     onSuccess: (data) => {
       queryClient.invalidateQueries('fetchfeeds')
+      invalidate()
       setCommentText('')
     },
 

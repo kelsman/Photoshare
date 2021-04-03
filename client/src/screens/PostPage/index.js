@@ -24,6 +24,7 @@ import { v4 as uuidv4 } from 'uuid';
 // redux imports
 // import { commentPost, getPosts, getSinglePost } from '../../redux/Actions/postActions';
 import { connect } from 'react-redux';
+
 // api
 import {
   fetchSinglePost,
@@ -173,6 +174,19 @@ function PostPage({ socket, user, history, }) {
           </div>
         </div>
       </main>
+      <section>
+        <Card
+          feed={userpost}
+          accountName={userpost.author.username}
+          avatar={userpost.avatar}
+          comments={userpost.comments}
+          image={userpost.postMedia}
+          storyBorder={true}
+          invalidate={() => queryClient.invalidateQueries('fetchsinglePost')}
+
+        />
+
+      </section>
 
     </div>
   );
