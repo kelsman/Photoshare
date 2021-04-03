@@ -103,6 +103,9 @@ export const retrieveFeedPosts = async (history) => {
             'Content-Type': 'application/json',
         },
     };
+    if (token) {
+        setToken(token);
+    }
     try {
         const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/route/post/retrieveFeedPosts`, config);
         return res.data.posts
