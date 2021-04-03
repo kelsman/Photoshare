@@ -23,7 +23,7 @@ const Cards = ({ isFetching }) => {
           <p> you have no posts yet follow more people to see their posts</p>{' '}
         </div>
       )}
-      {posts &&
+      {posts && posts.length > 0 &&
         posts.map((post) => {
           return (
 

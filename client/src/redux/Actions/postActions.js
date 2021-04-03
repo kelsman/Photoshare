@@ -6,7 +6,7 @@ import cogoToast from 'cogo-toast';
 import * as Routes from '../../component/routes';
 
 const token = localStorage.getItem('authToken');
-
+const baseUrl = process.env.REACT_APP_BASE_URL
 // @create post
 
 export const createPostFunc = (data, history) => {
@@ -22,7 +22,7 @@ export const createPostFunc = (data, history) => {
         },
       };
       cogoToast.loading('posting');
-      const response = await axios.post('/api/route/post/createPost', data, config);
+      const response = await axios.post(`${baseUrl}/api/route/post/createPost`, data, config);
       if (response) {
         await dispatch({ type: postActionTypes.CREATE_POST_SUCCESS, payload: response.data.msg });
         cogoToast.success('post created');
@@ -53,7 +53,7 @@ export const getPosts = (history) => {
         await setToken(token);
       }
 
-      const response = await axios.get(`/api/route/post/retrieveExplorePost`);
+      const response = await axios.get(`${baseUrl}/api/route/post/retrieveExplorePost`);
       console.log(response)
       if (response) {
         dispatch({ type: postActionTypes.GET_POSTS_SUCCESS, payload: response.data.posts });
@@ -88,7 +88,7 @@ export const commentPost = (postId, commentText, socket, history) => {
           'Content-Type': 'application/json',
         },
       };
-      const response = await axios.post(`/api/route/post/comment/${postId}`, { commentText });
+      const response = await axios.post(`${baseUrl}/api/route/post/comment/${postId}`, { commentText });
       if (response) {
         dispatch({ type: postActionTypes.COMMENT_POST_SUCCESS, payload: response.data.data });
         console.log(response.data.data);
@@ -127,7 +127,7 @@ export const deleteComment = (postid, commentid, history) => async (dispatch) =>
     };
 
     const response = await axios.put(
-      `/api/route/post/deleteComment/${postid}/${commentid}`,
+      `${baseUrl}/api/route/post/deleteComment/${postid}/${commentid}`,
       config,
     );
     if (response) {
@@ -162,7 +162,7 @@ export const getSinglePost = (postId, history) => {
       },
     };
     try {
-      const response = await axios.get(`/api/route/post/singlePost/${postId}`, config);
+      const response = await axios.get(`${baseUrl}/api/route/post/singlePost/${postId}`, config);
       if (response) {
         dispatch({ type: postActionTypes.GET_SINGLE_POST_SUCCESS, payload: response.data.post[0] });
       }
@@ -200,7 +200,7 @@ export const likePost = (postId, socket, history) => {
       await setToken(token);
     }
     try {
-      const response = await axios.put(`/api/route/post/likePost/${postId}`, config);
+      const response = await axios.put(`${baseUrl}/api/route/post/likePost/${postId}`, config);
       if (response) {
         dispatch({ type: postActionTypes.LIKE_POST_SUCCESS, payload: response.data.data });
       }
@@ -235,7 +235,7 @@ export const retrieveFeedPosts = (history) => async (dispatch) => {
     await setToken(token);
   }
   try {
-    const response = await axios.get(`api/route/post/retrieveFeedPosts`, config);
+    const response = await axios.get(`${baseUrl}api/route/post/retrieveFeedPosts`, config);
     if (response) {
       console.log(response.data);
       dispatch({ type: postActionTypes.GET_FEEDS_SUCCESS, payload: response.data.posts });

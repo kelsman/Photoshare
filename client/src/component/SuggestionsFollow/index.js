@@ -4,10 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import Profile from '../Profile';
 import axios from 'axios';
 import { useQuery } from 'react-query';
-import { getSuggestedUser } from '../../redux/SuggestedUsers/Actions';
 import FollowButton from '../FollowButton';
 
-const token = localStorage.getItem('authToken')
+const token = localStorage.getItem('authToken');
+const baseUrl = process.env.REACT_APP_BASE_URL;
+
 const Suggestions = () => {
   const dispatch = useDispatch();
   const suggestedUsers = useSelector(({ suggestedUsers }) => suggestedUsers.suggestedUsers);
@@ -15,7 +16,7 @@ const Suggestions = () => {
 
 
   const { data, isLoading, isError, error, isSuccess } = useQuery('fetchsuggestedusers', async () => {
-    const res = await axios.get('api/route/user/suggestedUsers', {
+    const res = await axios.get(`${baseUrl}/api/route/user/suggestedUsers`, {
       headers: {
         "Content-Type": "application/json",
         'x-auth-token': token

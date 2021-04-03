@@ -3,22 +3,25 @@ import { Switch, Redirect, Route } from 'react-router-dom';
 
 import { useHistory } from 'react-router-dom';
 import * as Routes from './component/routes';
-import { loaduser } from './redux/Actions/userActions';
-import { connect } from 'react-redux';
 import ErrorBoundary from './component/ErrorBounday';
+//  react-query 
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from 'react-query/devtools'
 // import UserProfile from './screens/UserProfile';
-
 import { connectSocketIo } from './redux/Socket/socketActions';
+
 // components
 import NavigationHeader from './component/NavigationHeader';
 import MobileTabMenu from './component/MobileTabMenu';
 import Footer from './component/Footer';
 import LoadingPage from './screens/LoadingScreen';
 import GlobaLoader from './component/GlobalLoader';
-// screens
 
+//  redux
+import { loaduser, LogOut } from './redux/Actions/userActions';
+import { connect, useDispatch } from 'react-redux';
+import { setToken } from './utils';
+// screens
 const ErrorPage = lazy(() => import('./screens/Error404Screen'));
 const LogInScreen = lazy(() => import('./screens/LoginScreen'));
 const SignUpScreen = lazy(() => import('./screens/SignUpScreen'));
@@ -33,7 +36,13 @@ const ProfilePage = lazy(() => import('./screens/ProfilePage'));
 
 const token = localStorage.getItem('authToken');
 // Create a client
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    }
+  }
+});
 
 function App({ loaduser, connectSocketIo }) {
   const {
@@ -41,25 +50,28 @@ function App({ loaduser, connectSocketIo }) {
     location: { pathname },
   } = useHistory();
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    let subscribe = true;
-    if (subscribe) {
-      if (token) {
-        connectSocketIo();
-        loaduser(history);
+
+    // check for token in localStoagre
+    if (localStorage.getItem('authToken')) {
+      setToken(localStorage.getItem('authToken'))
+    }
+    loaduser();
+
+    // handle user logout on all tabs 
+    const handleLogOut = () => {
+      if (!localStorage.getItem('authToken')) {
+        dispatch(LogOut(history))
       }
     }
-    return () => subscribe = null;
-  }, [loaduser]);
-
-  // useEffect(() => {
-  //   let subscribe = true;
-  //   if (subscribe) {
-  //     if (token) {
-  //     }
-  //   }
-  //   return () => subscribe = null;
-  // }, [loaduser]);
+    window.addEventListener('storage', handleLogOut)
+    return () => {
+      window.removeEventListener('storage', handleLogOut)
+      return null;
+    }
+  }, [])
 
   return (
     <ErrorBoundary>
@@ -67,6 +79,7 @@ function App({ loaduser, connectSocketIo }) {
         <QueryClientProvider client={queryClient}>
           <Suspense fallback={<LoadingPage />}>
             {pathname !== '/' &&
+              pathname !== Routes.Explore &&
               pathname !== Routes.SignUp &&
               pathname !== Routes.NewPostPage && <NavigationHeader />}
             <GlobaLoader />
@@ -75,7 +88,6 @@ function App({ loaduser, connectSocketIo }) {
               <Route exact path={Routes.SignUp} render={() => <SignUpScreen />} />
               <Route exact path={Routes.Dashboard} render={() => <HomeScreen />} />
               <Route exact path={Routes.Explore} render={() => <ExploreScreen />} />
-
               <Route exact path={Routes.NewPostPage} component={NewPostPage} />
               <Route exact path={`${Routes.PostPage}/:postId`} component={PostPage} />
               <Route exact path={`${Routes.ProfilePage}/:username`} component={ProfilePage} />
@@ -84,9 +96,9 @@ function App({ loaduser, connectSocketIo }) {
               <Route component={ErrorPage} />
             </Switch>
 
-
             {
               pathname !== Routes.SignUp &&
+              pathname !== Routes.Login &&
               pathname !== Routes.NewPostPage &&
               < MobileTabMenu />}
 

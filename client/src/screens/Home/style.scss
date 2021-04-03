@@ -2,20 +2,34 @@
 
 .homeScreen{
   width: 100%;
-  height: 100%;
+  height: 100vh;
   position: relative;
   padding-bottom: 2.5rem;
-  
-  main {
-    background-color: $background-grey;
-    margin-top: 60px;
-    height: 100%;
+ 
 
+  main {
+    height: 100vh;
+    margin-top: 60px;
+    
     .container {
       display: flex;
       justify-content: left;
       margin: 0 auto;
       max-width: 1000px;
+      height: 100%;
+      
+      
+    }
+    .mobile__suggestionCard{
+      display: flex;
+      margin-top: 10vh;
+      max-width: 640px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding: 0px 10px;
+      @media screen and (min-width: 640px){
+        display: none;
+      }
     }
   }
 }
@@ -28,7 +42,7 @@ a {
   font-weight: 500;
 }
 
-@media only screen and (max-width: 1024px) {
+@media only screen and (max-width: 960px) {
   .homeScreen{
     main .container {
       justify-content: center !important;

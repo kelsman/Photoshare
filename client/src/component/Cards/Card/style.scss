@@ -49,6 +49,7 @@
     margin-bottom: 0.75em;
     max-height: 300px;
     overflow-y: auto;
+    background: $background-grey;
   }
 
   .timePosted {
@@ -94,10 +95,11 @@
 @media only screen and (max-width: 640px) {
   .card {
     border: none;
+    border-top: 1px solid $border-color-grey;
     border-bottom: 1px solid $border-color-grey;
     // background-color: $background-grey;
     // margin-bottom: 0.75em;
-     margin: 40px 0px;
+    //  margin: 40px 0px;
 
      .cardImage {
       width: 100%;

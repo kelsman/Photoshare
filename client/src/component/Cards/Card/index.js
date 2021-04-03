@@ -46,28 +46,11 @@ function Card(props) {
 
   const commentPostMutation = useMutation(() => CommentPost(feed._id, commentText), {
 
-    xonMutate: () => {
-
-      //  take snapshot of the data
-
-    },
     onSuccess: (data) => {
-
-      queryClient.setQueryData('fetchfeeds', (prevData) => {
-
-        const postToUpdate = prevData.find((post) => {
-          return post._id === feed._id
-        })
-        postToUpdate.comments = [...postToUpdate.comments, data.newComment]
-
-
-      })
+      queryClient.invalidateQueries('fetchfeeds')
       setCommentText('')
     },
-    onError: (error, variables, context) => { throw new Error(error) },
-    // onSettled: () => {
-    //   queryClient.invalidateQueries('fetchfeeds')
-    // }
+
   })
   const likeFunc = async () => {
     try {

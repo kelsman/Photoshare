@@ -47,7 +47,7 @@
 }
 
 
-@media screen and (max-width: 600px){
+@media screen and (max-width: 640px){
     .image-grid{
         grid-template-columns: repeat(3, 1fr);
         grid-gap: 1.3px;
@@ -58,7 +58,7 @@
         display: block;
     }
     .header-section{
-        display: none;
+        display: none  !important;
     }
 }
 @media screen and (min-width: 7680x){

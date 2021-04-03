@@ -18,6 +18,7 @@ import FollowButton from '../../component/FollowButton';
 import { useQuery } from "react-query"
 
 const token = localStorage.getItem('authToken');
+const baseUrl = process.env.REACT_APP_BASE_URL;
 
 const ProfilePage = () => {
   // const [profile, setProfile] = useState(undefined);
@@ -35,7 +36,7 @@ const ProfilePage = () => {
         'Content-Type': 'applocation/json',
       },
     };
-    const response = await axios.get(`/api/route/user/userprofile/${username}`, config);
+    const response = await axios.get(`${baseUrl}/api/route/user/userprofile/${username}`, config);
     // if (response) {
     //   const data = response.data.userProfile[0];
 

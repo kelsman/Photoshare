@@ -6,7 +6,7 @@ import axios from 'axios';
 import cogoToast from 'cogo-toast';
 import * as Routes from '../../component/routes';
 
-const baseUrl = process.env.REACT_APP_BASE_URL || 'http://localhost:9000';
+const baseUrl = process.env.REACT_APP_BASE_URL
 
 export const signup = (data, history) => {
   return async (dispatch) => {
@@ -17,7 +17,7 @@ export const signup = (data, history) => {
         },
       };
       cogoToast.loading('Registering....');
-      const response = await axios.post(`/api/route/user/register`, data, config);
+      const response = await axios.post(`${baseUrl}/api/route/user/register`, data, config);
       if (response) {
         await dispatch({ type: userActionTypes.SIGN_UP_SUCESS, payload: response.data });
         cogoToast.success('signup success');
@@ -33,7 +33,7 @@ export const signup = (data, history) => {
   };
 };
 
-export const signin = (data, history) => {
+export const signin = (data) => {
   return async (dispatch) => {
     try {
       const config = {
@@ -41,17 +41,17 @@ export const signin = (data, history) => {
           'Content-Type': 'application/json',
         },
       };
-      const response = await axios.post(`/api/route/user/login`, data, config);
+      const response = await axios.post(`${baseUrl}/api/route/user/login`, data, config);
       if (response) {
         await dispatch({ type: userActionTypes.LOG_IN_SUCCESS, payload: response.data });
         await localStorage.setItem('authToken', response.data.jwtToken);
         cogoToast.success('sign in success', { position: 'bottom-right' });
-        history.push(Routes.Dashboard);
+
       }
     } catch (error) {
       if (error.response) {
         await dispatch({ type: userActionTypes.LOG_IN_FAIL, payload: error.response.data });
-        cogoToast.error(`${error.response.data.msg}`);
+        cogoToast.error(`${error.message}`);
       }
     }
   };
@@ -59,20 +59,16 @@ export const signin = (data, history) => {
 
 export const loaduser = () => {
   return async (dispatch) => {
-    const token = localStorage.getItem('authToken');
-
     try {
-      if (token) {
-        setToken(token);
-      }
-      const response = await axios.get('/api/route/user/getUser');
+
+      const response = await axios.get(`${baseUrl}/api/route/user/getUser`);
       if (response) {
         await dispatch({ type: userActionTypes.LOAD_USER_SUCCESS, payload: response.data.user[0] });
       }
     } catch (error) {
       if (error.response) {
         await dispatch({ type: userActionTypes.LOAD_USER_FAIL, payload: error.response.data });
-        cogoToast.warn(`${error.response.data.msg}`, { position: 'top-right' });
+        console.log(error.message)
         if (
           error.response.data.msg === 'jwt expired' ||
           error.response.data.msg === `you're not authorised`

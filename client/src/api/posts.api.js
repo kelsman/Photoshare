@@ -1,16 +1,21 @@
 import axios from 'axios';
 import { setToken } from '../utils';
-import cogoToast from 'cogo-toast'
+import cogoToast from 'cogo-toast';
+
+const baseUrl = process.env.REACT_APP_BASE_URL
 const token = localStorage.getItem('authToken');
 
-if (token) {
-    setToken(token);
-}
+
+
 
 
 //  fetch single post 
 
 export const fetchSinglePost = async (postId, history) => {
+
+    if (token) {
+        setToken(token);
+    }
 
     const config = {
         headers: {
@@ -18,7 +23,7 @@ export const fetchSinglePost = async (postId, history) => {
         },
     };
 
-    const response = await axios.get(`/api/route/post/singlePost/${postId}`, config);
+    const response = await axios.get(`${baseUrl}/api/route/post/singlePost/${postId}`, config);
     const userpost = response.data.post[0]
     return userpost
 
@@ -26,13 +31,17 @@ export const fetchSinglePost = async (postId, history) => {
 // like and unlike post 
 export const likePost = async (postId, history) => {
 
+    if (token) {
+        setToken(token);
+    }
+
     const config = {
         headers: {
             'Content-Type': 'application/json',
         },
     };
     try {
-        const response = await axios.put(`/api/route/post/likePost/${postId}`, config);
+        const response = await axios.put(`${baseUrl}/api/route/post/likePost/${postId}`, config);
         return response.data.msg
 
     } catch (error) {
@@ -49,13 +58,17 @@ export const likePost = async (postId, history) => {
 // @comment post 
 export const CommentPost = async (postId, commentText) => {
 
+    if (token) {
+        setToken(token);
+    }
+
     const config = {
         headers: {
             'Content-Type': 'application/json',
         }
     }
     try {
-        const res = await axios.post(`/api/route/post/comment/${postId}`, { commentText });
+        const res = await axios.post(`${baseUrl}/api/route/post/comment/${postId}`, { commentText }, config);
         console.log(res.data)
         return res.data
 
@@ -75,7 +88,7 @@ export const deleteComment = async (postid, commentid) => {
     }
     try {
         const res = await axios.put(
-            `/api/route/post/deleteComment/${postid}/${commentid}`,
+            `${baseUrl}/api/route/post/deleteComment/${postid}/${commentid}`,
             config)
 
         return res.data;
@@ -91,14 +104,14 @@ export const retrieveFeedPosts = async (history) => {
         },
     };
     try {
-        const res = await axios.get(`api/route/post/retrieveFeedPosts`, config);
+        const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/route/post/retrieveFeedPosts`, config);
         return res.data.posts
 
     } catch (error) {
         if (error.response) {
             console.log(error.response.data);
 
-            cogoToast.info(`${error.response.data.msg}`, { position: 'top-center' });
+            cogoToast.info(`${error.message}`, { position: 'top-center' });
             if (
                 error.response.data.msg === 'jwt expired' ||
                 error.response.data.msg === `you're not authorised`

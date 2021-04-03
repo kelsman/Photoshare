@@ -12,8 +12,8 @@ const GlobaLoader = () => {
             <Loader
                 type="Oval"
                 color="black"
-                height={30}
-                width={50}
+                height={20}
+                width={20}
             />
         </div>
         : null

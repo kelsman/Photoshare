@@ -1,0 +1,15 @@
+@import '../../../Sass/variables';
+
+.card__wrapper{   
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    background: #FFFFFF;
+    padding: 0px 15px;
+    margin: 0 5px;
+    box-shadow: 10px 10px 19px -15px rgba(97, 94, 94, 0.75);
+    -webkit-box-shadow: 10px 10px 19px -15px rgba(97, 94, 94, 0.75);
+    -moz-box-shadow: 10px 10px 19px -15px rgba(97, 94, 94, 0.75);
+
+}

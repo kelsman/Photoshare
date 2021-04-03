@@ -15,6 +15,7 @@ import SideBar from '../../component/SideBar';
 import Cards from '../../component/Cards';
 import Loader from '../../component/Loader';
 import { retrieveFeedPosts } from '../../api/posts.api';
+import SuggestionCard from '../../component/SuggestionsFollow/suggestionCard';
 
 
 const token = localStorage.getItem('authToken');
@@ -22,7 +23,7 @@ const token = localStorage.getItem('authToken');
 const HomeScreen = () => {
 
   const history = useHistory();
-
+  const queryClient = useQueryClient();
   const { data, isLoading, isError, isSuccess } = useQuery('fetchfeeds', () => retrieveFeedPosts(history))
   // console.log(data);
 
@@ -43,7 +44,15 @@ const HomeScreen = () => {
       <NavigationHeader />
 
       {/* main */}
-      <main>
+      <main className="main">
+        {
+          queryClient.getQueryData('fetchsuggestedusers') && (
+            <div className="mobile__suggestionCard">
+              <SuggestionCard />
+            </div>
+
+          )
+        }
         <div className="container">
           <Cards posts={data} />
           <SideBar />

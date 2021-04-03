@@ -8,7 +8,9 @@ import Footer from '../Footer';
 
 const SideBar = ({ user }) => {
   return (
+
     <Sticky topOffset={-80}>
+
       <div className="sideBar">
         {/*  profile */}
         <div className="profile">
@@ -29,6 +31,7 @@ const SideBar = ({ user }) => {
         <Footer />
       </div>
     </Sticky>
+
   );
 };
 

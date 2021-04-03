@@ -1,7 +1,8 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import './style.scss';
 import * as Yup from 'yup';
 import * as Icon from 'react-feather'
+
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { signin, loaduser } from '../../../redux/Actions/userActions';
@@ -29,9 +30,9 @@ const LogInForm = ({ signin }) => {
   const handleFormSubmit = async (values) => {
     try {
       setIsSubmitting(true);
-      await signin(values, history);
+      await signin(values);
       setIsSubmitting(false);
-
+      history.push(Routes.Dashboard);
     } catch (error) {
       console.log(error.message);
       values.email = '';
@@ -46,6 +47,11 @@ const LogInForm = ({ signin }) => {
     validationSchema,
     onSubmit: handleFormSubmit,
   });
+
+  useEffect(() => {
+
+    return () => null
+  })
 
   const { values, errors, handleChange, handleSubmit } = formik;
 
