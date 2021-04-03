@@ -57,8 +57,8 @@ function App({ loaduser, connectSocketIo }) {
     // check for token in localStoagre
     if (localStorage.getItem('authToken')) {
       setToken(localStorage.getItem('authToken'))
+      loaduser();
     }
-    loaduser();
 
     // handle user logout on all tabs 
     // const handleLogOut = () => {
