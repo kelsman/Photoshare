@@ -6,6 +6,8 @@ import { useQueryClient } from 'react-query'
 import FollowButton from '../../FollowButton'
 import Profile from '../../Profile';
 import { v4 as uuidv4 } from 'uuid';
+import HorizontalScroll from 'react-scroll-horizontal';
+
 const SuggestionCard = () => {
 
     const queryClient = useQueryClient();
@@ -22,8 +24,8 @@ const SuggestionCard = () => {
                     (
 
 
-                        data.users.map((user) => (
 
+                        data.users.map((user) => (
                             <div key={uuidv4()} className="card__wrapper">
                                 <Profile
                                     key={user._id}

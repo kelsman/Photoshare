@@ -17,7 +17,6 @@ import { useQueryClient, useMutation, useQuery } from 'react-query';
 
 function Card(props) {
   const [commentText, setCommentText] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const history = useHistory();
   const dispatch = useDispatch();
   const inputRef = useRef();
@@ -39,7 +38,10 @@ function Card(props) {
   const queryClient = useQueryClient();
 
   const likeMutation = useMutation(() => likePost(feed._id), {
-    onSuccess: () => {
+
+
+    onSuccess: (data) => {
+      console.log(data)
       queryClient.invalidateQueries('fetchfeeds')
       invalidate()
     },
@@ -48,11 +50,27 @@ function Card(props) {
 
   const commentPostMutation = useMutation(() => CommentPost(feed._id, commentText), {
 
+    onMutate: () => {
+      // prev data
+      const previousData = queryClient.getQueryData('fetchfeeds')
+
+
+      return { previousData }
+    },
+
     onSuccess: (data) => {
-      queryClient.invalidateQueries('fetchfeeds')
-      invalidate()
+      queryClient.setQueryData('fetchfeeds', prev => {
+        const post = prev.find(d => d._id === feed._id)
+        if (post) {
+          return prev.map(postItem => postItem._id === feed._id ? { ...postItem, comments: [...postItem.comments, data.newComment] } : postItem)
+        }
+      })
       setCommentText('')
     },
+    onSettled: (data, error, variables) => {
+      // invalidate the query 
+      queryClient.invalidateQueries('fetchfeeds');
+    }
 
   })
   const likeFunc = async () => {
@@ -65,6 +83,7 @@ function Card(props) {
   };
 
   const commentPostFunc = async () => {
+
     try {
       await commentPostMutation.mutateAsync()
       // setIsLikedButtonClicked(true)

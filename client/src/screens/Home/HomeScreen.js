@@ -25,7 +25,7 @@ const HomeScreen = () => {
   const history = useHistory();
   const queryClient = useQueryClient();
   const { data, isLoading, isError, isSuccess } = useQuery('fetchfeeds', () => retrieveFeedPosts(history))
-  // console.log(data);
+  console.log(data);
 
   if (!token) {
     history.push('/');
@@ -47,9 +47,9 @@ const HomeScreen = () => {
       <main className="main">
         {
           queryClient.getQueryData('fetchsuggestedusers') && (
-            <div className="mobile__suggestionCard">
+            <section className="mobile__suggestionCard">
               <SuggestionCard />
-            </div>
+            </section>
 
           )
         }

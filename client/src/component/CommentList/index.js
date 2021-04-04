@@ -35,9 +35,11 @@ const CommentList = ({
 
   const { mutateAsync, isLoading } = useMutation(() => deleteComment(userpost._id, commentId), {
 
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log(data)
       queryClient.invalidateQueries('fetchsinglePost')
       queryClient.invalidateQueries('fetchfeeds');
+
     }
   })
 
