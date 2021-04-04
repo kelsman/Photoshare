@@ -36,15 +36,17 @@ const ProfilePage = lazy(() => import('./screens/ProfilePage'));
 
 const token = localStorage.getItem('authToken');
 // Create a client
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-    }
-  }
-});
 
 function App({ loaduser, connectSocketIo }) {
+
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+        staleTime: 60 * 3000
+      }
+    }
+  });
   const {
     history,
     location: { pathname },
@@ -67,7 +69,9 @@ function App({ loaduser, connectSocketIo }) {
     //   }
     // }
     // window.addEventListener('storage', handleLogOut)
-    return () => null
+    return () => {
+      queryClient.cancelQueries()
+    }
   }, [])
 
   return (
@@ -75,7 +79,7 @@ function App({ loaduser, connectSocketIo }) {
       <div className="App">
         <QueryClientProvider client={queryClient}>
           <Suspense fallback={<LoadingPage />}>
-            {pathname !== '/' &&
+            {pathname !== Routes.Login &&
               pathname !== Routes.Explore &&
               pathname !== Routes.SignUp &&
               pathname !== Routes.NewPostPage && <NavigationHeader />}

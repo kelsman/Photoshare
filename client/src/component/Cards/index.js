@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import * as Icon from 'react-feather';
 import { useQueryClient } from 'react-query';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 const Cards = ({ isFetching }) => {
 
@@ -23,40 +24,51 @@ const Cards = ({ isFetching }) => {
           <p> you have no posts yet follow more people to see their posts</p>{' '}
         </div>
       )}
-      {posts && posts.length > 0 &&
-        posts.map((post) => {
-          return (
+      <InfiniteScroll
+        dataLength={posts.length}
+        next={() => queryClient.refetchQueries('fetchfeeds')}
+        hasMore={false}
+        loader={<p> Loading... </p>}
+        endMessage={
+          <div className="feed__bottom">
+            <Divider>
+              <Icon.CheckCircle
+                color="blue"
+                size={40}
 
-            <Card
-              feed={post}
-              avatar={post.author.avatar}
-              key={uuidv4()}
-              accountName={post.author.username}
-              storyBorder={true}
-              image={post.postMedia}
-              comments={post.comments ? post.comments : null}
-              likedByText={post.postLikes ? post.likes.username : null}
-              // likedByNumber={feed.postLikes && feed.postLikes.likes ? feed.postLikes.likes.length : "Be the first to Like this"}
-              hours={post.date}
-            />
+              />
+            </Divider>
+            <h2 style={{ textAlign: "center" }}>You're All Caught Up</h2>
+            <h4>
+              Follow more people to see more posts.
+          </h4>
+          </div>
+
+        }
+      >
+        {posts && posts.length > 0 &&
+          posts.map((post) => {
+            return (
+
+              <Card
+                feed={post}
+                avatar={post.author.avatar}
+                key={uuidv4()}
+                accountName={post.author.username}
+                storyBorder={true}
+                image={post.postMedia}
+                comments={post.comments ? post.comments : null}
+                likedByText={post.postLikes ? post.likes.username : null}
+                // likedByNumber={feed.postLikes && feed.postLikes.likes ? feed.postLikes.likes.length : "Be the first to Like this"}
+                hours={post.date}
+              />
 
 
 
-          );
-        })}
-      <div className="feed__bottom">
-        <Divider>
-          <Icon.CheckCircle
-            color="blue"
-            size={40}
+            );
+          })}
+      </InfiniteScroll>
 
-          />
-        </Divider>
-        <h2 style={{ textAlign: "center" }}>You're All Caught Up</h2>
-        <h4>
-          Follow more people to see more posts.
-        </h4>
-      </div>
 
     </div>
   );

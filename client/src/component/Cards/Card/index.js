@@ -17,6 +17,7 @@ import { useQueryClient, useMutation, useQuery } from 'react-query';
 
 function Card(props) {
   const [commentText, setCommentText] = useState('');
+
   const history = useHistory();
   const dispatch = useDispatch();
   const inputRef = useRef();
@@ -39,11 +40,10 @@ function Card(props) {
 
   const likeMutation = useMutation(() => likePost(feed._id), {
 
-
     onSuccess: (data) => {
       console.log(data)
-      queryClient.invalidateQueries('fetchfeeds')
-      invalidate()
+      // queryClient.invalidateQueries('fetchfeeds')
+      // invalidate()
     },
 
   });
@@ -53,8 +53,6 @@ function Card(props) {
     onMutate: () => {
       // prev data
       const previousData = queryClient.getQueryData('fetchfeeds')
-
-
       return { previousData }
     },
 
