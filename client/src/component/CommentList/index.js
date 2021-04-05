@@ -26,6 +26,7 @@ const CommentList = ({
   commentText,
   commentId,
   commentTime,
+  comment,
   userpost,
 }) => {
   const userData = useSelector(({ user }) => user.currentUser);
@@ -38,8 +39,20 @@ const CommentList = ({
     onSuccess: (data) => {
       console.log(data)
       queryClient.invalidateQueries('fetchsinglePost')
-      queryClient.invalidateQueries('fetchfeeds');
+      if (queryClient.getQueryData('fetchfeeds')) {
+        queryClient.setQueryData('fetchsinglePost', prev => {
+          return {
+            ...prev,
+            comments: [...prev.comments]
+          }
+        })
+      }
+      // queryClient.invalidateQueries('fetchfeeds');
 
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries('fetchfeeds');
+      queryClient.invalidateQueries('fetchsinglePost');
     }
   })
 
@@ -64,12 +77,14 @@ const CommentList = ({
 
         {userData && commentuser == userData._id && (
           <span onClick={deleteCommentFunc} className="deletebtn">
-            {isLoading ? <Loader
-              type="Oval"
-              color="black"
-              height={10}
-              width={30}
-            /> :
+            {isLoading ?
+              <Loader
+                type="Oval"
+                color="black"
+                height={10}
+                width={30}
+              />
+              :
               <Icon.Trash2 size={13} />}
           </span>
         )}

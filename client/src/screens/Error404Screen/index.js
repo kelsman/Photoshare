@@ -14,7 +14,7 @@ function Error404({ history }) {
         <div className="error-msg">
           <h1> I have Bad News For You</h1>
           <p>The page you are looking for might be removed or is temporarily unavailable </p>
-          <button onClick={() => history.push('/')}> back to Home</button>
+          <button onClick={() => history.goBack()}> Go back</button>
         </div>
       </section>
     </div>

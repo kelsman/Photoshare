@@ -63,7 +63,8 @@ function Card(props) {
           return prev.map(postItem => postItem._id === feed._id ? { ...postItem, comments: [...postItem.comments, data.newComment] } : postItem)
         }
       })
-      setCommentText('')
+
+
     },
     onSettled: (data, error, variables) => {
       // invalidate the query 
@@ -84,6 +85,7 @@ function Card(props) {
 
     try {
       await commentPostMutation.mutateAsync()
+      setCommentText('')
       // setIsLikedButtonClicked(true)
     } catch (error) {
       console.log(error);

@@ -33,19 +33,15 @@ import {
 
 
 } from '../../api/posts.api';
+import PostPagePostCard from './PostPagePostCard';
 
 
 
 function PostPage({ socket, user, history, }) {
-  //    get postId from params
+
   const { postId } = useParams();
-
-  //  states
   const [commentText, setCommentText] = React.useState('');
-  // const [isLikedButtonClicked, setIsLikedButtonClicked] = useState(false)
   const inputRef = useRef();
-
-  // query client
   const queryClient = useQueryClient()
 
   const focus = () => {
@@ -72,11 +68,20 @@ function PostPage({ socket, user, history, }) {
 
   const commentMutation = useMutation(() => CommentPost(userpost._id, commentText), {
     onSuccess: (data) => {
+
+      queryClient.setQueryData('fetchsinglePost', prev => {
+        if (prev.comments) {
+          return {
+            ...prev,
+            comments: [...prev.comments, data.newComment]
+          }
+        }
+      })
+    },
+    onSettled: () => {
       queryClient.invalidateQueries('fetchsinglePost')
     }
   })
-
-
 
   const commentPostFunc = async (event) => {
     event.preventDefault()
@@ -125,7 +130,7 @@ function PostPage({ socket, user, history, }) {
                     commentText={comment.commentText}
                     userpost={userpost}
                     accountName={comment.username}
-                    comment={comment.commentText}
+                    comment={comment}
                     commentImage={comment.avatar}
                     commentTime={comment.commentDate}
                   />
@@ -165,6 +170,7 @@ function PostPage({ socket, user, history, }) {
                 placeholder="Add a comment..."
                 className="commentText"
                 name="commentText"
+
               />
               {commentMutation.isLoading && <Loader />}
               <button disabled={commentText ? false : true} type="submit" className="postText-btn">
@@ -175,17 +181,34 @@ function PostPage({ socket, user, history, }) {
         </div>
       </main>
       <section>
-        <Card
+        {/*     <Card
           feed={userpost}
           accountName={userpost.author.username}
-          avatar={userpost.avatar}
-          comments={userpost.comments}
+          avatar={userpost.author.avatar}
+          comments={userpost.comments ? userpost.comments : null}
           image={userpost.postMedia}
           storyBorder={true}
+          hours={userpost.date}
+          likedByText={userpost.postLikes ? userpost.likes.username : null}
+          invalidate={() => queryClient.invalidateQueries('fetchsinglePost')}
+        /> */}
+        <PostPagePostCard
+          feed={userpost}
+          commentText={commentText}
+          accountName={userpost.author.username}
+          avatar={userpost.author.avatar}
+          comments={userpost.comments ? userpost.comments : null}
+          image={userpost.postMedia}
+          storyBorder={true}
+          hours={userpost.date}
+          likeFunc={likeFunc}
+          commentPostMutation={commentMutation}
+          commentPostFunc={commentPostFunc}
+          setCommentText={setCommentText}
+          likedByText={userpost.postLikes ? userpost.likes.username : null}
           invalidate={() => queryClient.invalidateQueries('fetchsinglePost')}
 
         />
-
       </section>
 
     </div>

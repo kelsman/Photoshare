@@ -35,18 +35,18 @@ const ProfilePage = lazy(() => import('./screens/ProfilePage'));
 
 
 const token = localStorage.getItem('authToken');
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      // refetchOnWindowFocus: false,
+      staleTime: 60 * 3000
+    }
+  }
+});
 // Create a client
 
-function App({ loaduser, connectSocketIo }) {
+function App({ loaduser, connectSocketIo, currentUser }) {
 
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        refetchOnWindowFocus: false,
-        staleTime: 60 * 3000
-      }
-    }
-  });
   const {
     history,
     location: { pathname },
@@ -70,15 +70,15 @@ function App({ loaduser, connectSocketIo }) {
     // }
     // window.addEventListener('storage', handleLogOut)
     return () => {
-      queryClient.cancelQueries()
+      return null
     }
   }, [])
 
   return (
     <ErrorBoundary>
-      <div className="App">
-        <QueryClientProvider client={queryClient}>
-          <Suspense fallback={<LoadingPage />}>
+      <Suspense fallback={<LoadingPage />}>
+        <div className="App">
+          <QueryClientProvider client={queryClient}>
             {pathname !== Routes.Login &&
               pathname !== Routes.Explore &&
               pathname !== Routes.SignUp &&
@@ -97,18 +97,20 @@ function App({ loaduser, connectSocketIo }) {
               <Route component={ErrorPage} />
             </Switch>
 
+
             {
               pathname !== Routes.SignUp &&
               pathname !== Routes.Login &&
-              pathname !== Routes.NewPostPage &&
+              currentUser &&
               < MobileTabMenu />}
-
-          </Suspense>
-          <ReactQueryDevtools initialIsOpen={true} />
-        </QueryClientProvider>
-      </div>
+            <ReactQueryDevtools initialIsOpen={true} />
+          </QueryClientProvider>
+        </div>
+      </Suspense>
     </ErrorBoundary>
   );
 }
-
-export default connect(null, { loaduser, connectSocketIo })(App);
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser
+})
+export default connect(mapStateToProps, { loaduser, connectSocketIo })(App);

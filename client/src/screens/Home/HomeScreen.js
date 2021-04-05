@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { loaduser } from '../../redux/Actions/userActions';
 import { useQuery, useQueryClient } from 'react-query';
-
+import * as Routes from '../../component/routes'
 
 // import Header from '../../component/Header';
 
@@ -23,12 +23,12 @@ const token = localStorage.getItem('authToken');
 const HomeScreen = () => {
 
   const history = useHistory();
+
   const queryClient = useQueryClient();
   const { data, isLoading, isError, isSuccess } = useQuery('fetchfeeds', () => retrieveFeedPosts(history))
-  console.log(data);
 
   if (!token) {
-    history.push('/');
+    history.push(Routes.Login)
   }
 
 
