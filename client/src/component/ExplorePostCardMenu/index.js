@@ -4,6 +4,8 @@ import './style.scss';
 import * as Icon from 'react-feather';
 
 import { connect } from 'react-redux';
+import styled from "styled-components";
+
 
 const ExploreCardMenu = ({ focus, likeFunc, userpost, user, isLiked, setIsLiked }) => {
   // const [isLiked, setIsLiked] = React.useState(undefined);
@@ -32,15 +34,17 @@ const ExploreCardMenu = ({ focus, likeFunc, userpost, user, isLiked, setIsLiked 
               className="icon__heart"
               onClick={likeFunc}
               fill="red"
-              size={40}
+              size={23}
             /> :
             <Icon.Heart
               fill="whitesmoke"
-              size={40}
+              size={23}
               onClick={likeFunc}
               className="icon__heart"
             />
         }
+
+
         {/* <input type="checkbox" class="like-btn" />
         <i class="fa fa-heart"></i> */}
         {/*   <Icon.ThumbsDown className="icon" onClick={unlikeFunc} /> */}
