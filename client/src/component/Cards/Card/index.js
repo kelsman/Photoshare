@@ -7,7 +7,7 @@ import Profile from '../../Profile';
 import moment from 'moment';
 import dayjs from 'dayjs';
 import ExploreCardMenu from '../../ExplorePostCardMenu';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { likePost, CommentPost } from '../../../api/posts.api'
 import Loader from '../../Loader'
@@ -17,11 +17,12 @@ import { useQueryClient, useMutation, useQuery } from 'react-query';
 
 function Card(props) {
   const [commentText, setCommentText] = useState('');
+  const [isLiked, setIsLiked] = React.useState(undefined);
 
   const history = useHistory();
   const dispatch = useDispatch();
   const inputRef = useRef();
-
+  const currentUser = useSelector(({ user }) => user.currentUser)
   const {
     storyBorder,
     feed,
@@ -40,30 +41,53 @@ function Card(props) {
 
   const likeMutation = useMutation(() => likePost(feed._id), {
 
+    onMutate: () => {
+
+      // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
+      queryClient.cancelQueries('fetchfeeds')
+      //  snapshot of the previous value 
+      const previousFeeds = queryClient.getQueryData('fetchfeeds');
+
+      // optimistically update the isLiked property 
+
+      // return context object of snapshot value 
+      return { previousFeeds }
+
+    },
+
     onSuccess: (data) => {
       console.log(data)
-      // queryClient.invalidateQueries('fetchfeeds')
+      if (data === "like success") {
+        setIsLiked(true)
+      }
+      if (data === "unlike success") {
+        setIsLiked(false)
+      }
       // invalidate()
     },
+
+    onError: (err, variable, context) => {
+      console.log(err)
+      queryClient.setQueryData('fetchfeeds', context.previousFeeds)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries('fetchfeeds')
+
+    }
 
   });
 
   const commentPostMutation = useMutation(() => CommentPost(feed._id, commentText), {
 
-    onMutate: () => {
-      // prev data
-      const previousData = queryClient.getQueryData('fetchfeeds')
-      return { previousData }
-    },
-
     onSuccess: (data) => {
+
       queryClient.setQueryData('fetchfeeds', prev => {
         const post = prev.find(d => d._id === feed._id)
         if (post) {
           return prev.map(postItem => postItem._id === feed._id ? { ...postItem, comments: [...postItem.comments, data.newComment] } : postItem)
         }
-      })
 
+      })
 
     },
     onSettled: (data, error, variables) => {
@@ -85,7 +109,7 @@ function Card(props) {
 
     try {
       await commentPostMutation.mutateAsync()
-      setCommentText('')
+
       // setIsLikedButtonClicked(true)
     } catch (error) {
       console.log(error);
@@ -108,7 +132,7 @@ function Card(props) {
         <CardButton className="cardButton" />
       </header>
       <img className="cardImage" src={image} alt="card content" />
-      {/*  <CardMenu /> */} <ExploreCardMenu focus={focus} likeFunc={likeFunc} userpost={feed} />
+      {/*  <CardMenu /> */} <ExploreCardMenu setIsLiked={setIsLiked} isLiked={isLiked} focus={focus} likeFunc={likeFunc} userpost={feed} />
       <div className="likedBy">
         {/*  <Profile iconSize="small" hideAccountName={true} /> */}
         {/*  <span>

@@ -28,7 +28,7 @@
   .cardImage {
     width: 100%;
     display: block;
-    object-fit: fill;
+    object-fit: cover;
     height: 500px;
     object-position: center;
   }
@@ -63,6 +63,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    
     font-size: 0.85em;
     padding: 1.5em 1.25em;
     position: relative;
