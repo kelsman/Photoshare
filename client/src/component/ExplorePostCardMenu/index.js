@@ -31,7 +31,7 @@ const ExploreCardMenu = ({ focus, likeFunc, userpost, user, isLiked, setIsLiked 
             <Icon.Heart
               className="icon__heart"
               onClick={likeFunc}
-              fill="tomatoe"
+              fill="red"
               size={30}
             /> :
             <Icon.Heart
