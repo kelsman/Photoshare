@@ -13,9 +13,13 @@ import Footer from '../../component/Footer';
 import PostCard from '../../component/Explorepostcard/PostCard';
 import { v4 as uuidv4 } from 'uuid';
 import FollowButton from '../../component/FollowButton';
+import { getProfile } from '../../api/profile.api';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import LoaderSpinner from '../../component/LoaderSpinner';
 
 // react-query
-import { useQuery } from "react-query"
+import { useQuery, useQueryClient } from "react-query"
+import Divider from '../../component/Divider';
 
 const token = localStorage.getItem('authToken');
 const baseUrl = process.env.REACT_APP_BASE_URL;
@@ -25,27 +29,9 @@ const ProfilePage = () => {
   const { username } = useParams();
   const currentUser = useSelector(({ user }) => user.currentUser);
   const history = useHistory();
+  const queryClient = useQueryClient()
 
-
-  const getProfile = async () => {
-    if (token) {
-      setToken(token);
-    }
-    const config = {
-      headers: {
-        'Content-Type': 'applocation/json',
-      },
-    };
-    const response = await axios.get(`${baseUrl}/api/route/user/userprofile/${username}`, config);
-    // if (response) {
-    //   const data = response.data.userProfile[0];
-
-    // }
-    return response.data.userProfile[0]
-
-  };
-
-  const { data: userProfile, isLoading, isError, error, isSuccess } = useQuery('getProfileData', getProfile)
+  const { data: userProfile, isLoading, isError, error, isSuccess } = useQuery('profile', () => getProfile(username))
 
   if (isLoading) {
     return <Loader />;
@@ -57,7 +43,6 @@ const ProfilePage = () => {
       return follow.user === String(currentUser._id)
     });
   }
-
 
 
   return (
@@ -80,12 +65,12 @@ const ProfilePage = () => {
               ) : (
                 <Fragment>
                   <button
-                    className="settings__btn"
+                    className="editprofile__btn"
                     onClick={() => history.push(Routes.SettingsPage)}
                   >
                     Edit Profile
                   </button>
-                  <button className="icon_btn">
+                  <button className="settings_btn">
                     <Icon.Settings />
                   </button>
                 </Fragment>
@@ -114,32 +99,40 @@ const ProfilePage = () => {
         </div>
       </header>
 
-      <section style={{ width: '100%' }}>
+      <section className="posts__section">
         <div className="post__title">
           <Icon.Grid className="grid__icon" />
         </div>
       </section>
 
-      {userProfile.posts ? (
-        <div className="posts__gallery">
-          {userProfile.posts.map((post) => {
-            return (
-              <PostCard
-                // src={post.postMedia}
-                key={uuidv4()}
-                alt="post image"
-                post={post}
-              />
-            );
-          })}
-        </div>
+
+      {userProfile.posts.length ? (
+        <InfiniteScroll
+          dataLength={userProfile.posts.length}
+          next={(() => queryClient.invalidateQueries('profile'))}
+          hasMore={true}
+          loader={<LoaderSpinner />}
+        >
+          <div className="posts__gallery">
+            {userProfile.posts.map((post) => {
+              return (
+                <PostCard
+                  //src={post.postMedia}
+                  key={uuidv4()}
+                  alt="post image"
+                  post={post}
+                />
+              );
+            })}
+          </div>
+        </InfiniteScroll>
+
       ) : (
         <div>
           no posts to show
           <Icon.Camera size={30} />
           <h1>Share Photos</h1>
           <p>When you share Photos they will appear on your profile</p>
-
         </div>
       )}
 

@@ -21,8 +21,9 @@ const PostPagePostCard = ({
     setCommentText,
     likeFunc,
     commentPostFunc,
-    commentPostMutation
-
+    commentPostMutation,
+    isLiked,
+    setIsLiked,
 }) => {
     const inputRef = useRef();
     const focus = () => {
@@ -42,7 +43,7 @@ const PostPagePostCard = ({
                 <CardButton className="cardButton" />
             </header>
             <img className="cardImage" src={image} alt="card content" />
-            {/*  <CardMenu /> */} <ExploreCardMenu focus={focus} likeFunc={likeFunc} userpost={feed} />
+            <ExploreCardMenu isLiked={isLiked} setIsLiked={setIsLiked} focus={focus} likeFunc={likeFunc} userpost={feed} />
             <div className="likedBy">
                 {/*  <Profile iconSize="small" hideAccountName={true} /> */}
                 {/*  <span>

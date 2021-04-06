@@ -21,6 +21,7 @@ import GlobaLoader from './component/GlobalLoader';
 import { loaduser, LogOut } from './redux/Actions/userActions';
 import { connect, useDispatch } from 'react-redux';
 import { setToken } from './utils';
+
 // screens
 const ErrorPage = lazy(() => import('./screens/Error404Screen'));
 const LogInScreen = lazy(() => import('./screens/LoginScreen'));
@@ -31,6 +32,8 @@ const NewPostPage = lazy(() => import('./screens/NewPost'));
 const EditProfilePage = lazy(() => import('./screens/SettingsScreen'));
 const PostPage = lazy(() => import('./screens/PostPage'));
 const ProfilePage = lazy(() => import('./screens/ProfilePage'));
+
+// lazy load component
 
 
 
@@ -76,14 +79,15 @@ function App({ loaduser, connectSocketIo, currentUser }) {
 
   return (
     <ErrorBoundary>
-      <Suspense fallback={<LoadingPage />}>
+      <QueryClientProvider client={queryClient}>
         <div className="App">
-          <QueryClientProvider client={queryClient}>
-            {pathname !== Routes.Login &&
-              pathname !== Routes.Explore &&
-              pathname !== Routes.SignUp &&
-              pathname !== Routes.NewPostPage && <NavigationHeader />}
-            <GlobaLoader />
+          {pathname !== Routes.Login &&
+            pathname !== Routes.Explore &&
+            pathname !== Routes.SignUp &&
+            pathname !== Routes.NewPostPage &&
+            <NavigationHeader />}
+
+          <Suspense fallback={<LoadingPage />}>
             <Switch>
               <Route exact path={Routes.Login} render={() => <LogInScreen />} />
               <Route exact path={Routes.SignUp} render={() => <SignUpScreen />} />
@@ -96,17 +100,17 @@ function App({ loaduser, connectSocketIo, currentUser }) {
               {/* <Route exact path={Routes.ProfilePage} component={UserProfile} /> */}
               <Route component={ErrorPage} />
             </Switch>
+          </Suspense>
 
 
-            {
-              pathname !== Routes.SignUp &&
-              pathname !== Routes.Login &&
-              currentUser &&
-              < MobileTabMenu />}
-            <ReactQueryDevtools initialIsOpen={true} />
-          </QueryClientProvider>
+          {
+            pathname !== Routes.SignUp &&
+            pathname !== Routes.Login &&
+            currentUser &&
+            <MobileTabMenu />}
         </div>
-      </Suspense>
+        <ReactQueryDevtools initialIsOpen={true} />
+      </QueryClientProvider>
     </ErrorBoundary>
   );
 }

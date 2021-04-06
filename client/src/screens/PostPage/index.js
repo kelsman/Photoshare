@@ -41,6 +41,7 @@ function PostPage({ socket, user, history, }) {
 
   const { postId } = useParams();
   const [commentText, setCommentText] = React.useState('');
+  const [isLiked, setIsLiked] = useState(undefined)
   const inputRef = useRef();
   const queryClient = useQueryClient()
 
@@ -60,9 +61,19 @@ function PostPage({ socket, user, history, }) {
 
 
   const likeMutation = useMutation(() => likePost(userpost._id), {
-    onSuccess: () => {
-      queryClient.invalidateQueries('fetchsinglePost')
+    onSuccess: (data) => {
+      console.log(data)
+      if (data === "like success") {
+        setIsLiked(true)
+      }
+      if (data === "unlike success") {
+        setIsLiked(false)
+      }
+
     },
+    onSettled: () => {
+      queryClient.invalidateQueries('fetchsinglePost')
+    }
 
   });
 
@@ -144,7 +155,8 @@ function PostPage({ socket, user, history, }) {
                   userpost={userpost}
                   focus={focus}
                   likeFunc={likeFunc}
-                // isLiked={isLikedButtonClicked}
+                  isLiked={isLiked}
+                  setIsLiked={setIsLiked}
                 />
               </div>
               {!userpost.likes ? (
@@ -181,18 +193,10 @@ function PostPage({ socket, user, history, }) {
         </div>
       </main>
       <section>
-        {/*     <Card
-          feed={userpost}
-          accountName={userpost.author.username}
-          avatar={userpost.author.avatar}
-          comments={userpost.comments ? userpost.comments : null}
-          image={userpost.postMedia}
-          storyBorder={true}
-          hours={userpost.date}
-          likedByText={userpost.postLikes ? userpost.likes.username : null}
-          invalidate={() => queryClient.invalidateQueries('fetchsinglePost')}
-        /> */}
+
         <PostPagePostCard
+          isLiked={isLiked}
+          setIsLiked={setIsLiked}
           feed={userpost}
           commentText={commentText}
           accountName={userpost.author.username}
