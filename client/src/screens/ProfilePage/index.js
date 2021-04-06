@@ -113,7 +113,12 @@ const ProfilePage = () => {
           next={(() => queryClient.refetchQueries('profile'))}
           hasMore={true}
           className="posts__gallery"
-          loader={<LoaderSpinner />}
+          loader={
+            <h4 style={{ textAlign: "center" }}>
+              <LoaderSpinner />
+            </h4>
+
+          }
         >
           {userProfile.posts.map((post) => {
             return (

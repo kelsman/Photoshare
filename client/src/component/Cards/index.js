@@ -24,30 +24,32 @@ const Cards = ({ isFetching }) => {
           <p> you have no posts yet follow more people to see their posts</p>{' '}
         </div>
       )}
-      <InfiniteScroll
-        dataLength={posts.length}
-        next={() => queryClient.refetchQueries('fetchfeeds')}
-        hasMore={false}
-        loader={<p> Loading... </p>}
-        endMessage={
-          <div className="feed__bottom">
-            <Divider>
-              <Icon.CheckCircle
-                color="blue"
-                size={40}
 
-              />
-            </Divider>
-            <h2 style={{ textAlign: "center" }}>You're All Caught Up</h2>
-            <h4>
-              Follow more people to see more posts.
-          </h4>
-          </div>
+      {posts && posts.length > 0 &&
 
-        }
-      >
-        {posts && posts.length > 0 &&
-          posts.map((post) => {
+        <InfiniteScroll
+          dataLength={posts.length}
+          next={() => queryClient.refetchQueries('fetchfeeds')}
+          hasMore={false}
+          loader={<p> Loading... </p>}
+          endMessage={
+            <div className="feed__bottom">
+              <Divider>
+                <Icon.CheckCircle
+                  color="blue"
+                  size={40}
+
+                />
+              </Divider>
+              <h2 style={{ textAlign: "center" }}>You're All Caught Up</h2>
+              <h4>
+                Follow more people to see more posts.
+            </h4>
+            </div>
+
+          }
+        >
+          {posts.map((post) => {
             return (
 
               <Card
@@ -63,11 +65,13 @@ const Cards = ({ isFetching }) => {
                 hours={post.date}
               />
 
-
-
             );
           })}
-      </InfiniteScroll>
+
+
+        </InfiniteScroll>
+
+      }
 
 
     </div>
