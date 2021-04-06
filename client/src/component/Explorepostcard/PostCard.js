@@ -9,7 +9,7 @@ const Media = styled.embed`
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 2px;
+  /* border-radius: 2px; */
 `;
 
 function PostCard({ post }) {

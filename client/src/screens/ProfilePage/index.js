@@ -107,25 +107,26 @@ const ProfilePage = () => {
 
 
       {userProfile.posts.length ? (
+
         <InfiniteScroll
           dataLength={userProfile.posts.length}
-          next={(() => queryClient.invalidateQueries('profile'))}
+          next={(() => queryClient.refetchQueries('profile'))}
           hasMore={true}
+          className="posts__gallery"
           loader={<LoaderSpinner />}
         >
-          <div className="posts__gallery">
-            {userProfile.posts.map((post) => {
-              return (
-                <PostCard
-                  //src={post.postMedia}
-                  key={uuidv4()}
-                  alt="post image"
-                  post={post}
-                />
-              );
-            })}
-          </div>
+          {userProfile.posts.map((post) => {
+            return (
+              <PostCard
+                //src={post.postMedia}
+                key={uuidv4()}
+                alt="post image"
+                post={post}
+              />
+            );
+          })}
         </InfiniteScroll>
+
 
       ) : (
         <div>
