@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import './style.scss';
 import * as Routes from '../../routes';
 
-const NewPostButton = ({ iconName, children }) => {
+const NewPostButton = ({ iconName, children, style }) => {
   const history = useHistory();
   const [fileSelected, setFileSelected] = useState(undefined);
   const fileinput = useRef();
@@ -20,7 +20,7 @@ const NewPostButton = ({ iconName, children }) => {
   return (
     <Fragment>
       <form encType="multipart/form-data">
-        <label htmlFor="file-upload">{!iconName && <Icon.Camera className="icon" />}</label>
+        <label style={style} htmlFor="file-upload">{!iconName && <Icon.Camera className="icon" />}</label>
         <input
           ref={fileinput}
           name="postfile"

@@ -7,7 +7,7 @@ import cogoToast from 'cogo-toast';
 import * as Routes from '../../component/routes';
 
 const baseUrl = process.env.REACT_APP_BASE_URL
-
+const token = localStorage.getItem('authToken');
 export const signup = (data, history) => {
   return async (dispatch) => {
     try {
@@ -59,8 +59,8 @@ export const signin = (data) => {
 
 export const loaduser = () => {
   return async (dispatch) => {
-    try {
 
+    try {
       const response = await axios.get(`${baseUrl}/api/route/user/getUser`);
       if (response) {
         await dispatch({ type: userActionTypes.LOAD_USER_SUCCESS, payload: response.data.user[0] });

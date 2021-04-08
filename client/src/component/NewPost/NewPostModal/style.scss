@@ -4,27 +4,32 @@
 .modal__wrapper{
     width: 100vw;
     height: 100%;
-   
 }
 
 .newPostModal{
     width: 400px;
     min-height: 500px;
-    @media screen and (max-width: 320px){
-        width: 280px;
+    @media screen and (max-width: 450px){
+        width: 90%;
         
+    }
+    @media screen and (min-width: 1440px){
+        width: 600px;
+        height: 600px;
     }
 
 }
 .caption__box{
      width: 100%;
      margin: 10px 0px;
-     border-bottom:  1px solid $border-color-grey;
+     border:  1px solid $border-color-grey;
      padding: 10px;
+     outline: 0;
 
-    //  &:focus{
-    //     //  border: none;
-    //  }
+
+     &:focus{
+        outline: 0;
+     }
     &::placeholder{
         color: $border-color-grey;
         font-weight: 600;
@@ -54,28 +59,17 @@
 
 }
 .preview__wrapper{
-  
     width: 100%;
-    border: 1px solid red;
-    display: flex;
-    align-items: center;
-    justify-content:center;
-    figure{
-        width: 350px;
-        display: block;
-        height: 300px;
-        object-fit: contain;
-        object-position: center;
-        margin: 3px 0px; } .preview{
-        width: 350px;
-        display: block;
-        height: 300px;
-        object-fit: contain;
-        object-position: center;
-        margin: 3px 0px;
-       
-        
+    height: fit-content;
+   
+    
+    img{
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
     }
+   
+   
 }
 @media screen and (max-width: 600px){
     .modal{

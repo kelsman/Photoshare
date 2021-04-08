@@ -41,7 +41,7 @@ function PostPage({ socket, user, history, }) {
 
   const { postId } = useParams();
   const [commentText, setCommentText] = React.useState('');
-  const [isLiked, setIsLiked] = useState(undefined)
+  const [isLiked, setIsLiked] = React.useState(undefined);
   const inputRef = useRef();
   const queryClient = useQueryClient()
 
@@ -57,12 +57,13 @@ function PostPage({ socket, user, history, }) {
 
 
   //  react-query
-  const { isFetching, isLoading, data: userpost, error, isSuccess } = useQuery('fetchsinglePost', () => fetchSinglePost(postId))
+  const { isFetching, isLoading, data: userpost, error, isSuccess } = useQuery(['fetchsinglePost', postId], () => fetchSinglePost(postId))
 
 
   const likeMutation = useMutation(() => likePost(userpost._id), {
+
     onSuccess: (data) => {
-      console.log(data)
+
       if (data === "like success") {
         setIsLiked(true)
       }
@@ -72,7 +73,7 @@ function PostPage({ socket, user, history, }) {
 
     },
     onSettled: () => {
-      queryClient.invalidateQueries('fetchsinglePost')
+      queryClient.invalidateQueries(['fetchsinglePost', postId])
     }
 
   });
@@ -80,7 +81,7 @@ function PostPage({ socket, user, history, }) {
   const commentMutation = useMutation(() => CommentPost(userpost._id, commentText), {
     onSuccess: (data) => {
 
-      queryClient.setQueryData('fetchsinglePost', prev => {
+      queryClient.setQueryData(['fetchsinglePost', postId], prev => {
         if (prev.comments) {
           return {
             ...prev,
@@ -90,7 +91,7 @@ function PostPage({ socket, user, history, }) {
       })
     },
     onSettled: () => {
-      queryClient.invalidateQueries('fetchsinglePost')
+      queryClient.invalidateQueries(['fetchsinglePost', postId])
     }
   })
 
@@ -126,6 +127,7 @@ function PostPage({ socket, user, history, }) {
                 image={userpost.author.avatar}
                 iconSize="medium"
                 username={userpost.author.username}
+                authorUsername={userpost.author.username}
               />
               <Icon.MoreHorizontal className="more-icon" size={26} />
             </div>

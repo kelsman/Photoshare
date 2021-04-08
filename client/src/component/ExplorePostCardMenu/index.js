@@ -9,6 +9,7 @@ import styled from "styled-components";
 import Heart from 'react-animated-heart'
 
 
+
 const ExploreCardMenu = ({ focus, likeFunc, userpost, user, isLiked, setIsLiked, hasUserLiked }) => {
   // const [isLiked, setIsLiked] = React.useState(undefined);
 
@@ -26,15 +27,14 @@ const ExploreCardMenu = ({ focus, likeFunc, userpost, user, isLiked, setIsLiked,
     return () => null;
   }, []);
 
+
+
   return (
     <div className="cardMenu">
       <div className="interactions">
-        {/*  <Icon.Heart
-          className="icon__heart"
-          onClick={likeFunc}
-          style={{ fill: isLiked || hasUserLiked ? "red !important" : "whitesmoke" }}
-          size={25}
-        /> */}
+
+
+
         {
           isLiked ?
             <Icon.Heart
@@ -42,12 +42,14 @@ const ExploreCardMenu = ({ focus, likeFunc, userpost, user, isLiked, setIsLiked,
               onClick={likeFunc}
               fill="red"
               size={25}
+              id="like__btn"
             /> :
             <Icon.Heart
               fill="whitesmoke"
               size={25}
               onClick={likeFunc}
               className="icon__heart"
+              id="like__btn"
             />
         }
         <Icon.MessageCircle className="icon" onClick={focus} size={30} />

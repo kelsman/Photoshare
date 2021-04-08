@@ -1,3 +1,5 @@
+@import "../../Sass/variables";
+
 .cardMenu {
     display: flex;
     justify-content: space-between;
@@ -55,6 +57,62 @@
       transform: scale(1);
     }
  
+}
+#i{
+  cursor:pointer;
+  padding:10px 12px 8px;
+  background: $background-grey;
+  border-radius:50%;
+  display:inline-block;
+  margin:0 0 15px;
+  color:#aaa;
+  transition:.2s;
+
+  &:hover {
+    color:#666;
+  }
+  &::before{
+    font-family:fontawesome;
+    content:'\f004';
+    font-style:normal;
+    font-size: 25px;
+    margin: 0 10px;
+  }
+}
+.liked__span{
+  position: absolute;
+  bottom:70px;
+  left:0;
+  right:0;
+  visibility: hidden;
+  transition:.6s;
+  z-index:-2;
+  font-size:2px;
+  color:transparent;
+  font-weight:400;
+}
+#i.active{
+  animation: size .4s;
+  color:#e23b3b;
+}
+.liked__span.press{
+  bottom:120px;
+  font-size:14px;
+  visibility:visible;
+  animation: fade 1s;
+}
+
+@keyframes fade {
+  0% {color: transparent;}
+  50% {color:#e23b3b;}
+  100% {color: transparent;}
+}
+
+@keyframes size {
+  0% {padding:10px 12px 8px;}
+  50% {padding:14px 16px 12px;  
+    margin-top:-4px;}
+  100% {padding:10px 12px 8px;}
 }
 
 

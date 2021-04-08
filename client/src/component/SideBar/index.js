@@ -28,7 +28,9 @@ const SideBar = ({ user }) => {
         <Suggestions />
 
         {/* Footer */}
-        <Footer />
+        <section className="footer__section">
+          <Footer />
+        </section>
       </div>
     </Sticky>
 

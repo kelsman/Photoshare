@@ -16,27 +16,30 @@ import Cards from '../../component/Cards';
 import Loader from '../../component/Loader';
 import { retrieveFeedPosts } from '../../api/posts.api';
 import SuggestionCard from '../../component/SuggestionsFollow/suggestionCard';
-
-
+import { loadUser } from '../../api/auth.api'
 
 const token = localStorage.getItem('authToken');
 
 const HomeScreen = () => {
 
-  const history = useHistory();
 
-  const queryClient = useQueryClient();
-  const { data, isLoading, isError, isSuccess } = useQuery('fetchfeeds', () => retrieveFeedPosts(history))
+  const history = useHistory();
+  const queryClient = useQueryClient()
+
+  const { data, isLoading, isError, isSuccess, isFetching } = useQuery(['fetchfeeds'], () => retrieveFeedPosts(history))
+  // const { data: currentUser, isLoading: isgettingUser, isError: getUserError, isSuccess: getUserSuccess } = useQuery(['getUser', token], loadUser);
 
   if (!token) {
     history.push(Routes.Login)
   }
-
-
-
+  // if (getUserSuccess) {
+  //   console.log(currentUser)
+  // }
   if (isLoading) {
     return <Loader />;
   }
+
+
 
 
   return (
@@ -71,6 +74,6 @@ const mapStateToProps = ({ user, post, feed }) => {
   };
 };
 
-export default connect(mapStateToProps, null)(
+export default connect(mapStateToProps, { loaduser })(
   HomeScreen,
 );

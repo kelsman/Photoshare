@@ -37,7 +37,6 @@ const Suggestions = () => {
     <div className="suggestions">
       <div className="titleContainer">
         <div className="title">Suggestions For You</div>
-
       </div>
 
       {

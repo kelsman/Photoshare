@@ -37,7 +37,7 @@ const ProfilePage = () => {
     return () => null;
   }, [])
 
-  const { data: userProfile, isLoading, isError, error, isSuccess } = useQuery('profile', () => getProfile(username))
+  const { data: userProfile, isLoading, isError, error, isSuccess } = useQuery(["profile", username], () => getProfile(username))
 
   if (isLoading) {
     return <Loader />;

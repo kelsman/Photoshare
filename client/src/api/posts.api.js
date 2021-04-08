@@ -1,16 +1,46 @@
 import axios from 'axios';
 import { setToken } from '../utils';
 import cogoToast from 'cogo-toast';
-
+import * as Routes from '../component/routes';
 const baseUrl = process.env.REACT_APP_BASE_URL
 const token = localStorage.getItem('authToken');
 
 
 
+// create a post 
+
+export const createPost = async (data, history) => {
+    if (token) {
+        setToken(token);
+    }
+    const config = {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    };
+    try {
+        const res = await axios.post(`${baseUrl}/api/route/post/createPost`, data, config);
+        if (res) {
+            console.log('post created')
+            history.push(Routes.Dashboard);
+        }
+    } catch (error) {
+        console.log(error.messge)
+        if (
+            error.response.data.msg === 'jwt expired' ||
+            error.response.data.msg === `you're not authorised`
+        ) {
+            history.push('/');
+            localStorage.removeItem('authToken');
+            cogoToast.info('session expired');
+        }
+    }
+}
+
+
 
 
 //  fetch single post 
-
 export const fetchSinglePost = async (postId, history) => {
 
     if (token) {

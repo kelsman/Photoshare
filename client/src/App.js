@@ -16,7 +16,7 @@ import LoadingPage from './screens/LoadingScreen';
 import GlobaLoader from './component/GlobalLoader';
 
 //  redux
-import { loaduser, LogOut } from './redux/Actions/userActions';
+import { loaduser, LogOut, signin } from './redux/Actions/userActions';
 import { connect, useDispatch } from 'react-redux';
 import { setToken } from './utils';
 
@@ -35,10 +35,10 @@ const ProfilePage = lazy(() => import('./screens/ProfilePage'));
 
 
 
-const token = localStorage.getItem('authToken');
+
 
 function App({ loaduser, connectSocketIo, currentUser }) {
-
+  const token = localStorage.getItem('authToken');
   const {
     history,
     location: { pathname },
@@ -64,7 +64,7 @@ function App({ loaduser, connectSocketIo, currentUser }) {
     return () => {
       return null
     }
-  }, [])
+  }, [loaduser, token, signin])
 
   return (
     <ErrorBoundary>
@@ -103,4 +103,4 @@ function App({ loaduser, connectSocketIo, currentUser }) {
 const mapStateToProps = ({ user }) => ({
   currentUser: user.currentUser
 })
-export default connect(mapStateToProps, { loaduser, connectSocketIo })(App);
+export default connect(mapStateToProps, { loaduser, connectSocketIo, signin })(App);

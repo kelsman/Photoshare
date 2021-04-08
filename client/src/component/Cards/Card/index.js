@@ -38,7 +38,7 @@ function Card(props) {
 
   // check if user has liked the post before;
   let hasUserLiked;
-  if (feed) {
+  if (feed && feed.likes) {
     hasUserLiked = feed.likes.find(d => d.user === currentUser._id)
 
   }
@@ -47,30 +47,16 @@ function Card(props) {
 
   const likeMutation = useMutation(() => likePost(feed._id), {
 
-    onMutate: () => {
-
-      // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
-      queryClient.cancelQueries('fetchfeeds')
-      //  snapshot of the previous value 
-      const previousFeeds = queryClient.getQueryData('fetchfeeds');
-
-
-      // return context object of snapshot value 
-      return { previousFeeds }
-
-    },
-
     onSuccess: (data) => {
-      if (data === "like success") setIsLiked(true)
-
-      if (data === "unlike success") setIsLiked(false)
+      if (data === "like success") {
+        setIsLiked(true)
+      }
+      if (data === "unlike success") {
+        setIsLiked(false)
+      }
       // invalidate()
     },
 
-    onError: (err, variable, context) => {
-      console.log(err)
-      queryClient.setQueryData('fetchfeeds', context.previousFeeds)
-    },
     onSettled: () => {
       queryClient.invalidateQueries('fetchfeeds')
     }

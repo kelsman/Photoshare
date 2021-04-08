@@ -17,8 +17,8 @@ Modal.setAppElement('#root');
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      // refetchOnWindowFocus: false,
-      staleTime: 60 * 3000
+      refetchOnWindowFocus: false,
+      staleTime: 60 * 2000
     }
   }
 })

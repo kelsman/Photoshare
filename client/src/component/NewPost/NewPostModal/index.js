@@ -9,11 +9,13 @@ import { createPostFunc } from '../../../redux/Actions/postActions';
 import * as Icon from 'react-feather';
 import cogoToast from 'cogo-toast';
 
+import { useQuery, useQueryClient, useMutation } from 'react-query';
+import { createPost } from '../../../api/posts.api';
+
 // modal
 import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
 
-import ImageFilter from 'react-image-filter';
 
 const NewPostModal = ({ file }) => {
   const modalIsOpen = useSelector(({ modal }) => modal.showModal);
@@ -21,8 +23,6 @@ const NewPostModal = ({ file }) => {
   const history = useHistory();
   const [previewImage, setPreviewImage] = useState(undefined);
   const [caption, setCaption] = useState('');
-
-  // console.log(file)
 
   useEffect(() => {
     dispatch(showModal());
@@ -44,34 +44,38 @@ const NewPostModal = ({ file }) => {
 
   const closeModal = async () => {
     dispatch(hideModal());
-    history.push(Routes.Dashboard);
+    history.goBack();
   };
 
-  const handlePost = async (e) => {
-    e.preventDefault();
-    try {
 
-      const data = await new FormData();
-      data.append('postfile', file);
-      data.append('caption', caption);
-      console.log(data.get('postfile'), data.get('caption'));
-      await dispatch(createPostFunc(data, history));
-      history.push(Routes.Dashboard);
-    } catch (error) {
-      console.log(error.message);
+  const mutatePost = useMutation(async () => {
+    cogoToast.loading('posting')
+    const data = await new FormData();
+    data.append('postfile', file);
+    data.append('caption', caption);
+    createPost(data, history)
+  }, {
+
+    onSuccess: () => {
+      cogoToast.success('post created')
+    },
+    onError: (err) => {
+      console.log(err)
     }
-  };
+  })
+
+
+
   return (
     <div className="modal__wrapper">
       <Modal
         open={modalIsOpen}
         onClose={closeModal}
-        className="modal"
         overlayClassName="overlay"
         showCloseIcon={false}
         blockScroll
+        center
         focusTrapped
-
         classNames={
           {
             overlay: 'newPostoverlay',
@@ -83,7 +87,7 @@ const NewPostModal = ({ file }) => {
           <button className="goback__btn" onClick={closeModal}>
             <Icon.ArrowLeft />
           </button>
-          <button className="share__btn" type="submit" onClick={handlePost}>
+          <button className="share__btn" type="submit" onClick={mutatePost.mutateAsync}>
             {' '}
             Share
           </button>
@@ -91,7 +95,7 @@ const NewPostModal = ({ file }) => {
         <small> New Post</small>
         {/* caption */}
         <input
-          placeholder=" write a Caption"
+          placeholder=" Add a Caption"
           className="caption__box"
           name="caption"
           id="caption"
@@ -104,21 +108,13 @@ const NewPostModal = ({ file }) => {
         {/* preview image */}
 
         {previewImage && (
-          <>
+          <Fragment>
             <div className="preview__wrapper">
               <figure className="aden">
                 <img src={previewImage} className="preview" alt="image" />
               </figure>
             </div>
-
-            <ImageFilter
-              image={previewImage}
-              // filter={'sepia'} // see docs beneath
-              colorOne={[40, 250, 250]}
-              colorTwo={[250, 150, 30]}
-
-            />
-          </>
+          </Fragment>
         )}
       </Modal>
     </div>

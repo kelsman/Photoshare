@@ -14,9 +14,9 @@ const NewPostPage = ({ location }) => {
     <>
       {location.state && location.state.fileSelected ? (
         <NewPost file={fileSelected} />
-      ) : (
-        <Redirect to={Routes.Dashboard} />
-      )}
+      ) :
+        history.goBack()
+      }
     </>
   );
 };
