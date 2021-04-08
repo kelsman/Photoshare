@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './style.scss';
 
 import * as Icon from 'react-feather';
@@ -6,8 +6,10 @@ import * as Icon from 'react-feather';
 import { connect } from 'react-redux';
 import styled from "styled-components";
 
+import Heart from 'react-animated-heart'
 
-const ExploreCardMenu = ({ focus, likeFunc, userpost, user, isLiked, setIsLiked }) => {
+
+const ExploreCardMenu = ({ focus, likeFunc, userpost, user, isLiked, setIsLiked, hasUserLiked }) => {
   // const [isLiked, setIsLiked] = React.useState(undefined);
 
   useEffect(() => {
@@ -17,9 +19,8 @@ const ExploreCardMenu = ({ focus, likeFunc, userpost, user, isLiked, setIsLiked 
         const doesLiked = userpost.likes.find((like) => {
           return like._user === user._id;
         });
-        if (doesLiked) {
-          setIsLiked(true);
-        }
+        if (doesLiked) setIsLiked(true);
+
       }
     }
     return () => null;
@@ -28,26 +29,27 @@ const ExploreCardMenu = ({ focus, likeFunc, userpost, user, isLiked, setIsLiked 
   return (
     <div className="cardMenu">
       <div className="interactions">
+        {/*  <Icon.Heart
+          className="icon__heart"
+          onClick={likeFunc}
+          style={{ fill: isLiked || hasUserLiked ? "red !important" : "whitesmoke" }}
+          size={25}
+        /> */}
         {
           isLiked ?
             <Icon.Heart
               className="icon__heart"
               onClick={likeFunc}
               fill="red"
-              size={23}
+              size={25}
             /> :
             <Icon.Heart
               fill="whitesmoke"
-              size={23}
+              size={25}
               onClick={likeFunc}
               className="icon__heart"
             />
         }
-
-
-        {/* <input type="checkbox" class="like-btn" />
-        <i class="fa fa-heart"></i> */}
-        {/*   <Icon.ThumbsDown className="icon" onClick={unlikeFunc} /> */}
         <Icon.MessageCircle className="icon" onClick={focus} size={30} />
         <Icon.Share className="icon" size={30} />
       </div>

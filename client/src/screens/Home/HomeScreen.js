@@ -18,6 +18,7 @@ import { retrieveFeedPosts } from '../../api/posts.api';
 import SuggestionCard from '../../component/SuggestionsFollow/suggestionCard';
 
 
+
 const token = localStorage.getItem('authToken');
 
 const HomeScreen = () => {
@@ -54,6 +55,7 @@ const HomeScreen = () => {
           )
         }
         <div className="container">
+          {/* <PulsatingIcon /> */}
           <Cards posts={data} />
           <SideBar />
         </div>

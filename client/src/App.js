@@ -4,9 +4,7 @@ import { Switch, Redirect, Route } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import * as Routes from './component/routes';
 import ErrorBoundary from './component/ErrorBounday';
-//  react-query 
-import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from 'react-query/devtools'
+
 // import UserProfile from './screens/UserProfile';
 import { connectSocketIo } from './redux/Socket/socketActions';
 
@@ -38,15 +36,6 @@ const ProfilePage = lazy(() => import('./screens/ProfilePage'));
 
 
 const token = localStorage.getItem('authToken');
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      // refetchOnWindowFocus: false,
-      staleTime: 60 * 3000
-    }
-  }
-});
-// Create a client
 
 function App({ loaduser, connectSocketIo, currentUser }) {
 
@@ -79,38 +68,35 @@ function App({ loaduser, connectSocketIo, currentUser }) {
 
   return (
     <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <div className="App">
-          {pathname !== Routes.Login &&
-            pathname !== Routes.Explore &&
-            pathname !== Routes.SignUp &&
-            pathname !== Routes.NewPostPage &&
-            <NavigationHeader />}
+      <div className="App">
+        {pathname !== Routes.Login &&
+          pathname !== Routes.Explore &&
+          pathname !== Routes.SignUp &&
+          pathname !== Routes.NewPostPage &&
+          <NavigationHeader />}
 
-          <Suspense fallback={<LoadingPage />}>
-            <Switch>
-              <Route exact path={Routes.Login} render={() => <LogInScreen />} />
-              <Route exact path={Routes.SignUp} render={() => <SignUpScreen />} />
-              <Route exact path={Routes.Dashboard} render={() => <HomeScreen />} />
-              <Route exact path={Routes.Explore} render={() => <ExploreScreen />} />
-              <Route exact path={Routes.NewPostPage} component={NewPostPage} />
-              <Route exact path={`${Routes.PostPage}/:postId`} component={PostPage} />
-              <Route exact path={`${Routes.ProfilePage}/:username`} component={ProfilePage} />
-              <Route path={Routes.SettingsPage} component={EditProfilePage} />
-              {/* <Route exact path={Routes.ProfilePage} component={UserProfile} /> */}
-              <Route component={ErrorPage} />
-            </Switch>
-          </Suspense>
+        <Suspense fallback={<LoadingPage />}>
+          <Switch>
+            <Route exact path={Routes.Login} render={() => <LogInScreen />} />
+            <Route exact path={Routes.SignUp} render={() => <SignUpScreen />} />
+            <Route exact path={Routes.Dashboard} render={() => <HomeScreen />} />
+            <Route exact path={Routes.Explore} render={() => <ExploreScreen />} />
+            <Route exact path={Routes.NewPostPage} component={NewPostPage} />
+            <Route exact path={`${Routes.PostPage}/:postId`} component={PostPage} />
+            <Route exact path={`${Routes.ProfilePage}/:username`} component={ProfilePage} />
+            <Route path={Routes.SettingsPage} component={EditProfilePage} />
+            {/* <Route exact path={Routes.ProfilePage} component={UserProfile} /> */}
+            <Route component={ErrorPage} />
+          </Switch>
+        </Suspense>
 
 
-          {
-            pathname !== Routes.SignUp &&
-            pathname !== Routes.Login &&
-            currentUser &&
-            <MobileTabMenu />}
-        </div>
-        <ReactQueryDevtools initialIsOpen={true} />
-      </QueryClientProvider>
+        {
+          pathname !== Routes.SignUp &&
+          pathname !== Routes.Login &&
+          currentUser &&
+          <MobileTabMenu />}
+      </div>
     </ErrorBoundary>
   );
 }

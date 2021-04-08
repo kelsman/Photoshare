@@ -13,7 +13,7 @@ import { likePost, CommentPost } from '../../../api/posts.api'
 import Loader from '../../Loader'
 import { v4 as uuidv4 } from 'uuid';
 import { useQueryClient, useMutation, useQuery } from 'react-query';
-
+import Heart from 'react-animated-heart'
 
 function Card(props) {
   const [commentText, setCommentText] = useState('');
@@ -36,6 +36,12 @@ function Card(props) {
     invalidate
   } = props;
 
+  // check if user has liked the post before;
+  let hasUserLiked;
+  if (feed) {
+    hasUserLiked = feed.likes.find(d => d.user === currentUser._id)
+
+  }
   // query client
   const queryClient = useQueryClient();
 
@@ -48,7 +54,6 @@ function Card(props) {
       //  snapshot of the previous value 
       const previousFeeds = queryClient.getQueryData('fetchfeeds');
 
-      // optimistically update the isLiked property 
 
       // return context object of snapshot value 
       return { previousFeeds }
@@ -56,13 +61,9 @@ function Card(props) {
     },
 
     onSuccess: (data) => {
-      console.log(data)
-      if (data === "like success") {
-        setIsLiked(true)
-      }
-      if (data === "unlike success") {
-        setIsLiked(false)
-      }
+      if (data === "like success") setIsLiked(true)
+
+      if (data === "unlike success") setIsLiked(false)
       // invalidate()
     },
 
@@ -72,7 +73,6 @@ function Card(props) {
     },
     onSettled: () => {
       queryClient.invalidateQueries('fetchfeeds')
-
     }
 
   });
@@ -132,7 +132,7 @@ function Card(props) {
         <CardButton className="cardButton" />
       </header>
       <img className="cardImage" src={image} alt="card content" />
-      {/*  <CardMenu /> */} <ExploreCardMenu setIsLiked={setIsLiked} isLiked={isLiked} focus={focus} likeFunc={likeFunc} userpost={feed} />
+      {/*  <CardMenu /> */} <ExploreCardMenu hasUserLiked={hasUserLiked} setIsLiked={setIsLiked} isLiked={isLiked} focus={focus} likeFunc={likeFunc} userpost={feed} />
       <div className="likedBy">
         {/*  <Profile iconSize="small" hideAccountName={true} /> */}
         {/*  <span>

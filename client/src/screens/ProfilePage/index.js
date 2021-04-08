@@ -20,6 +20,7 @@ import LoaderSpinner from '../../component/LoaderSpinner';
 // react-query
 import { useQuery, useQueryClient } from "react-query"
 import Divider from '../../component/Divider';
+import EmptyProfile from './EmptyProfile';
 
 const token = localStorage.getItem('authToken');
 const baseUrl = process.env.REACT_APP_BASE_URL;
@@ -30,6 +31,11 @@ const ProfilePage = () => {
   const currentUser = useSelector(({ user }) => user.currentUser);
   const history = useHistory();
   const queryClient = useQueryClient()
+
+  useEffect(() => {
+    document.title = `@${username} .PhotoShare Photos`;
+    return () => null;
+  }, [])
 
   const { data: userProfile, isLoading, isError, error, isSuccess } = useQuery('profile', () => getProfile(username))
 
@@ -119,6 +125,7 @@ const ProfilePage = () => {
             </h4>
 
           }
+          endMessage={<p>...</p>}
         >
           {userProfile.posts.map((post) => {
             return (
@@ -134,13 +141,10 @@ const ProfilePage = () => {
 
 
       ) : (
-        <div>
-          no posts to show
-          <Icon.Camera size={30} />
-          <h1>Share Photos</h1>
-          <p>When you share Photos they will appear on your profile</p>
-        </div>
+        <EmptyProfile />
       )}
+
+
 
     </div>
   );

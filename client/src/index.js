@@ -8,15 +8,29 @@ import Modal from 'react-modal';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './redux/store';
-
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from 'react-query/devtools'
 import 'react-responsive-modal/styles.css';
 
 Modal.setAppElement('#root');
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      // refetchOnWindowFocus: false,
+      staleTime: 60 * 3000
+    }
+  }
+})
+
+
 ReactDOM.render(
   <Provider store={store}>
     <Router>
-      <App />
+      <QueryClientProvider client={queryClient}>
+        <App />
+        <ReactQueryDevtools initialIsOpen={true} />
+      </QueryClientProvider>
     </Router>
   </Provider>,
 
