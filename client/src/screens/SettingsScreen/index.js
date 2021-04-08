@@ -11,7 +11,6 @@ import Footer from '../../component/Footer'
 
 function EditProfilePage() {
     // useEffect(() => {
-
     // }, [window.outerWidth]);
 
     const user = useSelector(({ user }) => user.currentUser);
@@ -26,30 +25,38 @@ function EditProfilePage() {
     };
     let { path, url } = useRouteMatch();
     return (
-        <div className="Edit_wrapper">
-            <div className="form_container">
-                <div className="nav_links">
-                    <ul>
-                        <NavLink to={path} id="edit__profile__link">
-                            <li>Edit Profile</li>
-                        </NavLink>
+        <div className="settings__page">
 
-                        <NavLink to={`${path}/Password`} id="change__password__link">
-                            <li> Change password</li>
-                        </NavLink>
-                    </ul>
-                </div>
+            <div className="settings__page__forms__wrapper">
 
-                <div className="switch_container">
+                <ul className="navlink__sidebar">
+                    <NavLink to={path}
+                        className="sidebar__link"
+                        activeClassName="sidebar__link--active"
+                    >
+                        <li className="sidebar__link__text">Edit Profile</li>
+                    </NavLink>
+
+                    <NavLink
+                        to={`${path}/Password`}
+                        className="sidebar__link"
+                        activeClassName="sidebar__link--active"
+                    >
+                        <li className='sidebar__link__text' > Change password</li>
+                    </NavLink>
+                </ul>
+
+
+                <article className="settings__page__content">
                     <Switch>
                         <Route exact path={path}>
                             <EditProFileForm />
                         </Route>
                         <Route exact path={`${path}/Password`} render={() => <ChangePasswordForm />} />
                     </Switch>
-                </div>
+                </article>
             </div>
-            <Footer />
+            {/*  <Footer /> */}
         </div>
     );
 }

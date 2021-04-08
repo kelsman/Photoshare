@@ -110,9 +110,9 @@ const NewPostModal = ({ file }) => {
         {previewImage && (
           <Fragment>
             <div className="preview__wrapper">
-              <figure className="aden">
-                <img src={previewImage} className="preview" alt="image" />
-              </figure>
+
+              <img src={previewImage} className="preview" alt="image" />
+
             </div>
           </Fragment>
         )}

@@ -49,10 +49,10 @@ function Card(props) {
 
     onSuccess: (data) => {
       if (data === "like success") {
-        setIsLiked(true)
+        setIsLiked(prev => true)
       }
       if (data === "unlike success") {
-        setIsLiked(false)
+        setIsLiked(prev => false)
       }
       // invalidate()
     },

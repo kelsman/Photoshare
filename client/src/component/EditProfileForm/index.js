@@ -33,24 +33,24 @@ function EditProFileForm() {
     }
 
     return (
-        <div className="form_wrapper">
-            <form action="" className="Edit_profile_form" onSubmit={handleFormSubmit}>
-                <div className="profile__header">
-                    <img src={user ? user.avatar : Avatar} alt="" />
+        <div className="Edit__profile__form__wrapper">
+            <div className="profile__header">
+                <img src={user ? user.avatar : Avatar} alt="" />
 
-                    <div className="profile__avatar__wrapper">
-                        <h4> {user && user.username}</h4>
-                        <input
-                            id="avatar-upload"
-                            type="file" accept="image/*"
-                            style={{ display: "none" }}
-                            onChange={(e) => setProfileImg(e.target.files[0])}
-                        />
-                        <label htmlFor="avatar-upload">Change Profile Photo</label>
-                    </div>
-
-
+                <div className="profile__avatar__wrapper">
+                    <h4> {user && user.username}</h4>
+                    <input
+                        id="avatar-upload"
+                        type="file" accept="image/*"
+                        style={{ display: "none" }}
+                        onChange={(e) => setProfileImg(e.target.files[0])}
+                    />
+                    <label htmlFor="avatar-upload">Change Profile Photo</label>
                 </div>
+
+
+            </div>
+            <form action="" className="Edit_profile_form" onSubmit={handleFormSubmit}>
 
                 <div className="name">
                     <label htmlFor="name">Name</label>

@@ -6,8 +6,7 @@ import { useSelector } from 'react-redux';
 import Avatar from '../../assets/default-avatar.png';
 import * as Routes from '../routes';
 import Loader from '../Loader';
-
-
+import { BiHide, BiShowAlt } from 'react-icons/bi';
 
 function ChangePasswordForm() {
   const user = useSelector(({ user }) => user.currentUser);
@@ -16,7 +15,7 @@ function ChangePasswordForm() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
+  const [showPassword, setShowPassword] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,45 +28,69 @@ function ChangePasswordForm() {
     }
   };
   return (
-    <div className="form__container">
+    <div className="change__password__form__container">
       <form action="" onSubmit={handleSubmit} className="newPassword__form">
         <div className="profile__header">
           <img src={user ? user.avatar : Avatar} alt="" />
 
           <div className="profile__avatar__wrapper">
-            <h4> {user && user.username}</h4>
+            <h4> {user && user.name}</h4>
           </div>
 
         </div>
-        <input
-          type="text"
-          name="oldPassword"
-          placeholder="old password"
-          value={oldPassword}
-          onChange={(e) => setOldPassword(e.target.value)}
-        />
+        <div className="group__wrapper">
+          <label htmlFor="oldPassword"> Old Password</label>
 
-        <input
-          type="text"
-          name="newPassword"
-          placeholder="New Password"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-        />
-        <input
-          type="text"
-          name="confirmNewPassword"
-          placeholder="Confirm New Password"
-          value={confirmNewPassword}
-          onChange={(e) => setConfirmNewPassword(e.target.value)}
-        />
-        <button type="submit">
-          Change password
-        {isLoading && <Loader />}
-        </button>
+          <input
+            type="password"
+            id="oldPassword"
+            name="oldPassword"
+            // placeholder="old password"
+            value={oldPassword}
+            onChange={(e) => setOldPassword(e.target.value)}
+          />
+
+
+        </div>
+
+        <div className="group__wrapper">
+          <label htmlFor="newPassword"> New Password</label>
+
+          <input
+            type="password"
+            id="newPassword"
+            name="newPassword"
+            // placeholder="New Password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+          />
+
+
+        </div>
+        <div className="group__wrapper">
+          <label htmlFor="confirmPassword"> confirm Password</label>
+
+          <input
+            type="password"
+            id="confirmPassword"
+            name="confirmNewPassword"
+            // placeholder="Confirm New Password"
+            value={confirmNewPassword}
+            onChange={(e) => setConfirmNewPassword(e.target.value)}
+          />
+
+        </div>
+        <div className="group__wrapper">
+          <label htmlFor="submit__btn"></label>
+          <button type="submit" id="submit__btn" style={{ width: "140px", height: "40px" }}>
+            Change password
+          {isLoading && <Loader />}
+          </button>
+
+        </div>
         {/*  <Link className="forgot__pasword__link">Forgot Password?</Link> */}
       </form>
-    </div>
+    </div >
   );
 }
 

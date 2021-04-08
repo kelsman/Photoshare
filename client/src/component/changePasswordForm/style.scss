@@ -1,52 +1,88 @@
 @import '../../Sass/variables';
 
-.form__container{
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-}
 
-.newPassword__form{
-    width: 100%;
+.change__password__form__container{
 
-    .profile__header{
-        width: 60%;
-        margin: 0px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    // min-height: 100%;
+    width: 100%;
+ 
    
-    }
-    input{
-        padding: 15px;
-        height: 40px;
-        border: 1px solid $font-color-secondary;
-        background-color: $background-grey;
-        margin: 10px 0px;
-        width: 60%;
-
-    }
-    button{
-
-         padding: 10px;
-          border: none;
-          outline: none;
+    .newPassword__form{ 
         
-          color: $background-white;
-          background-color: $link-color;
-          border-radius: 5px;
-          position: relative;
-      
-          &:focus{
-              outline: 0;
+        & > :not(:last-child) {
+            margin-bottom: 2rem;
+        }
+        .group__wrapper, .profile__header{
+            display: grid;
+            grid-template-columns: 3rem 1fr;
+            grid-column-gap: 3rem;
+            align-items: center;
+        }
+        .profile__header{
+             img{
+            width: 60px;
+            height: 60px;object-fit: cover;
+            border-radius: 50%;
+        }
+        }
+        .group__wrapper{
+
+            & > :first-child {
+                justify-self: right;
+                text-align: right;
+              }
+              button{
+                align-self: right;
+                margin-right: auto;
+                background-color: $link-color-secondary;
+                color: #FFFFFF;
+                border: none;
+                border-radius: 5px;
+                letter-spacing: 0.2em;
+                &:focus{
+                outline: 0;
+                }
+            }
+            input{
+                border-radius: 3px;
+                padding: 0.4em;
+                font-family: inherit;
+                font-size: 1.2rem;
+                color: black;
+                border: 1px solid #dbdbdb;
+                background-color:#dbdbdb;
+                font-weight: 90;
+                position: relative;
+                &:focus{
+                outline: 0;
+
+            }
+            
+        }
+       
     
-          }
+  
+     
     }
-    .forgot__pasword__link{
-        color: $link-color;
-        margin: 10px 0px;
+    @media screen and (max-width: 600px){
+
+      
+        .group__wrapper{
+            display: block;
+            grid-column-gap: 0;
+
+            &:nth-child(1) {
+                display: flex;
+                & > :not(:last-child) {
+                  margin-right: 2rem;
+                }
+              }
+        }
+
+
     }
-}
+
+}    
+} 
+
+    

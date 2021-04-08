@@ -119,7 +119,7 @@ function PostPage({ socket, user, history, }) {
       <main>
         <div className="post_content">
           <div className="post_image">
-            <img src={userpost.postMedia} alt="image" />
+            <img src={userpost.postMedia && userpost.postMedia} alt="image" />
           </div>
           <div className="post_details">
             <div className="profile">
