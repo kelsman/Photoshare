@@ -6,6 +6,7 @@
     width: 100vw;
     height: 100%;
     padding: 0px !important;
+    overflow: hidden;
    
     .newPassword__form{ 
         width: 100%;
@@ -22,7 +23,8 @@
         .profile__header{
              img{
             width: 60px;
-            height: 60px;object-fit: cover;
+            height: 60px;
+            object-fit: cover;
             border-radius: 50%;
         }
         }
@@ -34,16 +36,22 @@
               }
               input{
                 border-radius: 3px;
-                padding: 0.4em;
+                padding: 0 0.4em;
                 font-family: inherit;
-                font-size: 1.2rem;
+            //     font-size: 1.2rem;
                 color: black;
                 border: 1px solid #dbdbdb;
                 background-color:#dbdbdb;
                 font-weight: 90;
-                position: relative;
+            //     position: relative;
                 &:focus{
                 outline: 0;
+                    }
+
+                    @media screen and (min-width: 610px){
+                            font-size: 1.2rem;
+                            padding: 0.5em;
+                    }
         
             }
             
@@ -73,37 +81,37 @@
     }
   
     @media screen and (max-width: 600px){
-        // padding: 0px 2rem;
-        
-        width: 100vw !important;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-evenly;
+        padding: 0px 50px; 
+       
+       
 
-        button{
-            width: 90%;
-        }
-        input{
-            width: 90%;
-        }
+        .profile__header{
 
-        // .group__wrapper{
-        //     display: block;
-        //     grid-column-gap: 0;
-        //     grid-template-columns: 2rem 1fr;
-        //     &:nth-child(1) {
-        //         display: flex;
-        //         & > :not(:last-child) {
-        //         //   margin-right: 1.5rem;
-        //         }
-        //       }
+            width: fit-content;
+            margin: 3px auto;
+         }
+        .group__wrapper{
+            display: flex;
+     
+            height: 50px;
+            padding: 0px 3rem;
+            width: 98%;
+            grid-column-gap: 0;
+            grid-template-columns: 2rem 1fr;
+            input{
+                height: 40px;
+            }
+            &:nth-child(1) {
+                display: flex;
+                & > :not(:last-child) {
+                  margin-right: 1.5rem;
+                }
+              }
       
-        // }
+        }
       
 
 
     }
 
 }    
-} 
