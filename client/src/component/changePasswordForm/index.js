@@ -35,11 +35,9 @@ function ChangePasswordForm() {
           <img src={user ? user.avatar : Avatar} alt="" />
           <div className="profile__avatar__wrapper">
             <h4> {user && user.name}</h4>
-
-
           </div>
-
         </div>
+
         <div className="group__wrapper">
           <label> Old Password</label>
           <input
@@ -67,7 +65,7 @@ function ChangePasswordForm() {
 
         </div>
         <div className="group__wrapper">
-          <label> confirm New Password</label>
+          <label> Confirm Password</label>
 
           <input
             type="password"

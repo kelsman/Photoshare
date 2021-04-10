@@ -3,7 +3,7 @@
 .change__password__form__container {
 
     // min-height: 100%;
-    width: 100%;
+    width: 100vw;
     height: 100%;
     padding: 0px !important;
    
@@ -73,18 +73,34 @@
     }
   
     @media screen and (max-width: 600px){
+        // padding: 0px 2rem;
+        
+        width: 100vw !important;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-evenly;
 
-        .group__wrapper{
-            display: block;
-            grid-column-gap: 0;
-
-            &:nth-child(1) {
-                display: flex;
-                & > :not(:last-child) {
-                  margin-right: 2rem;
-                }
-              }
+        button{
+            width: 90%;
         }
+        input{
+            width: 90%;
+        }
+
+        // .group__wrapper{
+        //     display: block;
+        //     grid-column-gap: 0;
+        //     grid-template-columns: 2rem 1fr;
+        //     &:nth-child(1) {
+        //         display: flex;
+        //         & > :not(:last-child) {
+        //         //   margin-right: 1.5rem;
+        //         }
+        //       }
+      
+        // }
+      
 
 
     }

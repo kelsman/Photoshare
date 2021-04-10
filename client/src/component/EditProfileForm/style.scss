@@ -3,9 +3,9 @@
 .Edit__profile__form__wrapper{
 
     // min-height: 100%;
-    width: 100%;
-    height: 100%;
-    padding: 0px !important;
+    width: 100vw;
+    // height: 100%;
+    // padding: 0px !important;
    
     .Edit_profile_form{ 
         width: 100%;
@@ -75,17 +75,16 @@
   
     
     @media screen and (max-width: 600px){
-
-        
+        padding: 0px 2rem;
+        width: 100vw !important;
         .group__wrapper{
             display: block;
             grid-column-gap: 0;
-
-
+            grid-template-columns: 2rem 1fr;
             &:nth-child(1) {
                 display: flex;
                 & > :not(:last-child) {
-                  margin-right: 2rem;
+                  margin-right: 1.5rem;
                 }
               }
         }

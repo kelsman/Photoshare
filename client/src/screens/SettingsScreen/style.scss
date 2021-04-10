@@ -1,13 +1,13 @@
 @import '../../Sass/variables';
 .settings__page{
-    height: 100vh;
+        height: 100vh;
         width: 100%;
-     padding: 4rem 0;
+        padding: 4rem 0;
     
               &__content{
                   padding: 4rem 5rem;
               }
-    .settings__page__forms__wrapper{
+            .settings__page__forms__wrapper{
             height: 100%;
             grid-column: center-start / center-end;
             display: grid;
@@ -61,7 +61,7 @@
             @media screen and (max-width: 600px){
                 min-height: 100%;
                 &__content{
-                    padding: 2rem;
+                    padding: 0;
                 }
             }
 
