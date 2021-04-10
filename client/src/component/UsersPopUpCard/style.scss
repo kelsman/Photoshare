@@ -5,19 +5,20 @@
     top: 100%;
     border: none;
     min-width: 15rem;
-    
     background: $background-white;
     max-height: 25rem;
+    box-shadow: 0px 5px 15px 0px rgba(0,0,0,0.3);
 
     &::before {
         content: '';
-        // @include horizontalAbsoluteCenter;
-        width: 2.5rem;
-        height: 1rem;
+        position: absolute;
+        left: 50%;
+        width: 20px;
+      height: 20px;
         bottom: 100%;
-        background-color: black;
-     clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-        box-shadow: 0 0 30px 0px $background-grey;
+        background-color: white;
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+      box-shadow: 1px 1px 20px 0px rgba(0,0,0,0.6);
       }
 
 }

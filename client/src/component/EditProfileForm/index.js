@@ -34,26 +34,26 @@ function EditProFileForm() {
 
     return (
         <div className="Edit__profile__form__wrapper">
-            <div className="profile__header">
-                <img src={user ? user.avatar : Avatar} alt="" />
 
-                <div className="profile__avatar__wrapper">
-                    <h4> {user && user.username}</h4>
-                    <input
-                        id="avatar-upload"
-                        type="file" accept="image/*"
-                        style={{ display: "none" }}
-                        onChange={(e) => setProfileImg(e.target.files[0])}
-                    />
-                    <label htmlFor="avatar-upload">Change Profile Photo</label>
-                </div>
-
-
-            </div>
             <form action="" className="Edit_profile_form" onSubmit={handleFormSubmit}>
+                <div className="profile__header">
+                    <img src={user ? user.avatar : Avatar} alt="" />
 
-                <div className="name">
-                    <label htmlFor="name">Name</label>
+                    <div className="profile__avatar__wrapper">
+                        <h4> {user && user.username}</h4>
+                        <input
+                            id="avatar-upload"
+                            type="file" accept="image/*"
+                            style={{ display: "none" }}
+                            onChange={(e) => setProfileImg(e.target.files[0])}
+                        />
+                        <label className="change__photo__link" htmlFor="avatar-upload">Change Profile Photo</label>
+                    </div>
+
+
+                </div>
+                <div className="label__wraper">
+                    <label>Name</label>
                     <input
                         id="name"
                         type="text"
@@ -63,8 +63,8 @@ function EditProFileForm() {
                         onChange={(e) => setName(e.target.value)}
                     />
                 </div>
-                <div className="username">
-                    <label htmlFor="name">Username</label>
+                <div className="label__wraper">
+                    <label >Username</label>
                     <input
                         id="username"
                         type="text"
@@ -75,8 +75,8 @@ function EditProFileForm() {
                     />
 
                 </div>
-                <div className="bio">
-                    <label htmlFor="bio">Bio</label>
+                <div className="label__wraper">
+                    <label >Bio</label>
                     <input
                         id="bio"
                         name="bio"
@@ -87,8 +87,8 @@ function EditProFileForm() {
 
 
                 </div>
-                <div className="email">
-                    <label htmlFor="name">Email</label>
+                <div className="label__wraper">
+                    <label>Email</label>
                     <input
                         id="email"
                         type="text"
@@ -97,12 +97,14 @@ function EditProFileForm() {
                         value={user && user.email ? user.email : email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
-
                 </div>
 
-                <div className="btn__wrapper">
-
-                    <button className="submit__btn" type="submit">
+                <div className="label__wraper">
+                    <label></label>
+                    <button
+                        className="submit__btn"
+                        type="submit"
+                        style={{ height: "2rem" }}>
                         Submit
                     {isLoading && <Loader />}
                     </button>

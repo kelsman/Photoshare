@@ -40,6 +40,7 @@ const ExploreScreen = ({ getPosts, posts, location }) => {
         <div className="image-grid">
           {posts &&
             posts.length &&
+
             posts.map((post) => {
               return <PostCard post={post} key={uuidv4()} />;
             })}

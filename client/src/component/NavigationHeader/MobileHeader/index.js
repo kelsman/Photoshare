@@ -9,8 +9,9 @@ const MobileHeader = ({ children }) => {
         <header>
             <Icon.ArrowLeft />
             {children}
-
         </header>
     )
 
 }
+
+export default MobileHeader

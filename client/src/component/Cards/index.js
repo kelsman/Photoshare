@@ -19,9 +19,10 @@ const Cards = ({ isFetching }) => {
     <div className="cards">
       {/* stories components for later */}
       { posts && posts.length < 1 && (
-        <div style={{ marginTop: '20px' }}>
+        <div style={{ marginTop: '10vh' }}>
           {' '}
-          <p> you have no posts yet follow more people to see their posts</p>{' '}
+          <h3> Welcome to Photogram</h3>
+          <p> When you follow somebody you can see their posts here</p>{' '}
         </div>
       )}
 

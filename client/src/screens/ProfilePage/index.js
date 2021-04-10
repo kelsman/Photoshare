@@ -20,7 +20,7 @@ import LoaderSpinner from '../../component/LoaderSpinner';
 // react-query
 import { useQuery, useQueryClient } from "react-query"
 import Divider from '../../component/Divider';
-import EmptyProfile from './EmptyProfile';
+import EmptyProfile from './EmptyProfile/EmptyProfile';
 
 const token = localStorage.getItem('authToken');
 const baseUrl = process.env.REACT_APP_BASE_URL;
@@ -45,9 +45,12 @@ const ProfilePage = () => {
   let isFollowing;
 
   if (isSuccess) {
-    isFollowing = userProfile.followers.find((follow) => {
-      return follow.user === String(currentUser._id)
-    });
+    if (userProfile.followers) {
+      isFollowing = userProfile.followers.find((follow) => {
+        return follow.user === String(currentUser._id)
+      });
+
+    }
   }
 
 
@@ -116,8 +119,8 @@ const ProfilePage = () => {
 
         <InfiniteScroll
           dataLength={userProfile.posts.length}
-          next={(() => queryClient.refetchQueries('profile'))}
-          hasMore={true}
+          next={(() => queryClient.refetchQueries(['profile', `${username}`]))}
+          // hasMore={true}
           className="posts__gallery"
           loader={
             <h4 style={{ textAlign: "center" }}>
@@ -125,7 +128,7 @@ const ProfilePage = () => {
             </h4>
 
           }
-          endMessage={<p>...</p>}
+        // endMessage={<p>...</p>}
         >
           {userProfile.posts.map((post) => {
             return (
@@ -141,7 +144,10 @@ const ProfilePage = () => {
 
 
       ) : (
-        <EmptyProfile />
+        <EmptyProfile
+          currentUserProfile={currentUser.username === username}
+          username={username}
+        />
       )}
 
 

@@ -1,14 +1,15 @@
 @import '../../Sass/variables';
 
-
-.change__password__form__container{
+.change__password__form__container {
 
     // min-height: 100%;
     width: 100%;
- 
+    height: 100%;
+    padding: 0px !important;
    
     .newPassword__form{ 
-        
+        width: 100%;
+        height: 100%;
         & > :not(:last-child) {
             margin-bottom: 2rem;
         }
@@ -31,19 +32,7 @@
                 justify-self: right;
                 text-align: right;
               }
-              button{
-                align-self: right;
-                margin-right: auto;
-                background-color: $link-color-secondary;
-                color: #FFFFFF;
-                border: none;
-                border-radius: 5px;
-                letter-spacing: 0.2em;
-                &:focus{
-                outline: 0;
-                }
-            }
-            input{
+              input{
                 border-radius: 3px;
                 padding: 0.4em;
                 font-family: inherit;
@@ -55,18 +44,36 @@
                 position: relative;
                 &:focus{
                 outline: 0;
-
+        
             }
             
+            
+            
         }
+        
+        
+        button{
        
-    
+          background-color: $link-color-secondary;
+          color: #FFFFFF;
+          border: none;
+          border-radius: 5px;
+          letter-spacing: 0.2em;
+          &:focus{
+          outline: 0;
+          }
+      }
   
      
     }
+  
+    .change__photo__link{
+        color: $link-color;
+        font-size: smaller;
+    }
+  
     @media screen and (max-width: 600px){
 
-      
         .group__wrapper{
             display: block;
             grid-column-gap: 0;
@@ -84,5 +91,3 @@
 
 }    
 } 
-
-    

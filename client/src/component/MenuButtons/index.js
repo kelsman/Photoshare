@@ -23,6 +23,7 @@ const Menu = () => {
       />
       <Icon.Heart className="icon" />
       <NewPostButton />
+      <span></span>
       <ProfileIcon
         iconSize="medium"
         image={user && user.avatar}

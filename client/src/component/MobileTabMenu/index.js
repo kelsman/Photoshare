@@ -6,8 +6,11 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import * as Routes from '../routes';
-import NewPostButton from '../NewPost/NewPostButton'
+import {
+  Tooltip,
+} from 'react-tippy';
 
+import NewPostButton from '../NewPost/NewPostButton'
 
 const MobileTabMenu = ({ user }) => {
   const history = useHistory();
@@ -15,7 +18,7 @@ const MobileTabMenu = ({ user }) => {
   const { location } = history;
   return (
     <nav className="mobile__nav">
-      <Link to={Routes.Dashboard}>
+      <Link to={Routes.Dashboard} >
         <Icon.Home size={30} />
       </Link>
       <Link to={Routes.Explore}>
@@ -24,8 +27,16 @@ const MobileTabMenu = ({ user }) => {
 
       <NewPostButton />
 
+      <Tooltip
+        position="top"
+        title="coming soon"
+        trigger="click"
+        animation="scale"
+        arrow="true"
 
-      <Icon.Heart className="icon__heart" fill={'black'} size={30} />
+      >
+        <Icon.Bell className="icon__heart" size={30} />
+      </Tooltip>
 
       {user && user.avatar && (
         <Link to={Routes.ProfilePage + `/${user.username}`}>

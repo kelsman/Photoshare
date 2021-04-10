@@ -20,7 +20,7 @@ const NewPostButton = ({ iconName, children, style }) => {
   return (
     <Fragment>
       <form encType="multipart/form-data">
-        <label style={style} htmlFor="file-upload">{!iconName && <Icon.Camera className="icon" />}</label>
+        <label style={style} htmlFor="file-upload">{!iconName ? <Icon.Camera className="icon" /> : iconName}</label>
         <input
           ref={fileinput}
           name="postfile"

@@ -28,19 +28,20 @@ function ChangePasswordForm() {
     }
   };
   return (
+
     <div className="change__password__form__container">
       <form action="" onSubmit={handleSubmit} className="newPassword__form">
         <div className="profile__header">
           <img src={user ? user.avatar : Avatar} alt="" />
-
           <div className="profile__avatar__wrapper">
             <h4> {user && user.name}</h4>
+
+
           </div>
 
         </div>
         <div className="group__wrapper">
-          <label htmlFor="oldPassword"> Old Password</label>
-
+          <label> Old Password</label>
           <input
             type="password"
             id="oldPassword"
@@ -50,11 +51,9 @@ function ChangePasswordForm() {
             onChange={(e) => setOldPassword(e.target.value)}
           />
 
-
         </div>
-
         <div className="group__wrapper">
-          <label htmlFor="newPassword"> New Password</label>
+          <label> New Password</label>
 
           <input
             type="password"
@@ -68,7 +67,7 @@ function ChangePasswordForm() {
 
         </div>
         <div className="group__wrapper">
-          <label htmlFor="confirmPassword"> confirm Password</label>
+          <label> confirm New Password</label>
 
           <input
             type="password"
@@ -81,8 +80,8 @@ function ChangePasswordForm() {
 
         </div>
         <div className="group__wrapper">
-          <label htmlFor="submit__btn"></label>
-          <button type="submit" id="submit__btn" style={{ width: "140px", height: "40px" }}>
+          <label></label>
+          <button type="submit" id="submit__btn" style={{ height: "2rem" }}>
             Change password
           {isLoading && <Loader />}
           </button>
@@ -90,7 +89,7 @@ function ChangePasswordForm() {
         </div>
         {/*  <Link className="forgot__pasword__link">Forgot Password?</Link> */}
       </form>
-    </div >
+    </div>
   );
 }
 

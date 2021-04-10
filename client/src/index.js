@@ -11,6 +11,7 @@ import store from './redux/store';
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from 'react-query/devtools'
 import 'react-responsive-modal/styles.css';
+import 'react-tippy/dist/tippy.css'
 
 Modal.setAppElement('#root');
 
