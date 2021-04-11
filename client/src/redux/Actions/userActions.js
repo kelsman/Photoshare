@@ -8,6 +8,7 @@ import * as Routes from '../../component/routes';
 
 const baseUrl = process.env.REACT_APP_BASE_URL
 const token = localStorage.getItem('authToken');
+
 export const signup = (data, history) => {
   return async (dispatch) => {
     try {
@@ -85,8 +86,8 @@ export const LogOut = (history) => {
   return async (dispatch) => {
     try {
       await localStorage.removeItem('authToken');
-      dispatch({ type: userActionTypes.LOG_OUT_SUCCESS, payload: 'sign out sucessful' });
       history.push(Routes.Login);
+      dispatch({ type: userActionTypes.LOG_OUT_SUCCESS, payload: 'sign out sucessful' });
       cogoToast.success('Sign out success');
     } catch (error) {
       console.log(error.message);

@@ -1,25 +1,40 @@
 import React, { useState, useRef } from 'react';
 import './style.scss';
+// component
 import { ReactComponent as CardButton } from '../../../assets/cardButton.svg';
 import CardMenu from '../CardMenu';
 import CommentList from '../../CommentList';
+import Loader from '../../Loader'
+import ModalComponent from '../../Modal'
 import Profile from '../../Profile';
+import { likePost, CommentPost } from '../../../api/posts.api'
+import * as Routes from '../../routes';
+
+// External libraries
 import moment from 'moment';
 import dayjs from 'dayjs';
 import ExploreCardMenu from '../../ExplorePostCardMenu';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { likePost, CommentPost } from '../../../api/posts.api'
-import Loader from '../../Loader'
 import { v4 as uuidv4 } from 'uuid';
+
+// react-query
 import { useQueryClient, useMutation, useQuery } from 'react-query';
-import Heart from 'react-animated-heart'
+import Heart from 'react-animated-heart';
+import copy from 'copy-to-clipboard'
 
 function Card(props) {
   const [commentText, setCommentText] = useState('');
   const [isLiked, setIsLiked] = React.useState(undefined);
+  const [showModal, setShowModal] = useState(false);
+
+  const closeModal = () => {
+    setShowModal(prev => false)
+  }
+
 
   const history = useHistory();
+
   const dispatch = useDispatch();
   const inputRef = useRef();
   const currentUser = useSelector(({ user }) => user.currentUser)
@@ -105,6 +120,10 @@ function Card(props) {
   const focus = () => {
     inputRef.current.focus();
   };
+
+  const copyUrl = () => {
+    copy(window.location.href)
+  }
   return (
     <div className="card">
       <header>
@@ -115,7 +134,7 @@ function Card(props) {
           username={accountName}
           storyBorder={storyBorder}
         />
-        <CardButton className="cardButton" />
+        <CardButton className="cardButton" onClick={() => setShowModal(true)} />
       </header>
       <img className="cardImage" src={image} alt="card content" />
       {/*  <CardMenu /> */} <ExploreCardMenu hasUserLiked={hasUserLiked} setIsLiked={setIsLiked} isLiked={isLiked} focus={focus} likeFunc={likeFunc} userpost={feed} />
@@ -171,13 +190,22 @@ function Card(props) {
           type="submit"
           disabled={commentText ? false : true}
           className="postText-btn"
-
         >
           Post
         </button>
+
       </form>
+      <ModalComponent open={showModal} hide={closeModal}>
+        <ul className="options__modal__container">
+          <li onClick={() => history.push(Routes.PostPage + `/${feed._id}`)}>Go to Post</li>
+          <hr />
+          {/* <li onClick={copyUrl}>Copy Link</li> */}
+          <li onClick={closeModal}>Cancel</li>
+        </ul>
+      </ModalComponent>
     </div>
   );
 }
+
 
 export default Card;

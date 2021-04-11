@@ -91,6 +91,25 @@
     }
   }
 }
+.options__modal__container{
+
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 250px;
+  height: fit-content;
+  background: #FFFFFF;
+  border-radius: 10px;
+  li{
+    text-align: center;
+    width: 100%;
+    padding: 15px;
+    line-height: 3px;
+    font-stretch: condensed;
+    cursor: pointer;
+    
+  }
+}
 
 @media only screen and (max-width: 640px) {
   .card {

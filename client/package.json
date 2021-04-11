@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^12.1.10",
     "axios": "^0.21.1",
     "cogo-toast": "^4.2.3",
+    "copy-to-clipboard": "^3.3.1",
     "dayjs": "^1.10.4",
     "eslint": "^7.22.0",
     "filepond": "^4.26.1",

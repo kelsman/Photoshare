@@ -1,11 +1,11 @@
 @import '../../Sass/variables';
 
 .divider {
-    width: 80%;
+    width: 100%;
     height: 1px;
-    background-color: rgb(17, 16, 16);
-    margin: 0 auto;
-  
+    background-color: $border-color-grey;
+    // margin: 0 auto;
+   
     &--split {
       display: grid;
       grid-template-columns: 1fr min-content 1fr;

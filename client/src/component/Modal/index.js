@@ -3,7 +3,8 @@ import React from 'react'
 import './style.scss';
 
 
-import { Modal } from 'react-responsive-modal'
+import { Modal } from 'react-responsive-modal';
+
 const ModalComponent = ({ children, open, hide, setModal }) => {
 
 
@@ -21,7 +22,7 @@ const ModalComponent = ({ children, open, hide, setModal }) => {
                 modalAnimationIn: 'customEnterModalAnimation',
                 modalAnimationOut: 'customLeaveModalAnimation',
             }}
-            animationDuration={800}
+            animationDuration={400}
         >
             {children}
         </Modal>

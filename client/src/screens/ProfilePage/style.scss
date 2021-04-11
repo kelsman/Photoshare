@@ -7,6 +7,8 @@
     overflow-y : auto;
     background-color: $background-grey;
 
+    
+
     header{
        
         width: 100%;
@@ -79,6 +81,7 @@
             margin: 10px 0px;
             small{
                 margin: 0 10px;
+                cursor: pointer;
             }
         }
         .name{
@@ -103,8 +106,49 @@
         grid-template-columns: repeat(3, 1fr);
         grid-column-gap: 2px;
         grid-row-gap: 2px;
+        
     }
+
+   
     
+}
+.settings__options{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 250px;
+    height: fit-content;
+    background: #FFFFFF;
+    border-radius: 10px;
+li{
+text-align: center;
+width: 100%;
+padding: 15px;
+line-height: 3px;
+font-stretch: condensed;
+cursor: pointer;
+
+}
+}
+
+.followers__modal__list{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 250px;
+    max-height: 300px;
+    overflow-y: auto;
+    background: #FFFFFF;
+    border-radius: 10px;
+
+    li{
+        // display: flex;
+        align-items: center;
+        width: 100%;
+        padding: 15px;
+        line-height: 3px;
+        font-stretch: condensed; 
+    }
 }
 @media screen  and (min-width: 641px){
     .profilepage__wrapper{

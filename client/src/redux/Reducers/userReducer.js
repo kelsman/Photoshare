@@ -55,7 +55,9 @@ const userReducer = (state = initState, { type, payload }) => {
         case userActionTypes.LOG_OUT_SUCCESS:
             return {
                 ...state,
-                isLoading: false
+                isLoading: false,
+                currentUser: null,
+                isAuthenticated: false,
             }
 
         case userActionTypes.LOAD_USER_SUCCESS:
