@@ -9,7 +9,7 @@ import ModalComponent from '../../Modal'
 import Profile from '../../Profile';
 import { likePost, CommentPost } from '../../../api/posts.api'
 import * as Routes from '../../routes';
-
+import Divider from '../../Divider'
 // External libraries
 import moment from 'moment';
 import dayjs from 'dayjs';
@@ -198,9 +198,11 @@ function Card(props) {
       <ModalComponent open={showModal} hide={closeModal}>
         <ul className="options__modal__container">
           <li onClick={() => history.push(Routes.PostPage + `/${feed._id}`)}>Go to Post</li>
-          <hr />
+          <Divider />
           {/* <li onClick={copyUrl}>Copy Link</li> */}
-          <li onClick={closeModal}>Cancel</li>
+          {currentUser._id === feed.author._id && <li style={{ color: "navy" }}> Delete Post</li>}
+          <Divider />
+          <li style={{ color: "tomato" }} onClick={closeModal}>Cancel</li>
         </ul>
       </ModalComponent>
     </div>

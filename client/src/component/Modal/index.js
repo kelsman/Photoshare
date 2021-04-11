@@ -22,7 +22,7 @@ const ModalComponent = ({ children, open, hide, setModal }) => {
                 modalAnimationIn: 'customEnterModalAnimation',
                 modalAnimationOut: 'customLeaveModalAnimation',
             }}
-            animationDuration={400}
+            animationDuration={600}
         >
             {children}
         </Modal>

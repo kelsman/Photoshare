@@ -59,7 +59,6 @@ const SearchBox = ({ }) => {
         <input
           ref={inputRef}
           onChange={(e) => fetchUsers(e.target.value)}
-          onClick={(onClick) => console.log('serach ready')}
           value={query}
           className="search-box__input"
           placeholder="Search"

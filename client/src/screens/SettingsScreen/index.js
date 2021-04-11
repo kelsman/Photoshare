@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
-
 import './style.scss';
-import { Switch, Route, NavLink, useRouteMatch, Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+// components
 import Avatar from '../../assets/default-avatar.png';
 import * as Icon from 'react-feather';
 import ChangePasswordForm from '../../component/changePasswordForm';
 import EditProFileForm from '../../component/EditProfileForm';
 import Footer from '../../component/Footer'
+
+// External Libraries
+
+import { Switch, Route, NavLink, useRouteMatch, Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 function EditProfilePage() {
     // useEffect(() => {

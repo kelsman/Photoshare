@@ -70,7 +70,9 @@ const ProfilePage = () => {
 
 
 
-
+  if (!userProfile) {
+    return null;
+  }
 
   return (
     <div className="profilepage__wrapper">
@@ -204,16 +206,14 @@ const ProfilePage = () => {
                         userId={follower.user}
                         avatar={follower.avatar}
                         username={follower.username}
-                        following={currentUser.following.find((id) => id.user === follower.user) ? true : false}
+                        following={userProfile.following.find((id) => id.user === follower.user) ? true : false}
                       /> :
                       <FollowButton
                         userId={follower.user}
                         avatar={follower.avatar}
                         username={follower.username}
-                        following={userProfile.following.find((id) => id.user === follower.user) ? true : false}
+                        following={currentUser.following.find((id) => id.user === follower.user) ? true : false}
                       />
-
-
                   }
 
                 </li>
@@ -251,16 +251,14 @@ const ProfilePage = () => {
                         userId={following.user}
                         avatar={following.avatar}
                         username={following.username}
-                        following={currentUser.followers.find((id) => id.user === following.user) ? true : false}
+                        following={userProfile.following.find((id) => id.user === following.user) ? true : false}
                       /> :
                       <FollowButton
                         userId={following.user}
                         avatar={following.avatar}
                         username={following.username}
-                        following={userProfile.followers.find((id) => id.user === following.user) ? true : false}
+                        following={currentUser.following.find((id) => id.user === following.user) ? true : false}
                       />
-
-
                   }
 
                 </li>

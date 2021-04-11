@@ -30,7 +30,7 @@ const FollowButton = ({ userId, avatar, username, following }) => {
       const response = await axios.post(`${baseUrl}/api/route/user/unfollow/${userId}`);
       if (response) {
         cogoToast.success(`${response.data.msg}`);
-
+        queryClient.invalidateQueries(['profile', `${username}`])
       }
     } catch (error) {
       if (error.response) {
@@ -46,6 +46,7 @@ const FollowButton = ({ userId, avatar, username, following }) => {
       const response = await axios.post(`${baseUrl}/api/route/user/follow/${userId}`);
       if (response) {
         cogoToast.success(`${response.data.msg}`);
+
 
       }
     } catch (error) {

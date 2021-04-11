@@ -15,6 +15,8 @@ import MobileTabMenu from '../../component/MobileTabMenu';
 import Card from '../../component/Cards/Card';
 import Footer from '../../component/Footer';
 import Loader from '../../component/Loader'
+import ModalComponent from '../../component/Modal';
+
 
 // external liberires
 import * as Icon from 'react-feather';
@@ -30,8 +32,6 @@ import {
   fetchSinglePost,
   likePost,
   CommentPost,
-
-
 } from '../../api/posts.api';
 import PostPagePostCard from './PostPagePostCard';
 
@@ -129,7 +129,7 @@ function PostPage({ socket, user, history, }) {
                 username={userpost.author.username}
                 authorUsername={userpost.author.username}
               />
-              <Icon.MoreHorizontal className="more-icon" size={26} />
+              {/*  <Icon.MoreHorizontal className="more-icon" size={26} /> */}
             </div>
 
             {/* comment section */}

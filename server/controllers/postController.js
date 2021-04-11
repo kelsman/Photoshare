@@ -10,6 +10,7 @@ const ObjectId = require('mongoose').Types.ObjectId
 // const getPostupdate = require('../utils/post').getPostupdate;
 const { getupdatedPost } = require('../utils/post');
 // @ create a post 
+
 exports.createPost = async (req, res, next) => {
 
     const { caption } = req.body;
@@ -214,27 +215,27 @@ exports.deleteComment = async (req, res, next) => {
 
 //  delete a post
 
-exports.deletePost = async (req, res, next) => {
+// exports.deletePost = async (req, res, next) => {
 
-    try {
-        const post = await Post.findById(req.params.id);
-        if (!post) {
-            return res.status(404).json({ msg: 'Post not found' });
-        }
-        console.log(post)
-        if (post.postedBy.toString() !== req.user.id.toString()) {
-            return res.status(404).json({ msg: "not authorised" });
-        };
+//     try {
+//         const post = await Post.findById(req.params.id);
+//         if (!post) {
+//             return res.status(404).json({ msg: 'Post not found' });
+//         }
+//         console.log(post)
+//         if (post.postedBy.toString() !== req.user.id.toString()) {
+//             return res.status(404).json({ msg: "not authorised" });
+//         };
 
-        await cloudinary.uploader.destroy(post.cloudinary_id)
-        await post.remove();
-        res.status(200).json({ msg: "post deleted" })
-    } catch (error) {
-        console.log(error.message);
-        return res.status(500).send('Server Error');
-        next();
-    }
-}
+//         await cloudinary.uploader.destroy(post.cloudinary_id)
+//         await post.remove();
+//         res.status(200).json({ msg: "post deleted" })
+//     } catch (error) {
+//         console.log(error.message);
+//         return res.status(500).send('Server Error');
+//         next();
+//     }
+// }
 
 //  get posts for explore 
 exports.retrieveExplorePost = async (req, res, next) => {
@@ -504,17 +505,40 @@ exports.retrieveFeedPosts = async (req, res, next) => {
     }
 }
 
-//  get post based on followers 
+exports.deletePost = async (req, res, next) => {
+    const { postId } = req.params;
+    try {
 
-// exports.followersPosts = async (req, res, next) => {
-//     try {
-//         const user = await User.findById(req.user.id);
-//     } catch (error) {
-//         console.log(error.message);
-//         return res.status(500).send('Server Error');
-//         next(error);
-//     }
+        const post = await Post.findById(postId)
+        console.log(post)
+        if (!post) {
+            res.status(400).json({ msg: "post does not exist" });
+        };
+        if (post.postedBy.toString() !== req.user.id.toString()) {
+            return res.status(404).json({ msg: "not authorised" });
+        };
 
-// }
+        // delete from cloudinary
+        await cloudinary.uploader.destroy(post.cloudinary_id, (result) => {
+            console.log(result)
+        });
+        await PostComments.findOneAndRemove({ _post: postId }, (err) => {
+            if (err) {
+                console.log(err)
+            }
+        });
+        await PostLikes.findOneAndRemove({ _post: postId }, (err) => {
+            if (err) {
+                console.log(err)
+            }
+        });
+        await post.remove((err) => {
+            if (err) return res.json({ msg: "failed to delete post" })
+        })
+        return res.status(200).json({ success: true, msg: "post deleted" })
+    } catch (error) {
+        console.log(error)
+        next(error)
+    }
 
-// retrive explore posts 
+}
