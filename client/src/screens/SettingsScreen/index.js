@@ -52,7 +52,7 @@ function EditProfilePage() {
                         <Route exact path={path}>
                             <EditProFileForm />
                         </Route>
-                        <Route exact path={`${path}/Password`} render={() => <ChangePasswordForm />} />
+                        <Route exact path={`${path}/password`} render={() => <ChangePasswordForm />} />
                     </Switch>
                 </article>
             </div>

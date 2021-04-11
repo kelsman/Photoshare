@@ -37,6 +37,7 @@
                 padding: 0.4em;
                 font-family: inherit;
                 font-size: 1.2rem;
+                // width: 300px !important;
                 color: black;
                 border: 1px solid #dbdbdb;
                 background-color:#dbdbdb;
@@ -44,7 +45,6 @@
                 position: relative;
                 &:focus{
                 outline: 0;
-        
             }
             
             
@@ -74,10 +74,16 @@
     }
   
     
-    @media screen and (max-width: 640px){
-        padding: 0px 2rem;
-        width: 100vw !important;
-        .group__wrapper{
+    @media screen and (max-width: 600px){
+        // padding: 0px 2rem;
+        // width: 100vw !important;
+        
+        padding: 0px 50px; 
+        
+        input{
+            width: 90% !important;
+        }
+        .label__wrapper{
             display: block;
             grid-column-gap: 0;
             grid-template-columns: 2rem 1fr;

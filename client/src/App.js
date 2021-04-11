@@ -85,7 +85,7 @@ function App({ loaduser, connectSocketIo, currentUser }) {
             <Route exact path={`${Routes.PostPage}/:postId`} component={PostPage} />
             <Route exact path={`${Routes.ProfilePage}/:username`} component={ProfilePage} />
             <Route path={Routes.SettingsPage} component={EditProfilePage} />
-            {/* <Route exact path={Routes.ProfilePage} component={UserProfile} /> */}
+
             <Route component={ErrorPage} />
           </Switch>
         </Suspense>
