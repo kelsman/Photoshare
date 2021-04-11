@@ -155,3 +155,23 @@ export const retrieveFeedPosts = async (history) => {
         }
     }
 };
+
+export const deletePost = async (postId) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    };
+    if (token) {
+        setToken(token);
+    }
+    try {
+        const res = await axios.delete(`${baseUrl}/api/route/post/deletePost/${postId}`)
+        if (res) {
+            console.log(res.data.msg)
+        }
+    } catch (error) {
+        console.log(error.message)
+    }
+
+}
