@@ -52,7 +52,7 @@ export const signin = (data) => {
     } catch (error) {
       if (error.response) {
         await dispatch({ type: userActionTypes.LOG_IN_FAIL, payload: error.response.data });
-        cogoToast.error(`${error.message}`);
+        cogoToast.error(`${error.response.data.msg}`);
       }
     }
   };
