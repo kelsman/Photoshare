@@ -8,7 +8,6 @@ import { useQuery, useQueryClient } from 'react-query';
 import * as Routes from '../../component/routes'
 
 // import Header from '../../component/Header';
-
 import Menu from '../../component/MenuButtons';
 import NavigationHeader from '../../component/NavigationHeader';
 import SideBar from '../../component/SideBar';
@@ -20,7 +19,7 @@ import { loadUser } from '../../api/auth.api'
 
 const token = localStorage.getItem('authToken');
 
-const HomeScreen = () => {
+const HomeScreen = ({ currentUser, isAuthenticated }) => {
 
 
   const history = useHistory();
@@ -38,9 +37,6 @@ const HomeScreen = () => {
   if (isLoading) {
     return <Loader />;
   }
-
-
-
 
   return (
     <div className="homeScreen">
@@ -71,6 +67,7 @@ const mapStateToProps = ({ user, post, feed }) => {
   return {
     currentUser: user.currentUser,
     posts: feed.posts,
+    isAuthenticated: user.isAuthenticated
   };
 };
 

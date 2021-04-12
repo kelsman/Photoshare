@@ -43,8 +43,13 @@
                 background-color:#dbdbdb;
                 font-weight: 90;
                 position: relative;
+
+                @media screen and (min-width: 768px){
+                    width: 300px !important;
+                }
                 &:focus{
                 outline: 0;
+
             }
             
             

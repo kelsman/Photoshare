@@ -390,7 +390,7 @@ exports.getSuggestedUsers = async (req, res, next) => {
         }
         return res.json({ users })
     } catch (error) {
-        console.log(error.message)
+        console.log(error)
         return res.status(500).json({ msg: 'server error' });
         next(err)
     }
@@ -400,7 +400,7 @@ exports.searchUsers = async (req, res, next) => {
     const { query } = req.params;
     try {
         const users = await User.aggregate([
-            { $match: { username: { $regex: new RegExp("^" + query), $options: 'i' } } },
+            { $match: { username: { $regex: new RegExp(query), $options: 'i' } } },
 
             {
                 $lookup: {

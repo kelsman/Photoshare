@@ -157,6 +157,7 @@ export const retrieveFeedPosts = async (history) => {
 };
 
 export const deletePost = async (postId) => {
+
     const config = {
         headers: {
             'Content-Type': 'application/json',
@@ -166,7 +167,7 @@ export const deletePost = async (postId) => {
         setToken(token);
     }
     try {
-        const res = await axios.delete(`${baseUrl}/api/route/post/deletePost/${postId}`)
+        const res = await axios.delete(`${baseUrl}/api/route/post/deletePost/${postId}`, config)
         if (res) {
             console.log(res.data.msg)
         }

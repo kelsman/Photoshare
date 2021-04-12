@@ -510,17 +510,16 @@ exports.deletePost = async (req, res, next) => {
     try {
 
         const post = await Post.findById(postId)
-        console.log(post)
         if (!post) {
             res.status(400).json({ msg: "post does not exist" });
         };
-        if (post.postedBy.toString() !== req.user.id.toString()) {
+        if (String(post.postedBy) !== String(req.user.id)) {
             return res.status(404).json({ msg: "not authorised" });
         };
 
         // delete from cloudinary
         await cloudinary.uploader.destroy(post.cloudinary_id, (result) => {
-            console.log(result)
+
         });
         await PostComments.findOneAndRemove({ _post: postId }, (err) => {
             if (err) {

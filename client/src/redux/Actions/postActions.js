@@ -54,7 +54,6 @@ export const getPosts = (history) => {
       }
 
       const response = await axios.get(`${baseUrl}/api/route/post/retrieveExplorePost`);
-      console.log(response)
       if (response) {
         dispatch({ type: postActionTypes.GET_POSTS_SUCCESS, payload: response.data.posts });
       }

@@ -7,9 +7,12 @@ import CommentList from '../../CommentList';
 import Loader from '../../Loader'
 import ModalComponent from '../../Modal'
 import Profile from '../../Profile';
-import { likePost, CommentPost } from '../../../api/posts.api'
 import * as Routes from '../../routes';
-import Divider from '../../Divider'
+import Divider from '../../Divider';
+
+//  Api
+import { likePost, CommentPost, deletePost } from '../../../api/posts.api';
+
 // External libraries
 import moment from 'moment';
 import dayjs from 'dayjs';
@@ -95,7 +98,11 @@ function Card(props) {
       // invalidate the query 
       queryClient.invalidateQueries('fetchfeeds');
     }
-
+  });
+  const { mutateAsync: deletePostAsync } = useMutation(deletePost, {
+    omSucces: () => {
+      queryClient.invalidateQueries('fetchfeeds')
+    }
   })
   const likeFunc = async () => {
     try {
@@ -107,7 +114,6 @@ function Card(props) {
   };
 
   const commentPostFunc = async () => {
-
     try {
       await commentPostMutation.mutateAsync()
 
@@ -200,7 +206,7 @@ function Card(props) {
           <li onClick={() => history.push(Routes.PostPage + `/${feed._id}`)}>Go to Post</li>
           <Divider />
           {/* <li onClick={copyUrl}>Copy Link</li> */}
-          {currentUser._id === feed.author._id && <li style={{ color: "navy" }}> Delete Post</li>}
+          {currentUser._id === feed.author._id && <li style={{ color: "navy" }} onClick={deletePostAsync(feed._id)}> Delete Post</li>}
           <Divider />
           <li style={{ color: "tomato" }} onClick={closeModal}>Cancel</li>
         </ul>

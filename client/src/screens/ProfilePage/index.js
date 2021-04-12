@@ -99,9 +99,9 @@ const ProfilePage = () => {
                   >
                     Edit Profile
                   </button>
-                  <button className="settings_btn">
-                    <Icon.Settings onClick={() => setShowOptionsModal(true)} />
-                  </button>
+
+                  <Icon.Settings className="settings_btn" onClick={() => setShowOptionsModal(true)} />
+
                 </Fragment>
               )}
             </div>
