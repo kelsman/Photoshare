@@ -11,10 +11,10 @@ import LoaderSpinner from '../LoaderSpinner';
 function EditProFileForm() {
 
     const user = useSelector(({ user }) => user.currentUser);
-    const [name, setName] = useState('');
-    const [username, setUsername] = useState('')
-    const [bio, setBio] = useState('')
-    const [email, setEmail] = useState('');
+    const [name, setName] = useState(user && user.name ? user.name : '');
+    const [username, setUsername] = useState(user && user.username ? user.username : '')
+    const [bio, setBio] = useState(user && user.bio ? user.bio : '')
+    const [email, setEmail] = useState(user && user.email ? user.email : '');
     const [profileImg, setProfileImg] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
 
@@ -87,7 +87,7 @@ function EditProFileForm() {
                         type="text"
                         name="name"
                         placeholder={'Name'}
-                        value={user && user.name ? user.name : name}
+                        value={name}
                         onChange={(e) => setName(e.target.value)}
                     />
                 </div>
@@ -98,7 +98,7 @@ function EditProFileForm() {
                         type="text"
                         name="username"
                         placeholder={'Username'}
-                        value={user && user.username ? user.username : username}
+                        value={username}
                         onChange={(e) => setUsername(e.target.value)}
                     />
 
@@ -109,7 +109,7 @@ function EditProFileForm() {
                         id="bio"
                         name="bio"
                         placeholder={'Bio'}
-                        value={user && user.bio ? user.bio : bio}
+                        value={bio}
                         onChange={(e) => setBio(e.target.value)}
                     />
 
@@ -122,7 +122,7 @@ function EditProFileForm() {
                         type="text"
                         name="email"
                         placeholder={'Email'}
-                        value={user && user.email ? user.email : email}
+                        value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
                 </div>
