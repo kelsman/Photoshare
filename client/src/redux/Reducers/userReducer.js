@@ -2,9 +2,10 @@
 import { userActionTypes } from '../Constants/userConstants';
 
 const initState = {
+    token: localStorage.getItem('authToken'),
     isLoading: true,
     currentUser: null,
-    isAuthenticated: false,
+    isAuthenticated: null,
     authError: {
         signInError: "",
         signUpError: "",
@@ -20,8 +21,6 @@ const userReducer = (state = initState, { type, payload }) => {
             return {
                 ...state,
                 isLoading: false,
-
-
             };
         case userActionTypes.LOG_IN_FAIL:
             return {
@@ -53,6 +52,7 @@ const userReducer = (state = initState, { type, payload }) => {
                 }
             };
         case userActionTypes.LOG_OUT_SUCCESS:
+            localStorage.removeItem('authToken')
             return {
                 ...state,
                 isLoading: false,
@@ -69,10 +69,12 @@ const userReducer = (state = initState, { type, payload }) => {
 
             };
         case userActionTypes.LOAD_USER_FAIL:
+            localStorage.removeItem('authToken')
             return {
                 ...state,
                 isLoading: false,
                 isAuthenticated: false,
+                token: null,
                 authError: {
                     loadUserError: payload
                 }

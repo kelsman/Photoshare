@@ -13,8 +13,9 @@ import Avatar from '../../assets/default-avatar.png';
 import { v4 as uuidv4 } from 'uuid';
 import { useHistory } from 'react-router-dom'
 const token = localStorage.getItem('authToken');
-const baseUrl = process.env.REACT_APP_BASE_URL
-const SearchBox = ({ }) => {
+const baseUrl = process.env.REACT_APP_BASE_URL;
+
+const SearchBox = () => {
   const [query, setQuery] = useState('');
   const [userDetails, setUserDetails] = useState([])
   const [isSearching, setIsSearching] = useState(undefined);

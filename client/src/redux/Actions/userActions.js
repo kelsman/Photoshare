@@ -46,8 +46,8 @@ export const signin = (data) => {
       if (response) {
         await dispatch({ type: userActionTypes.LOG_IN_SUCCESS, payload: response.data });
         await localStorage.setItem('authToken', response.data.jwtToken);
-        cogoToast.success('sign in success', { position: 'bottom-right' });
-
+        await dispatch(loaduser())
+        await cogoToast.success('sign in success', { position: 'bottom-right' });
       }
     } catch (error) {
       if (error.response) {
@@ -60,7 +60,9 @@ export const signin = (data) => {
 
 export const loaduser = () => {
   return async (dispatch) => {
-
+    if (localStorage.authToken) {
+      setToken(localStorage.authToken)
+    }
     try {
       const response = await axios.get(`${baseUrl}/api/route/user/getUser`);
       if (response) {
@@ -83,11 +85,13 @@ export const loaduser = () => {
 };
 
 export const LogOut = (history) => {
+
   return async (dispatch) => {
+
     try {
       await localStorage.removeItem('authToken');
       history.push(Routes.Login);
-      dispatch({ type: userActionTypes.LOG_OUT_SUCCESS, payload: 'sign out sucessful' });
+      await dispatch({ type: userActionTypes.LOG_OUT_SUCCESS, payload: 'sign out sucessful' });
       cogoToast.success('Sign out success');
     } catch (error) {
       console.log(error.message);

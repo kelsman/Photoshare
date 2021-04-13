@@ -4,6 +4,9 @@ import './style.scss';
 import cogoToast from 'cogo-toast';
 import Avatar from '../../assets/default-avatar.png';
 import Loader from '../Loader';
+import { changeAvatar, editProfile } from '../../api/profile.api';
+import { useMutation, useQueryClient } from 'react-query'
+import LoaderSpinner from '../LoaderSpinner';
 
 function EditProFileForm() {
 
@@ -15,39 +18,64 @@ function EditProFileForm() {
     const [profileImg, setProfileImg] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
 
-
+    const queryClient = useQueryClient()
     useEffect(() => {
         document.title = 'Edit Profile • Photoshare';
     }, []);
 
-    const handleFormSubmit = async (e) => {
-        e.preventDefault();
+    const { mutateAsync: editProfileAsync, isLoading: updateProfileLoading } = useMutation(editProfile, {
+        onSucces: () => {
+            queryClient.invalidateQueries(['profile', `${user.username}`])
+        }
+    })
+    const { mutateAsync, isLoading: changingAvatar } = useMutation(changeAvatar, {
+
+        onSucces: () => {
+            queryClient.invalidateQueries(['profile', `${user.username}`])
+        }
+    })
+    const handleFormSubmit = async () => {
+
         try {
-            setIsLoading(true)
-            await cogoToast.info('button has been clicked')
-            setIsLoading(false)
+            await editProfileAsync({ name, username, bio, email })
         } catch (error) {
             throw new Error('something went wrong')
         }
-
     }
+
+    const handleAvatarChange = async (event) => {
+        try {
+            await setProfileImg(event.target.files[0]);
+            if (profileImg) {
+                const data = new FormData;
+                await data.append('avatar', profileImg)
+                await mutateAsync(data)
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
 
     return (
         <div className="Edit__profile__form__wrapper">
 
-            <form action="" className="Edit_profile_form" onSubmit={handleFormSubmit}>
+            <form action="" className="Edit_profile_form" onSubmit={(e) => { e.preventDefault(); handleFormSubmit() }}>
                 <div className="profile__header">
-                    <img src={user ? user.avatar : Avatar} alt="" />
-
+                    <div className="avatar__container">
+                        <img src={user ? user.avatar : Avatar} alt="avatar" />
+                        {changingAvatar && <Loader />}
+                    </div>
                     <div className="profile__avatar__wrapper">
                         <h4> {user && user.username}</h4>
                         <input
-                            id="avatar-upload"
+                            id="avatar"
                             type="file" accept="image/*"
                             style={{ display: "none" }}
-                            onChange={(e) => setProfileImg(e.target.files[0])}
+                            onChange={handleAvatarChange}
                         />
-                        <label className="change__photo__link" htmlFor="avatar-upload">Change Profile Photo</label>
+                        <label className="change__photo__link" htmlFor="avatar">Change Profile Photo</label>
                     </div>
 
 
@@ -112,6 +140,7 @@ function EditProFileForm() {
 
 
             </form>
+
         </div>
     )
 }

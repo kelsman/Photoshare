@@ -15,11 +15,13 @@ import { likePost, CommentPost, deletePost } from '../../../api/posts.api';
 
 // External libraries
 import moment from 'moment';
+import Moment from 'react-moment';
 import dayjs from 'dayjs';
 import ExploreCardMenu from '../../ExplorePostCardMenu';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 // react-query
 import { useQueryClient, useMutation, useQuery } from 'react-query';
@@ -56,7 +58,7 @@ function Card(props) {
 
   // check if user has liked the post before;
   let hasUserLiked;
-  if (feed && feed.likes) {
+  if (feed && feed.likes && currentUser) {
     hasUserLiked = feed.likes.find(d => d.user === currentUser._id)
 
   }
@@ -76,7 +78,7 @@ function Card(props) {
     },
 
     onSettled: () => {
-      queryClient.invalidateQueries('fetchfeeds')
+      queryClient.refetchQueries('fetchfeeds')
     }
 
   });
@@ -99,7 +101,8 @@ function Card(props) {
       queryClient.invalidateQueries('fetchfeeds');
     }
   });
-  const { mutateAsync: deletePostAsync } = useMutation(deletePost, {
+  const { mutateAsync: deletePostAsync, isLoading: deleteLoading } = useMutation(deletePost, {
+
     omSucces: () => {
       queryClient.invalidateQueries('fetchfeeds')
     }
@@ -122,6 +125,13 @@ function Card(props) {
       console.log(error);
     }
   }
+  const deletePostFunc = async () => {
+    try {
+      deletePostAsync(feed._id)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const focus = () => {
     inputRef.current.focus();
@@ -129,6 +139,9 @@ function Card(props) {
 
   const copyUrl = () => {
     copy(window.location.href)
+  }
+  if (deleteLoading) {
+    return <Loader />;
   }
   return (
     <div className="card">
@@ -142,21 +155,22 @@ function Card(props) {
         />
         <CardButton className="cardButton" onClick={() => setShowModal(true)} />
       </header>
-      <img className="cardImage" src={image} alt="card content" />
+      <LazyLoadImage
+        src={image}
+        alt={"cardcontent"}
+        className="cardImage"
+        effect="blur"
+      />
+      {/* <img className="cardImage" src={image} alt="cardcontent" /> */}
       {/*  <CardMenu /> */} <ExploreCardMenu hasUserLiked={hasUserLiked} setIsLiked={setIsLiked} isLiked={isLiked} focus={focus} likeFunc={likeFunc} userpost={feed} />
       <div className="likedBy">
-        {/*  <Profile iconSize="small" hideAccountName={true} /> */}
-        {/*  <span>
-                    Liked by <strong>{likedByText}</strong> and{" "}
-                    <strong>{likedByNumber} others</strong>
-                </span> */}
         {!feed.likes || feed.likes.length < 1 ? (
           <span className="like-title">
             {' '}
             Be the first to <b>like this</b>
           </span>
         ) : (
-          <span>{feed.likes.length} Likes</span>
+          <span>{feed.likes.length}  Likes</span>
         )}
       </div>
       <div className="comments">
@@ -177,7 +191,10 @@ function Card(props) {
             );
           })}
       </div>
-      <div className="timePosted">{moment(feed.date).fromNow()} </div>
+      <div className="timePosted">
+        {/* moment(feed.date).fromNow() */}
+        <Moment date={feed.date} format={'DD MMM '} />
+      </div>
       <form onSubmit={(event) => {
         event.preventDefault();
         commentPostFunc()
@@ -206,7 +223,11 @@ function Card(props) {
           <li onClick={() => history.push(Routes.PostPage + `/${feed._id}`)}>Go to Post</li>
           <Divider />
           {/* <li onClick={copyUrl}>Copy Link</li> */}
-          {currentUser._id === feed.author._id && <li style={{ color: "navy" }} onClick={deletePostAsync(feed._id)}> Delete Post</li>}
+          {currentUser && currentUser._id === feed.author._id && <li style={{ color: "navy" }} onClick={async () => {
+
+            await deletePostFunc()
+            closeModal()
+          }}> Delete Post</li>}
           <Divider />
           <li style={{ color: "tomato" }} onClick={closeModal}>Cancel</li>
         </ul>
@@ -214,6 +235,5 @@ function Card(props) {
     </div>
   );
 }
-
 
 export default Card;

@@ -4,12 +4,13 @@ import './style.scss';
 import * as Routes from '../../routes';
 import { showModal, hideModal } from '../../../redux/modal/modalActions';
 import { useHistory } from 'react-router-dom';
-import { createPostFunc } from '../../../redux/Actions/postActions';
-
+// import { createPostFunc } from '../../../redux/Actions/postActions';
+import Loader from '../../Loader'
 import * as Icon from 'react-feather';
 import cogoToast from 'cogo-toast';
-
+// react-query
 import { useQuery, useQueryClient, useMutation } from 'react-query';
+// api
 import { createPost } from '../../../api/posts.api';
 
 // modal
@@ -23,6 +24,7 @@ const NewPostModal = ({ file }) => {
   const history = useHistory();
   const [previewImage, setPreviewImage] = useState(undefined);
   const [caption, setCaption] = useState('');
+  const queryClient = useQueryClient()
 
   useEffect(() => {
     dispatch(showModal());
@@ -49,20 +51,23 @@ const NewPostModal = ({ file }) => {
 
 
   const mutatePost = useMutation(async () => {
-    cogoToast.loading('posting')
+    // cogoToast.loading('posting')
     const data = await new FormData();
     data.append('postfile', file);
     data.append('caption', caption);
-    createPost(data, history)
-  }, {
+    await createPost(data, history)
+  },
+    {
 
-    onSuccess: () => {
-      cogoToast.success('post created')
-    },
-    onError: (err) => {
-      console.log(err)
-    }
-  })
+      onSuccess: async () => {
+        queryClient.invalidateQueries('fetchfeeds')
+        cogoToast.success('post created')
+
+      },
+      onError: (err) => {
+        console.log(err)
+      }
+    })
 
 
 
@@ -116,6 +121,7 @@ const NewPostModal = ({ file }) => {
             </div>
           </Fragment>
         )}
+        {mutatePost.isLoading && <Loader />}
       </Modal>
     </div>
   );

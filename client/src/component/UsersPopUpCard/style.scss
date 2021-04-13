@@ -12,9 +12,10 @@
     &::before {
         content: '';
         position: absolute;
+        
         left: 50%;
         width: 20px;
-      height: 20px;
+        height: 20px;
         bottom: 100%;
         background-color: white;
       clip-path: polygon(50% 0%, 0% 100%, 100% 100%);

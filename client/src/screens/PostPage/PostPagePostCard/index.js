@@ -5,10 +5,17 @@ import CommentList from '../../../component/CommentList'
 import Profile from '../../../component/Profile'
 import moment from 'moment'
 import ExploreCardMenu from '../../../component/ExplorePostCardMenu'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import Loader from '../../../component/Loader'
+import Loader from '../../../component/Loader';
+import * as Icon from 'react-feather'
 import { v4 as uuidv4 } from 'uuid';
+import Divider from '../../../component/Divider';
+import ModalComponent from '../../../component/Modal'
+import * as Routes from '../../../component/routes';
+
+
+
 
 const PostPagePostCard = ({
     feed,
@@ -24,12 +31,19 @@ const PostPagePostCard = ({
     commentPostMutation,
     isLiked,
     setIsLiked,
+    deletePostFunc,
+    openModal,
+    setOpenModal,
+    closeModal
+
+
 }) => {
     const inputRef = useRef();
     const focus = () => {
         inputRef.current.focus();
     };
-
+    const user = useSelector(({ user }) => user.currentUser)
+    const history = useHistory();
     return (
         <div className="card_container">
             {
@@ -43,7 +57,7 @@ const PostPagePostCard = ({
                             username={accountName}
                             storyBorder={storyBorder}
                         />
-                        {/*   <CardButton className="cardButton" /> */}
+                        <Icon.MoreHorizontal className="more-icon" size={26} onClick={() => setOpenModal(true)} />
                     </header>
                     <img className="cardImage" src={image} alt="card content" />
                     <ExploreCardMenu isLiked={isLiked} setIsLiked={setIsLiked} focus={focus} likeFunc={likeFunc} userpost={feed} />
@@ -100,6 +114,20 @@ const PostPagePostCard = ({
                     </button>
                     </form>
 
+                    <ModalComponent open={openModal} hide={closeModal}>
+                        <ul className="options__modal__container">
+                            <li onClick={() => history.push(Routes.PostPage + `/${feed._id}`)}>Go to Post</li>
+                            <Divider />
+                            {/* <li onClick={copyUrl}>Copy Link</li> */}
+                            {user._id === feed.author._id && <li style={{ color: "navy" }} onClick={async () => {
+
+                                await deletePostFunc()
+                                closeModal()
+                            }}> Delete Post</li>}
+                            <Divider />
+                            <li style={{ color: "tomato" }} onClick={closeModal}>Cancel</li>
+                        </ul>
+                    </ModalComponent>
                 </>
             }
 

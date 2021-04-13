@@ -36,6 +36,9 @@ const ProfilePage = lazy(() => import('./screens/ProfilePage'));
 
 
 
+if (localStorage.authToken) {
+  setToken(localStorage.authToken)
+}
 
 function App({ loaduser, connectSocketIo, currentUser }) {
   const token = localStorage.getItem('authToken');
@@ -49,22 +52,25 @@ function App({ loaduser, connectSocketIo, currentUser }) {
   useEffect(() => {
 
     // check for token in localStoagre
-    if (localStorage.getItem('authToken')) {
-      setToken(localStorage.getItem('authToken'))
-      loaduser();
-    }
+    (async function () {
+
+      if (localStorage.authToken) {
+        loaduser();
+      }
+    }())
 
     // handle user logout on all tabs 
     // const handleLogOut = () => {
     //   if (!localStorage.getItem('authToken')) {
-    //     dispatch(LogOut(history))
+    //     dispatch(LogOut())
     //   }
     // }
     // window.addEventListener('storage', handleLogOut)
     return () => {
+      // window.removeEventListener('storage', handleLogOut)
       return null
     }
-  }, [loaduser, token, signin])
+  }, [])
 
   return (
     <div className="App">
@@ -88,7 +94,6 @@ function App({ loaduser, connectSocketIo, currentUser }) {
 
             <Route component={ErrorPage} />
           </Switch>
-
 
           {
             pathname !== Routes.SignUp &&

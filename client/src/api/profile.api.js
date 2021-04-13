@@ -4,8 +4,6 @@ import cogoToast from 'cogo-toast';
 
 const baseUrl = process.env.REACT_APP_BASE_URL;
 
-
-
 export const getProfile = async (username) => {
 
     if (localStorage.getItem('authToken')) {
@@ -34,3 +32,38 @@ export const getProfile = async (username) => {
     }
 
 };
+
+export const changeAvatar = async (file) => {
+    try {
+        if (localStorage.authToken) {
+            setToken(localStorage.authToken)
+        }
+        const config = {
+            header: {
+                "Content-Type": "multipart/form-data"
+            }
+        }
+        const { data } = await axios.put(`${baseUrl}/api/route/profile/change-avatar`, file, config)
+        cogoToast.success(`${data.msg}`)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const editProfile = async (info) => {
+
+    try {
+        if (localStorage.authToken) {
+            setToken(localStorage.authToken)
+        }
+        const config = {
+            header: {
+                "Content-Type": "application/json"
+            }
+        }
+        const { data } = await axios.put(`${baseUrl}/api/route/profile/edit-profile`, info, config)
+        cogoToast.success(`${data.msg}`)
+    } catch (error) {
+        console.log(error)
+    }
+}

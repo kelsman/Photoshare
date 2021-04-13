@@ -99,7 +99,6 @@ export const CommentPost = async (postId, commentText) => {
     }
     try {
         const res = await axios.post(`${baseUrl}/api/route/post/comment/${postId}`, { commentText }, config);
-        console.log(res.data)
         return res.data
 
     } catch (error) {

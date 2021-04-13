@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './style.scss';
 
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { loaduser } from '../../redux/Actions/userActions';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient, useQueries } from 'react-query';
 import * as Routes from '../../component/routes'
 
 // import Header from '../../component/Header';
@@ -15,33 +15,30 @@ import Cards from '../../component/Cards';
 import Loader from '../../component/Loader';
 import { retrieveFeedPosts } from '../../api/posts.api';
 import SuggestionCard from '../../component/SuggestionsFollow/suggestionCard';
-import { loadUser } from '../../api/auth.api'
+import { loadUser } from '../../api/auth.api';
+
 
 const token = localStorage.getItem('authToken');
 
 const HomeScreen = ({ currentUser, isAuthenticated }) => {
 
-
   const history = useHistory();
   const queryClient = useQueryClient()
-
+  const [isLoadingUser, setIsLoadingUser] = useState(false)
   const { data, isLoading, isError, isSuccess, isFetching } = useQuery(['fetchfeeds'], () => retrieveFeedPosts(history))
   // const { data: currentUser, isLoading: isgettingUser, isError: getUserError, isSuccess: getUserSuccess } = useQuery(['getUser', token], loadUser);
 
   if (!token) {
     history.push(Routes.Login)
   }
-  // if (getUserSuccess) {
-  //   console.log(currentUser)
-  // }
+
+
   if (isLoading) {
     return <Loader />;
   }
 
   return (
     <div className="homeScreen">
-      {/*  the navigation Header */}
-      <NavigationHeader />
 
       {/* main */}
       <main className="main">
@@ -50,7 +47,6 @@ const HomeScreen = ({ currentUser, isAuthenticated }) => {
             <section className="mobile__suggestionCard">
               <SuggestionCard />
             </section>
-
           )
         }
         <div className="container">

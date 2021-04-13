@@ -3,7 +3,8 @@ import './style.scss';
 import * as Yup from 'yup';
 import * as Icon from 'react-feather'
 
-import { Link } from 'react-router-dom';
+
+import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { signin, loaduser } from '../../../redux/Actions/userActions';
 // import { Formik } from 'formik';
@@ -23,7 +24,7 @@ const validationSchema = Yup.object().shape({
   password: Yup.string().required(`password can't be empty`),
 });
 
-const LogInForm = ({ signin }) => {
+const LogInForm = ({ signin, isAuthenticated }) => {
   const history = useHistory();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -32,7 +33,7 @@ const LogInForm = ({ signin }) => {
       setIsSubmitting(true);
       await signin(values);
       setIsSubmitting(false);
-      history.push(Routes.Dashboard);
+
     } catch (error) {
       console.log(error.message);
       values.email = '';
@@ -55,6 +56,10 @@ const LogInForm = ({ signin }) => {
 
   const { values, errors, handleChange, handleSubmit } = formik;
 
+  //  Redirect if Logged in 
+  if (isAuthenticated) {
+    return <Redirect to={Routes.Dashboard} />
+  }
   return (
     <div>
       {/* <h1 className="logo">Photogram</h1> */}
@@ -131,6 +136,7 @@ const LogInForm = ({ signin }) => {
 const mapStateToProps = ({ user }) => {
   return {
     loadUserErrorr: user.authError.loadUserError,
+    isAuthenticated: user.isAuthenticated
   };
 };
 

@@ -12,6 +12,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from 'react-query/devtools'
 import 'react-responsive-modal/styles.css';
 import 'react-tippy/dist/tippy.css'
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 Modal.setAppElement('#root');
 
@@ -19,7 +20,7 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
-      staleTime: 60 * 2000
+      // staleTime: 60 * 2000
     }
   }
 })

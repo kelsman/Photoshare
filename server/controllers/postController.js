@@ -29,7 +29,6 @@ exports.createPost = async (req, res, next) => {
                 postMedia: upload.secure_url,
                 cloudinary_id: upload.public_id,
             });
-
             await post.save()
             res.status(201).json({ success: true, msg: "post created successfully" })
         }
