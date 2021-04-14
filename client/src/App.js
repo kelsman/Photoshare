@@ -52,24 +52,13 @@ function App({ loaduser, connectSocketIo, currentUser }) {
   useEffect(() => {
 
     // check for token in localStoagre
-    (async function () {
 
-      if (localStorage.authToken) {
-        loaduser();
-      }
-    }())
-
-    // handle user logout on all tabs 
-    // const handleLogOut = () => {
-    //   if (!localStorage.getItem('authToken')) {
-    //     dispatch(LogOut())
-    //   }
-    // }
-    // window.addEventListener('storage', handleLogOut)
-    return () => {
-      // window.removeEventListener('storage', handleLogOut)
-      return null
+    if (localStorage.authToken) {
+      loaduser();
     }
+
+
+    return () => null;
   }, [])
 
   return (

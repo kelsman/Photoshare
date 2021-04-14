@@ -1,25 +1,33 @@
 @import '../../Sass/variables';
 
 .post-page{
-  width: 100%;
- height: 100vh;
+width: 100%;
+ height: 100%;
  position: relative;
  background: $background-grey;
+ overflow-y: auto;
 
- overflow: auto;
-
- section{
-   margin-top: 7vh;
-   &::after{
-    content: "";
-    width: 100%;
-    height: 40px;
-    background: white;
-  }
-  @media screen and (min-width: 650px){
+ .postpagecard__container{
+   width: 100%;
+   height: fit-content;
+   margin-top: 5.9vh;
+  
+   @media screen and (min-width: 650px){
     display: none;
   }
  }
+//  section{
+//    margin-top: 7vh;
+//    &::after{
+//     content: "";
+//     width: 100%;
+//     height: 40px;
+//     background: white;
+//   }
+//   @media screen and (min-width: 650px){
+//     display: none;
+//   }
+//  }
  
 
  main{

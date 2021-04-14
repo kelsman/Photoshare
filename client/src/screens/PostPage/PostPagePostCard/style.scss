@@ -1,16 +1,17 @@
 @import '../../../Sass/variables';
 
 .card_container{
-
     border-top: 1px solid $border-color-grey;
     border-bottom: 1px solid $border-color-grey;
-    margin-bottom: 3.5em;
+    margin-bottom: 3em;
+    background: #FFFFFF;
 
     header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 0.75em;
+
     
         .profile {
           margin-bottom: 0;
@@ -48,7 +49,7 @@
         margin-bottom: 0.75em;
         max-height: 200px;
         overflow-y: auto;
-        background: $background-grey;
+        background: $background-white;
       }
 
 
@@ -68,7 +69,7 @@
     padding: 1.5em 1.25em;
     position: relative;
     width: 100%;
-    height: 40px;
+    height: 45px;
 
     .commentText {
       color: $font-color-primary;

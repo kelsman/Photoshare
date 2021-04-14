@@ -11,7 +11,7 @@
     "start": "node server.js",
     "server": "nodemon server.js",
     "deploy": "git push heroku master",
-    "deploy:full": "git add . && git commit -am uibuild && npm run deploy"
+    "deploy:full": "git add . && git commit -am serverbuild && npm run deploy"
   },
   "author": "",
   "license": "ISC",

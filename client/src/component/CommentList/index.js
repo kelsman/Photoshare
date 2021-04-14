@@ -28,9 +28,11 @@ const CommentList = ({
   commentTime,
   comment,
   userpost,
+  feed
 }) => {
   const userData = useSelector(({ user }) => user.currentUser);
   const dispatch = useDispatch();
+
 
   const {
     history,
@@ -41,8 +43,12 @@ const CommentList = ({
   const { mutateAsync, isLoading } = useMutation(() => deleteComment(userpost._id, commentId), {
 
     onSuccess: (data) => {
-      console.log(data)
-      queryClient.invalidateQueries('fetchsinglePost')
+
+      if (queryClient.getQueryData(['fetchsinglePost', `${userpost._id}`])) {
+        queryClient.invalidateQueries(['fetchsinglePost', `${userpost._id}`]);
+
+      }
+
       // if (queryClient.getQueryData('fetchfeeds')) {
       //   queryClient.setQueryData('fetchsinglePost', prev => {
       //     return {

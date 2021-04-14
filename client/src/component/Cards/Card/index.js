@@ -69,16 +69,16 @@ function Card(props) {
 
     onSuccess: (data) => {
       if (data === "like success") {
-        setIsLiked(prev => true)
+        setIsLiked(true)
       }
       if (data === "unlike success") {
-        setIsLiked(prev => false)
+        setIsLiked(false)
       }
       // invalidate()
     },
 
     onSettled: () => {
-      queryClient.refetchQueries('fetchfeeds')
+      queryClient.invalidateQueries('fetchfeeds')
     }
 
   });
@@ -103,8 +103,11 @@ function Card(props) {
   });
   const { mutateAsync: deletePostAsync, isLoading: deleteLoading } = useMutation(deletePost, {
 
+
+
     omSucces: () => {
-      queryClient.invalidateQueries('fetchfeeds')
+      queryClient.refetchQueries('fetchfeeds')
+
     }
   })
   const likeFunc = async () => {

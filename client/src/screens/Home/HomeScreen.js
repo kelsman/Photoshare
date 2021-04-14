@@ -25,7 +25,9 @@ const HomeScreen = ({ currentUser, isAuthenticated }) => {
   const history = useHistory();
   const queryClient = useQueryClient()
   const [isLoadingUser, setIsLoadingUser] = useState(false)
-  const { data, isLoading, isError, isSuccess, isFetching } = useQuery(['fetchfeeds'], () => retrieveFeedPosts(history))
+  const { data, isLoading, isError, isSuccess, isFetching } = useQuery(['fetchfeeds'], () => retrieveFeedPosts(history), {
+    staleTime: 60 * 2000,
+  })
   // const { data: currentUser, isLoading: isgettingUser, isError: getUserError, isSuccess: getUserSuccess } = useQuery(['getUser', token], loadUser);
 
   if (!token) {

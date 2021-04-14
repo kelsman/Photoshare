@@ -14,7 +14,7 @@ router.post('/comment/:postId', authMiddleWare, postController.commentPost);
 // @delete a comment
 router.put('/deleteComment/:postid/:commentid', authMiddleWare, postController.deleteComment);
 // @delete a post
-router.delete('/deletePost/:postId', authMiddleWare, postController.deletePost)
+router.delete('/deletePost/:postId', authMiddleWare, postController.deletePost);
 
 //  @get a single post by the post id
 router.get('/singlePost/:postId', authMiddleWare, postController.getSinglePost);

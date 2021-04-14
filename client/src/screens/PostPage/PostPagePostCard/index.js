@@ -14,12 +14,12 @@ import Divider from '../../../component/Divider';
 import ModalComponent from '../../../component/Modal'
 import * as Routes from '../../../component/routes';
 
-
+import Moment from 'react-moment'
 
 
 const PostPagePostCard = ({
     feed,
-    accountName,
+    // accountName,
     avatar,
     comments,
     storyBorder,
@@ -54,7 +54,7 @@ const PostPagePostCard = ({
                             iconSize="medium"
                             image={avatar}
                             authorUsername={feed.author.username}
-                            username={accountName}
+                            username={feed.author.username}
                             storyBorder={storyBorder}
                         />
                         <Icon.MoreHorizontal className="more-icon" size={26} onClick={() => setOpenModal(true)} />
@@ -94,7 +94,7 @@ const PostPagePostCard = ({
                                 );
                             })}
                     </div>
-                    <div className="timePosted">{moment(feed.date).fromNow()} </div>
+                    <div className="timePosted"> <Moment date={feed.date} format={'DD MMM '} /> </div>
                     <form onSubmit={commentPostFunc} className="addComment">
                         <input
                             ref={inputRef}

@@ -125,7 +125,6 @@ exports.changeAvatar = async (req, res, next) => {
 
 exports.editProfile = async (req, res, next) => {
 
-
     const { name, email, bio, username } = req.body;
     try {
         //  get the user

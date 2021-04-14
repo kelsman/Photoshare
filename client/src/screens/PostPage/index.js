@@ -19,13 +19,15 @@ import ModalComponent from '../../component/Modal';
 import * as Routes from '../../component/routes';
 import Divider from '../../component/Divider'
 
+import Avatar from '../../assets/default-avatar.png';
+
 
 
 // external liberires
 import * as Icon from 'react-feather';
-// import moment from 'moment';
 import Moment from 'react-moment'
 import { v4 as uuidv4 } from 'uuid';
+
 
 // redux imports
 // import { commentPost, getPosts, getSinglePost } from '../../redux/Actions/postActions';
@@ -147,7 +149,7 @@ function PostPage({ socket, user, history, }) {
     <div className="post-page">
       <main>
         {
-          isSuccess && userpost && (
+          userpost && (
 
             <div className="post_content">
               <div className="post_image">
@@ -235,46 +237,59 @@ function PostPage({ socket, user, history, }) {
         }
 
       </main>
-      <section>
-        <PostPagePostCard
-          isLiked={isLiked}
-          setIsLiked={setIsLiked}
-          feed={userpost}
-          commentText={commentText}
-          accountName={userpost.author.username}
-          avatar={userpost.author.avatar}
-          comments={userpost.comments ? userpost.comments : null}
-          image={userpost.postMedia}
-          storyBorder={true}
-          hours={userpost.date}
-          setOpenModal={setOpenModal}
-          closeModal={closeModal}
-          likeFunc={likeFunc}
-          deletePostFunc={deletePostFunc}
-          commentPostMutation={commentMutation}
-          commentPostFunc={commentPostFunc}
-          setCommentText={setCommentText}
-          likedByText={userpost.postLikes ? userpost.likes.username : null}
-          invalidate={() => queryClient.invalidateQueries('fetchsinglePost')}
+      <section className="postpagecard__container">
+        {
+          userpost && (
+            <>
+              <PostPagePostCard
+                isLiked={isLiked}
+                setIsLiked={setIsLiked}
+                feed={userpost}
+                commentText={commentText}
+                // accountName={userpost.author.username}
+                avatar={userpost ? userpost.author.avatar : Avatar}
+                comments={userpost.comments ? userpost.comments : null}
+                image={userpost.postMedia ? userpost.postMedia : null}
+                storyBorder={true}
+                hours={userpost.date}
+                setOpenModal={setOpenModal}
+                closeModal={closeModal}
+                likeFunc={likeFunc}
+                deletePostFunc={deletePostFunc}
+                commentPostMutation={commentMutation}
+                commentPostFunc={commentPostFunc}
+                setCommentText={setCommentText}
+                likedByText={userpost.postLikes ? userpost.likes.username : null}
+                invalidate={() => queryClient.invalidateQueries('fetchsinglePost')}
 
-        />
+              />
+
+            </>
+          )
+        }
       </section>
 
-      <ModalComponent open={openModal} hide={closeModal}>
-        <ul className="options__modal__container">
-          <li onClick={() => history.push(Routes.PostPage + `/${userpost._id}`)}>Go to Post</li>
-          <Divider />
-          {/* <li onClick={copyUrl}>Copy Link</li> */}
-          {user._id === userpost.author._id && <li style={{ color: "navy" }} onClick={async () => {
+      {
+        userpost && (
+          <>
+            <ModalComponent open={openModal} hide={closeModal}>
+              <ul className="options__modal__container">
+                <li onClick={() => history.push(Routes.PostPage + `/${userpost._id}`)}>Go to Post</li>
+                <Divider />
+                {/* <li onClick={copyUrl}>Copy Link</li> */}
+                {user._id === userpost.author._id && <li style={{ color: "navy" }} onClick={async () => {
 
-            await deletePostFunc()
-            closeModal()
-          }}> Delete Post</li>}
-          <Divider />
-          <li style={{ color: "tomato" }} onClick={closeModal}>Cancel</li>
-        </ul>
-      </ModalComponent>
+                  await deletePostFunc()
+                  closeModal()
+                }}> Delete Post</li>}
+                <Divider />
+                <li style={{ color: "tomato" }} onClick={closeModal}>Cancel</li>
+              </ul>
+            </ModalComponent>
 
+          </>
+        )
+      }
     </div>
   );
 }

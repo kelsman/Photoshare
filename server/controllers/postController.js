@@ -10,7 +10,6 @@ const ObjectId = require('mongoose').Types.ObjectId
 // const getPostupdate = require('../utils/post').getPostupdate;
 const { getupdatedPost } = require('../utils/post');
 // @ create a post 
-
 exports.createPost = async (req, res, next) => {
 
     const { caption } = req.body;
