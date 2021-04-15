@@ -170,7 +170,12 @@ const ProfilePage = () => {
 
       <ModalComponent open={showOptionsModal} hide={() => setShowOptionsModal(false)}>
         <ul className="settings__options">
-          <li onClick={() => dispatch(LogOut(history))}>Log Out</li>
+          <li onClick={async () => {
+            await dispatch(LogOut(history))
+            queryClient.clear()
+
+          }
+          }>Log Out</li>
           <Divider />
           <li onClick={() => history.push(Routes.SettingsPage + `/password`)}>Change Password</li>
           <Divider />

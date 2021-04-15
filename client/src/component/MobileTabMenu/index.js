@@ -11,14 +11,20 @@ import {
 } from 'react-tippy';
 import Avatar from '../../assets/default-avatar.png'
 import NewPostButton from '../NewPost/NewPostButton'
+import { IoHomeOutline, IoHomeSharp } from 'react-icons/io5';
 
 const MobileTabMenu = ({ user }) => {
-  const history = useHistory();
-  const { location } = history;
+  const { history, location: { pathname } } = useHistory();
   return (
     <nav className="mobile__nav">
       <Link to={Routes.Dashboard} >
-        <Icon.Home size={30} />
+        {pathname === Routes.Dashboard ?
+          <IoHomeOutline size={30} />
+          :
+          <IoHomeSharp size={30} />
+
+        }
+
       </Link>
       <Link to={Routes.Explore}>
         <Icon.Search className="icon__search" size={30} />
@@ -37,11 +43,11 @@ const MobileTabMenu = ({ user }) => {
         <Icon.Bell className="icon__heart" size={30} />
       </Tooltip>
 
-      {user && (
-        <Link to={Routes.ProfilePage + `/${user.username}`}>
-          <img src={user.avatar ? user.avatar : Avatar} alt="avatar" width="26px" height="26px" />
-        </Link>
-      )}
+
+      <Link to={Routes.ProfilePage + `/${user.username}`}>
+        <img src={user.avatar ? user.avatar : Avatar} alt="avatar" width="26px" height="26px" />
+      </Link>
+
     </nav>
   );
 };

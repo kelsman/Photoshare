@@ -20,6 +20,9 @@ import { loaduser, LogOut, signin } from './redux/Actions/userActions';
 import { connect, useDispatch } from 'react-redux';
 import { setToken } from './utils';
 
+// react-query
+
+
 // screens
 const ErrorPage = lazy(() => import('./screens/Error404Screen'));
 const LogInScreen = lazy(() => import('./screens/LoginScreen'));
@@ -57,14 +60,13 @@ function App({ loaduser, connectSocketIo, currentUser }) {
       loaduser();
     }
 
-
     return () => null;
   }, [])
 
   return (
     <ErrorBoundary>
-      <div className="App">
-        <Suspense fallback={<LoadingPage />}>
+      <Suspense fallback={<LoadingPage />}>
+        <div className="App">
           {pathname !== Routes.Login &&
             pathname !== Routes.SignUp &&
             <NavigationHeader />}
@@ -86,8 +88,8 @@ function App({ loaduser, connectSocketIo, currentUser }) {
             pathname !== Routes.Login &&
             currentUser &&
             <MobileTabMenu />}
-        </Suspense>
-      </div>
+        </div>
+      </Suspense>
     </ErrorBoundary>
   );
 }

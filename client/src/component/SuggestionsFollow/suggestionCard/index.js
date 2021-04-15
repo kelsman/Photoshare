@@ -9,7 +9,7 @@ import Profile from '../../Profile';
 import { v4 as uuidv4 } from 'uuid';
 import * as Routes from '../../routes'
 import HorizontalScroll from 'react-scroll-horizontal';
-
+import Avatar from '../../../assets/default-avatar.png';
 const SuggestionCard = () => {
 
     const queryClient = useQueryClient();
@@ -41,7 +41,7 @@ const SuggestionCard = () => {
                                     image={user.avatar}
                                     authorUsername={user.username}
                                 /> */}
-                                <img src={user.avatar} alt="" onClick={() => history.push(Routes.ProfilePage + `/${user.username}`)} />
+                                <img src={user.avatar ? user.avatar : Avatar} alt="" onClick={() => history.push(Routes.ProfilePage + `/${user.username}`)} />
                                 <h4>{user.username}</h4>
                                 {user.bio && <p> {user.bio}</p>}
                                 <FollowButton

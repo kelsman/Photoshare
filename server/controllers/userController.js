@@ -378,11 +378,11 @@ exports.getSuggestedUsers = async (req, res, next) => {
                     avatar: true,
                     name: true,
                     username: true,
-                    isFollowing: { $in: [ObjectId(req.user.id), '$followers._followers.user'] }
+                    // isFollowing: { $in: [ObjectId(req.user.id), '$followers._followers.user'] }
                 }
             },
             { $sample: { size: 6 } },
-            { $match: { isFollowing: false } },
+            // { $match: { isFollowing: false } },
 
             { $unset: [...unwantedFields] }
 
@@ -390,6 +390,7 @@ exports.getSuggestedUsers = async (req, res, next) => {
         if (!users) {
             return res.status(400).json({ msg: "users not found" })
         }
+
         return res.json({ users })
     } catch (error) {
         console.log(error)
