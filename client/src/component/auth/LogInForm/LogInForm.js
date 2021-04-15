@@ -33,11 +33,11 @@ const LogInForm = ({ signin, isAuthenticated }) => {
       setIsSubmitting(true);
       await signin(values);
       setIsSubmitting(false);
+      values.email = '';
+      values.password = '';
 
     } catch (error) {
       console.log(error.message);
-      values.email = '';
-      values.password = '';
     }
   };
   const formik = useFormik({
@@ -50,7 +50,6 @@ const LogInForm = ({ signin, isAuthenticated }) => {
   });
 
   useEffect(() => {
-
     return () => null
   })
 

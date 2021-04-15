@@ -18,7 +18,7 @@ import Loader from '../../component/Loader'
 import ModalComponent from '../../component/Modal';
 import * as Routes from '../../component/routes';
 import Divider from '../../component/Divider'
-
+import MobileHeader from '../../component/NavigationHeader/MobileHeader'
 import Avatar from '../../assets/default-avatar.png';
 
 
@@ -76,7 +76,6 @@ function PostPage({ socket, user, history, }) {
   const likeMutation = useMutation(() => likePost(userpost._id), {
 
     onSuccess: (data) => {
-
       if (data === "like success") {
         setIsLiked(true)
       }
@@ -86,7 +85,7 @@ function PostPage({ socket, user, history, }) {
 
     },
     onSettled: () => {
-      queryClient.invalidateQueries(['fetchsinglePost', postId])
+      queryClient.invalidateQueries(['fetchsinglePost', `${userpost._id}`])
     }
 
   });
@@ -136,8 +135,6 @@ function PostPage({ socket, user, history, }) {
   }
 
 
-
-
   if (isLoading) {
     return <p>Loading...</p>;
   }
@@ -147,6 +144,9 @@ function PostPage({ socket, user, history, }) {
 
   return (
     <div className="post-page">
+      <MobileHeader backArrow>
+        <h5 style={{ textAlign: "center" }}>  Post</h5>
+      </MobileHeader>
       <main>
         {
           userpost && (

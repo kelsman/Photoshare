@@ -46,6 +46,7 @@ const PostPagePostCard = ({
     const history = useHistory();
     return (
         <div className="card_container">
+
             {
                 feed &&
                 <>
@@ -62,19 +63,16 @@ const PostPagePostCard = ({
                     <img className="cardImage" src={image} alt="card content" />
                     <ExploreCardMenu isLiked={isLiked} setIsLiked={setIsLiked} focus={focus} likeFunc={likeFunc} userpost={feed} />
                     <div className="likedBy">
-                        {/*  <Profile iconSize="small" hideAccountName={true} /> */}
-                        {/*  <span>
-                    Liked by <strong>{likedByText}</strong> and{" "}
-                    <strong>{likedByNumber} others</strong>
-                </span> */}
-                        {!feed.likes || feed.likes.length < 1 ? (
+                        {!feed.likes || feed.likes.length < 1 && (
                             <span className="like-title">
                                 {' '}
-            Be the first to <b>like this</b>
+                            Be the first to <b>like this</b>
                             </span>
-                        ) : (
-                            <span>{feed.likes.length} Likes</span>
                         )}
+                        {feed.likes && feed.likes.length === 1 && <span> {feed.likes.length} Like</span>}
+
+                        {feed.likes && feed.likes.length > 1 && <span>{feed.likes.length} likes </span>}
+
                     </div>
                     <div className="comments">
                         {comments &&

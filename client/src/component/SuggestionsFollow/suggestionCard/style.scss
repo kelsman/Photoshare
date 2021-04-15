@@ -8,8 +8,18 @@
     background: #FFFFFF;
     padding: 0px 15px;
     margin: 0 5px;
-    box-shadow: 10px 10px 19px -15px rgba(97, 94, 94, 0.75);
-    -webkit-box-shadow: 10px 10px 19px -15px rgba(97, 94, 94, 0.75);
-    -moz-box-shadow: 10px 10px 19px -15px rgba(97, 94, 94, 0.75);
+    height: 150px;
+    border: 1px solid $border-color-grey;
+    // box-shadow: 10px 10px 19px -15px rgba(97, 94, 94, 0.75);
+    // -webkit-box-shadow: 10px 10px 19px -15px rgba(97, 94, 94, 0.75);
+    // -moz-box-shadow: 10px 10px 19px -15px rgba(97, 94, 94, 0.75);
+
+    img{
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+        cursor: pointer;
+    }
 
 }

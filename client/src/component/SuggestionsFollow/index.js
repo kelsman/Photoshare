@@ -3,7 +3,7 @@ import './style.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import Profile from '../Profile';
 import axios from 'axios';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import FollowButton from '../FollowButton';
 
 const token = localStorage.getItem('authToken');
@@ -11,28 +11,11 @@ const baseUrl = process.env.REACT_APP_BASE_URL;
 
 const Suggestions = () => {
   const dispatch = useDispatch();
-  const suggestedUsers = useSelector(({ suggestedUsers }) => suggestedUsers.suggestedUsers);
-  const currentUser = useSelector(({ user }) => user.currentUser)
+  const queryClient = useQueryClient()
+
+  const data = queryClient.getQueryData('fetchsuggestedusers');
 
 
-  const { data, isLoading, isError, error, isSuccess } = useQuery('fetchsuggestedusers', async () => {
-    const res = await axios.get(`${baseUrl}/api/route/user/suggestedUsers`, {
-      headers: {
-        "Content-Type": "application/json",
-        'x-auth-token': token
-      }
-    })
-    return res.data
-
-
-  })
-
-  if (isLoading) {
-    return <p> Loading...</p>;
-  }
-  if (isError) {
-    return <p> {error.message}</p>
-  }
   return (
     <div className="suggestions">
       <div className="titleContainer">
@@ -40,7 +23,7 @@ const Suggestions = () => {
       </div>
 
       {
-        data.users.map((user) => {
+        data && data.users.map((user) => {
           return (
             <div key={user._id} style={{ display: 'flex', width: '100%' }}>
               <Profile

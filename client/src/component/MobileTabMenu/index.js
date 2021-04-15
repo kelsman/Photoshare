@@ -9,7 +9,7 @@ import * as Routes from '../routes';
 import {
   Tooltip,
 } from 'react-tippy';
-
+import Avatar from '../../assets/default-avatar.png'
 import NewPostButton from '../NewPost/NewPostButton'
 
 const MobileTabMenu = ({ user }) => {
@@ -38,9 +38,9 @@ const MobileTabMenu = ({ user }) => {
         <Icon.Bell className="icon__heart" size={30} />
       </Tooltip>
 
-      {user && user.avatar && (
+      {user && (
         <Link to={Routes.ProfilePage + `/${user.username}`}>
-          <img src={user.avatar} alt="avatar" width="26px" height="26px" />
+          <img src={user.avatar ? user.avatar : Avatar} alt="avatar" width="26px" height="26px" />
         </Link>
       )}
     </nav>

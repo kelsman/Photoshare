@@ -62,15 +62,12 @@ function App({ loaduser, connectSocketIo, currentUser }) {
   }, [])
 
   return (
-    <div className="App">
-      <ErrorBoundary>
+    <ErrorBoundary>
+      <div className="App">
         <Suspense fallback={<LoadingPage />}>
           {pathname !== Routes.Login &&
-            pathname !== Routes.Explore &&
             pathname !== Routes.SignUp &&
-            pathname !== Routes.NewPostPage &&
             <NavigationHeader />}
-
           <Switch>
             <Route exact path={Routes.Login} render={() => <LogInScreen />} />
             <Route exact path={Routes.SignUp} render={() => <SignUpScreen />} />
@@ -80,9 +77,9 @@ function App({ loaduser, connectSocketIo, currentUser }) {
             <Route exact path={`${Routes.PostPage}/:postId`} component={PostPage} />
             <Route exact path={`${Routes.ProfilePage}/:username`} component={ProfilePage} />
             <Route path={Routes.SettingsPage} component={EditProfilePage} />
-
             <Route component={ErrorPage} />
           </Switch>
+
 
           {
             pathname !== Routes.SignUp &&
@@ -90,8 +87,8 @@ function App({ loaduser, connectSocketIo, currentUser }) {
             currentUser &&
             <MobileTabMenu />}
         </Suspense>
-      </ErrorBoundary>
-    </div>
+      </div>
+    </ErrorBoundary>
   );
 }
 const mapStateToProps = ({ user }) => ({

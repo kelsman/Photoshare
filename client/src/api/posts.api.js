@@ -136,7 +136,7 @@ export const retrieveFeedPosts = async (history) => {
         setToken(token);
     }
     try {
-        const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/route/post/retrieveFeedPosts`, config);
+        const res = await axios.get(`${baseUrl}/api/route/post/retrieveFeedPosts`, config);
         return res.data.posts
 
     } catch (error) {

@@ -11,7 +11,6 @@ const ObjectId = require('mongoose').Types.ObjectId
 const { getupdatedPost } = require('../utils/post');
 // @ create a post 
 exports.createPost = async (req, res, next) => {
-
     const { caption } = req.body;
     const file = req.file.path
 
@@ -20,6 +19,9 @@ exports.createPost = async (req, res, next) => {
             use_filename: true,
             folder: "photoshare_post",
             resource_type: 'auto',
+            // width: 300,
+            // height: 300,
+            // crop: "scale"
         });
         if (upload) {
             const post = await new Post({
@@ -211,30 +213,6 @@ exports.deleteComment = async (req, res, next) => {
 
 }
 
-//  delete a post
-
-// exports.deletePost = async (req, res, next) => {
-
-//     try {
-//         const post = await Post.findById(req.params.id);
-//         if (!post) {
-//             return res.status(404).json({ msg: 'Post not found' });
-//         }
-//         console.log(post)
-//         if (post.postedBy.toString() !== req.user.id.toString()) {
-//             return res.status(404).json({ msg: "not authorised" });
-//         };
-
-//         await cloudinary.uploader.destroy(post.cloudinary_id)
-//         await post.remove();
-//         res.status(200).json({ msg: "post deleted" })
-//     } catch (error) {
-//         console.log(error.message);
-//         return res.status(500).send('Server Error');
-//         next();
-//     }
-// }
-
 //  get posts for explore 
 exports.retrieveExplorePost = async (req, res, next) => {
 
@@ -255,7 +233,7 @@ exports.retrieveExplorePost = async (req, res, next) => {
 
 
         const posts = await Post.aggregate([
-            { $match: {} },
+            { $match: { postedBy: { $ne: ObjectId(req.user.id) } } },
             { $sort: { date: -1 } },
             {
                 $lookup: {
@@ -499,7 +477,8 @@ exports.retrieveFeedPosts = async (req, res, next) => {
         }
         return res.json({ success: true, posts })
     } catch (error) {
-
+        console.log(error);
+        return res.status(500).json({ msg: "server error" })
     }
 }
 

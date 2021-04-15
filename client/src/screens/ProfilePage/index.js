@@ -7,17 +7,14 @@ import Divider from '../../component/Divider';
 import * as Routes from '../../component/routes';
 import FollowButton from '../../component/FollowButton';
 import * as Icon from 'react-feather';
-import Footer from '../../component/Footer';
 import PostCard from '../../component/Explorepostcard/PostCard';
 import Loader from '../../component/Loader';
 import LoaderSpinner from '../../component/LoaderSpinner';
 import ModalComponent from '../../component/Modal';
 import Profile from '../../component/Profile';
+import MobileHeader from '../../component/NavigationHeader/MobileHeader'
 
 // External Libraries
-import axios from 'axios';
-import { setToken } from '../../utils';
-import cogoToast from 'cogo-toast';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
@@ -75,7 +72,8 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className="profilepage__wrapper">
+    <div className="profilepage__container">
+
       <header className="header">
         <div className="header__content">
           <div className="profile__image">
@@ -89,7 +87,7 @@ const ProfilePage = () => {
                   userId={userProfile && userProfile._id}
                   avatar={userProfile.avatar}
                   username={userProfile.username}
-                  following={currentUser.following.find((id) => id.user === userProfile._id ? true : false)}
+                  following={currentUser.following && currentUser.following.find((id) => id.user === userProfile._id ? true : false)}
                 />
               ) : (
                 <Fragment>
@@ -212,7 +210,7 @@ const ProfilePage = () => {
                         userId={follower.user}
                         avatar={follower.avatar}
                         username={follower.username}
-                        following={currentUser.following.find((id) => id.user === follower.user) ? true : false}
+                        following={currentUser.following && currentUser.following.find((id) => id.user === follower.user) ? true : false}
                       />
                   }
 
@@ -251,13 +249,13 @@ const ProfilePage = () => {
                         userId={following.user}
                         avatar={following.avatar}
                         username={following.username}
-                        following={userProfile.following.find((id) => id.user === following.user) ? true : false}
+                        following={userProfile.following && userProfile.following.find((id) => id.user === following.user) ? true : false}
                       /> :
                       <FollowButton
                         userId={following.user}
                         avatar={following.avatar}
                         username={following.username}
-                        following={currentUser.following.find((id) => id.user === following.user) ? true : false}
+                        following={currentUser.following && currentUser.following.find((id) => id.user === following.user) ? true : false}
                       />
                   }
 

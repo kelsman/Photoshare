@@ -10,6 +10,7 @@
   height: 70px;
   border-bottom: 1px solid $border-color-grey;
   transition: height 300ms ease;
+  display: none;
   
 
   .container {
@@ -39,18 +40,18 @@
   
 }
 
-@media only screen and (max-width: 600px) {
-  .search {
-    display: none !important;
-  }
-  .menu__btn__wrapper{
-    display: none;
-  }
+@media only screen and (min-width: 640px) {
+  // .search {
+  //   display: none !important;
+  // }
+  // .menu__btn__wrapper{
+  //   display: none;
+  // }
  .navigation{
-   height:6vh;
-   display: flex;
-   align-items: center;
-   justify-content: center;
+  //  height:6vh;
+    display:block;
+  //  align-items: center;
+  //  justify-content: center;
   
  }
 

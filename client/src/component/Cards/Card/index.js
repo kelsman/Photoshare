@@ -74,7 +74,7 @@ function Card(props) {
       if (data === "unlike success") {
         setIsLiked(false)
       }
-      // invalidate()
+
     },
 
     onSettled: () => {
@@ -164,8 +164,8 @@ function Card(props) {
         className="cardImage"
         effect="blur"
       />
-      {/* <img className="cardImage" src={image} alt="cardcontent" /> */}
-      {/*  <CardMenu /> */} <ExploreCardMenu hasUserLiked={hasUserLiked} setIsLiked={setIsLiked} isLiked={isLiked} focus={focus} likeFunc={likeFunc} userpost={feed} />
+
+      <ExploreCardMenu hasUserLiked={hasUserLiked} setIsLiked={setIsLiked} isLiked={isLiked} focus={focus} likeFunc={likeFunc} userpost={feed} />
       <div className="likedBy">
         {!feed.likes || feed.likes.length < 1 ? (
           <span className="like-title">

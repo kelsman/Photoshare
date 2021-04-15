@@ -25,13 +25,15 @@ exports.signUp = async (req, res, next) => {
         await authSchema.validateAsync(req.body);
 
         //  upload to cloudinary
-        const upload = await cloudinary.uploader.upload(req.file.path, {
-            folder: "avatars",
-            use_filename: true,
-            allowed_formats: ["jpeg", 'png', 'gif']
-        });
-        if (!upload) {
-            return res.status(401).json({ success: false, msg: "error in saving profile-picture" })
+        if (req.file) {
+            const upload = await cloudinary.uploader.upload(req.file.path, {
+                folder: "avatars",
+                use_filename: true,
+                allowed_formats: ["jpeg", 'png', 'gif']
+            });
+            if (!upload) {
+                return res.status(401).json({ success: false, msg: "error in saving profile-picture" })
+            }
         }
 
         const user = new User({
@@ -39,8 +41,8 @@ exports.signUp = async (req, res, next) => {
             username,
             email,
             password,
-            avatar: upload.secure_url,
-            cloudinary_id: upload.public_id
+            // avatar: upload.secure_url,
+            // cloudinary_id: upload.public_id
         });
         await user.save()
         res.status(201).json({ success: true, msg: "account created successfully" });

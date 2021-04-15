@@ -14,6 +14,7 @@
 
     .profile {
       margin-bottom: 0;
+     
     }
 
     .cardButton {
@@ -28,7 +29,7 @@
   .cardImage {
     width: 100%;
     display: block;
-    object-fit: cover;
+    object-fit: contain;
     height: 500px;
     object-position: center;
   }

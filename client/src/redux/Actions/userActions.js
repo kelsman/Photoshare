@@ -14,7 +14,7 @@ export const signup = (data, history) => {
     try {
       const config = {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'application/json',
         },
       };
       cogoToast.loading('Registering....');

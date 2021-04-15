@@ -1,121 +1,129 @@
 @import '../../../Sass/variables';
-
-.error{
-    color: red;
-    opacity: .7;
-}
-.sign__up__form{  
+.sign_up_form_container{
+    width: 100%;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-     width: fit-content;
-     height: auto;
-     padding: 20px;
-  // color: white;
-      background: $background-white;
-}
-.name-input, .username-input, .email-input, .password-input {
-     height: 48px;
-        width: 300px;
-        border-radius: 10px;
+    justify-content: center;
+
+    .error{
+        color: red;
+        opacity: .7;
+    }
+    .sign__up__form{  
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         align-items: center;
-        justify-content: space-between;
-        outline: 0;
-        background-color: #F2F5FA;
+         width: fit-content;
+         height: auto;
+         padding: 20px;
+      // color: white;
+          background: $background-white;
+    }
+    .name-input, .username-input, .email-input, .password-input {
+         height: 48px;
+            width: 300px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            outline: 0;
+            background-color: #F2F5FA;
+            border: none;
+            padding: 0 10px; 
+           margin: 10px 0px;
+    }
+    input{
         border: none;
-        padding: 0 10px; 
-       margin: 10px 0px;
-}
-
-
-
-input{
-    border: none;
-    outline: none;
-    flex: 1;
-    background: inherit;
-}
-
-// react-icons
-.btn-icon{
-    background: inherit;
-    border: none;
-    outline: none;
-    font-size: 16px;
-    cursor: pointer;
-}
-// small tag
-small{
-    align-self: flex-start;
-    margin: 0 56px;
-}
-// sign up button
-.signup-btn{ 
-    border: 0;
-    outline: 0;
-    cursor: pointer;
-    height: 46px;
-    color: #ffffff;
-    width: 300px;
-    border-radius: 8px;
-    background-image: linear-gradient(90deg, #59A1FF 19.89%, #3D67F2 100%);
-
-}
-p{
-    font-weight: 200;
-}
-a{
-    color: blue;
-    text-decoration: none;
-    font-weight: 300;
-}
-.file-input{
-   
-    width: 100%;
-    padding:10px;
-    margin: 0;
-    height: fit-content;
-    position: relative;
-
-    .span__upload{
-        position: absolute;
-        margin-left: auto;
-    margin-right: auto;
-    left: 0;
-    right: 0;
-    margin-top: auto;
-    text-align: center;
-    z-index: 10;
+        outline: none;
+        flex: 1;
+        background: inherit;
     }
-    
-}
-.avatar-label{
-    
-    height: 100px;
-    border: 1px solid black;
-    
-    align-items: center;
-  
-    
-
-}
-.existing_user_link{
-    border: 1px solid $border-color-grey;
-    background:$background-white;
-    margin: 10px 0px;
-    padding: 15px 0px;
-    text-align: center;
-
-    span{
-        font-size: smaller;
-        font-weight: 100;
-    }
-    .sign-in-link{
+    // react-icons
+    .btn-icon{
+        background: inherit;
+        border: none;
+        outline: none;
         font-size: 16px;
+        cursor: pointer;
+    }
+    // small tag
+    small{
+        align-self: flex-start;
+        margin: 0 56px;
+    }
+    // sign up button
+    .signup-btn{ 
+        border: 0;
+        outline: 0;
+        cursor: pointer;
+        height: 46px;
+        color: #ffffff;
+        width: 300px;
+        border-radius: 8px;
+        background-image: linear-gradient(90deg, #59A1FF 19.89%, #3D67F2 100%);
+    
+    }
+    p{
+        font-weight: 200;
     }
     a{
-        color: $link-color;
-    } 
+        color: blue;
+        text-decoration: none;
+        font-weight: 300;
+    }
+    .file-input{
+       
+        width: 100%;
+        padding:10px;
+        margin: 0;
+        height: fit-content;
+        position: relative;
+    
+        .span__upload{
+            position: absolute;
+            margin-left: auto;
+        margin-right: auto;
+        left: 0;
+        right: 0;
+        margin-top: auto;
+        text-align: center;
+        z-index: 10;
+        }
+        
+    }
+    .avatar-label{
+        
+        height: 100px;
+        border: 1px solid black;
+        
+        align-items: center;
+      
+        
+    
+    }
+    .existing_user_link{
+        border: 1px solid $border-color-grey;
+        background:$background-white;
+        margin: 10px 0px;
+        padding: 20px;
+        text-align: center;
+    
+        span{
+            font-size: smaller;
+            font-weight: 100;
+        }
+        .sign-in-link{
+            font-size: 16px;
+        }
+        a{
+            color: $link-color;
+        } 
+    }
 }
+
+
+
+

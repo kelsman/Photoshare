@@ -7,6 +7,7 @@ import Avatar from '../../assets/default-avatar.png';
 import * as Routes from '../routes';
 import Loader from '../Loader';
 import { BiHide, BiShowAlt } from 'react-icons/bi';
+import MobileHeader from '../NavigationHeader/MobileHeader';
 
 function ChangePasswordForm() {
   const user = useSelector(({ user }) => user.currentUser);
@@ -30,6 +31,9 @@ function ChangePasswordForm() {
   return (
 
     <div className="change__password__form__container">
+      <MobileHeader backArrow>
+        <h5 style={{ textAlign: "center" }}> Change Password</h5>
+      </MobileHeader>
       <form action="" onSubmit={handleSubmit} className="newPassword__form">
         <div className="profile__header">
           <img src={user ? user.avatar : Avatar} alt="" />

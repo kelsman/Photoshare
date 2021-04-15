@@ -7,7 +7,7 @@ import Loader from '../Loader';
 import { changeAvatar, editProfile } from '../../api/profile.api';
 import { useMutation, useQueryClient } from 'react-query'
 import LoaderSpinner from '../LoaderSpinner';
-
+import MobileHeader from '../NavigationHeader/MobileHeader'
 function EditProFileForm() {
 
     const user = useSelector(({ user }) => user.currentUser);
@@ -60,7 +60,9 @@ function EditProFileForm() {
 
     return (
         <div className="Edit__profile__form__wrapper">
-
+            <MobileHeader backArrow>
+                <h5 style={{ textAlign: "center" }}> Edit Profile</h5>
+            </MobileHeader>
             <form action="" className="Edit_profile_form" onSubmit={(e) => { e.preventDefault(); handleFormSubmit() }}>
                 <div className="profile__header">
                     <div className="avatar__container">

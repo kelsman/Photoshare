@@ -15,35 +15,34 @@ import { ReactComponent as LoaderSpinner } from '../../../assets/loader.svg';
 
 
 
+const validationSchema = Yup.object().shape({
+  name: Yup.string().required('fullname is required'),
+  username: Yup.string().required('username is required'),
+  email: Yup.string().email('please enter a valid email address').required(),
+  password: Yup.string().required('password is required'),
+});
 
 
 function SignUpForm({ history, signup }) {
 
-  const validationSchema = Yup.object().shape({
-    name: Yup.string().required('fullname is required'),
-    username: Yup.string().required('username is required'),
-    email: Yup.string().email('please enter a valid email address').required(),
-    password: Yup.string().required('required'),
-  });
 
   const [showPassword, setShowPassword] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleShowToggle = () => {
     setShowPassword((prev) => !prev);
   };
 
   const handleFormSubmit = async (values) => {
+
     try {
       setIsSubmitting(true)
-      const data = await new FormData();
-      await data.append('name', values.name);
-      await data.append('username', values.username);
-      await data.append('email', values.email);
-      await data.append('password', values.password);
-      data.append('avatar', values.avatar);
-      console.log(values.avatar.path)
-      await signup(data, history);
+      // const data = await new FormData();
+      // await data.append('name', values.name);
+      // await data.append('username', values.username);
+      // await data.append('email', values.email);
+      // await data.append('password', values.password);
+      await signup(values, history);
       setIsSubmitting(false)
     } catch (error) {
       throw new Error(error.message)
@@ -55,7 +54,6 @@ function SignUpForm({ history, signup }) {
       username: '',
       email: '',
       password: '',
-      avatar: null,
     },
     validationSchema,
     onSubmit: handleFormSubmit,
@@ -63,8 +61,8 @@ function SignUpForm({ history, signup }) {
 
   const { values, errors, handleChange, handleSubmit, setFieldValue } = formik;
   return (
-    <div className="">
-      <form className="sign__up__form" encType="multipart/form-data" onSubmit={handleSubmit}>
+    <div className="sign_up_form_container">
+      <form className="sign__up__form" onSubmit={handleSubmit}>
         <h2>Sign up</h2>
         <div className="name-input">
           <input
@@ -116,7 +114,7 @@ function SignUpForm({ history, signup }) {
           )}
         </div>
         {errors.password && <small className="error">{errors.password}</small>}
-        <div className="file-input">
+        {/*  <div className="file-input">
           <label htmlFor="avatar" className="avatar-label">
 
             <span>select Avatar <Icons.Image /></span>
@@ -131,7 +129,7 @@ function SignUpForm({ history, signup }) {
           />
           <span></span>
 
-        </div>
+        </div> */}
         {errors.file && <small className="error">{errors.file}</small>}
         <button
           type="submit"

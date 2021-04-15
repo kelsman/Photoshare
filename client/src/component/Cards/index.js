@@ -13,18 +13,20 @@ const Cards = ({ isFetching }) => {
 
   const queryClient = useQueryClient();
   const posts = queryClient.getQueryData('fetchfeeds')
-
+  const currentUser = useSelector(({ user }) => user.currentUser)
 
   return (
     <div className="cards">
       {/* stories components for later */}
-      { posts && posts.length < 1 && (
-        <div style={{ marginTop: '10vh' }}>
-          {' '}
-          <h3> Welcome to Photogram</h3>
-          <p> When you follow somebody you can see their posts here</p>{' '}
-        </div>
-      )}
+      {
+
+        !posts && !currentUser.following || currentUser.following && currentUser.following.length === 0 && (
+          <div style={{ marginTop: '10vh', padding: "10px" }}>
+            {' '}
+            <h3 > Welcome to Photogram</h3>
+            <p> When you follow somebody you can see their posts here</p>{' '}
+          </div>
+        )}
 
       {posts && posts.length > 0 &&
 
