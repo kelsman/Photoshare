@@ -17,12 +17,12 @@ const ModalComponent = ({ children, open, hide, setModal }) => {
             classNames={{
                 overlay: 'customOverlay',
                 modal: 'customModal',
-                overlayAnimationIn: 'customEnterOverlayAnimation',
-                overlayAnimationOut: 'customLeaveOverlayAnimation',
-                modalAnimationIn: 'customEnterModalAnimation',
-                modalAnimationOut: 'customLeaveModalAnimation',
+                // overlayAnimationIn: 'customEnterOverlayAnimation',
+                // overlayAnimationOut: 'customLeaveOverlayAnimation',
+                // modalAnimationIn: 'customEnterModalAnimation',
+                // modalAnimationOut: 'customLeaveModalAnimation',
             }}
-            animationDuration={600}
+
         >
             {children}
         </Modal>
