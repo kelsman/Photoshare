@@ -110,7 +110,7 @@ const ProfilePage = () => {
               </small>
               <small onClick={() => setShowFollowersModal(true)}>
                 {userProfile.followers && userProfile.followers.length ? userProfile.followers.length : 0}{' '}
-                followers
+                {userProfile.followers && userProfile.followers.length < 2 ? "follower" : "followers"}
               </small>
               <small onClick={() => setShowFollowingModal(true)}>
                 {' '}

@@ -18,6 +18,8 @@ import { getSuggestedUsers } from '../../api/suggestedusers.api';
 import SuggestionCard from '../../component/SuggestionsFollow/suggestionCard';
 import { loadUser } from '../../api/auth.api';
 import MobileHeader from '../../component/NavigationHeader/MobileHeader';
+import MobileTabMenu from '../../component/MobileTabMenu';
+
 import LogoText from '../../component/NavigationHeader/MobileHeader';
 const token = localStorage.getItem('authToken');
 
@@ -38,7 +40,7 @@ const HomeScreen = ({ currentUser, isAuthenticated }) => {
   }
 
 
-  if (isLoading && fetchingSuggestedUsers) {
+  if (isLoading && fetchingSuggestedUsers && !currentUser) {
     return <Loader />;
   }
 

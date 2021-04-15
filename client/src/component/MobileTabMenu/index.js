@@ -14,7 +14,6 @@ import NewPostButton from '../NewPost/NewPostButton'
 
 const MobileTabMenu = ({ user }) => {
   const history = useHistory();
-  // console.log(history);
   const { location } = history;
   return (
     <nav className="mobile__nav">
