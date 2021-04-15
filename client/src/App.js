@@ -53,16 +53,16 @@ function App({ loaduser, connectSocketIo, currentUser }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-
     // check for token in localStoagre
-
     if (localStorage.authToken) {
       loaduser();
     }
 
     return () => null;
   }, [])
-
+  if (!currentUser && localStorage.authToken) {
+    return <LoadingPage />
+  }
   return (
     <ErrorBoundary>
       <Suspense fallback={<LoadingPage />}>
@@ -81,7 +81,6 @@ function App({ loaduser, connectSocketIo, currentUser }) {
             <Route path={Routes.SettingsPage} component={EditProfilePage} />
             <Route component={ErrorPage} />
           </Switch>
-
 
           {
             pathname !== Routes.SignUp &&

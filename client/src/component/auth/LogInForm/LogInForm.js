@@ -24,7 +24,7 @@ const validationSchema = Yup.object().shape({
   password: Yup.string().required(`password can't be empty`),
 });
 
-const LogInForm = ({ signin, isAuthenticated }) => {
+const LogInForm = ({ signin, isAuthenticated, currentUser }) => {
   const history = useHistory();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -35,6 +35,7 @@ const LogInForm = ({ signin, isAuthenticated }) => {
       setIsSubmitting(false);
       values.email = '';
       values.password = '';
+
 
     } catch (error) {
       console.log(error.message);
@@ -49,16 +50,14 @@ const LogInForm = ({ signin, isAuthenticated }) => {
     onSubmit: handleFormSubmit,
   });
 
-  useEffect(() => {
-    return () => null
-  })
+  //  Redirect if Logged in 
+  if (isAuthenticated && currentUser) {
+    // return <Redirect to={Routes.Dashboard} />
+    window.location.href = Routes.Dashboard
+  }
 
   const { values, errors, handleChange, handleSubmit } = formik;
 
-  //  Redirect if Logged in 
-  if (isAuthenticated) {
-    return <Redirect to={Routes.Dashboard} />
-  }
   return (
     <div>
       {/* <h1 className="logo">Photogram</h1> */}
@@ -135,7 +134,8 @@ const LogInForm = ({ signin, isAuthenticated }) => {
 const mapStateToProps = ({ user }) => {
   return {
     loadUserErrorr: user.authError.loadUserError,
-    isAuthenticated: user.isAuthenticated
+    isAuthenticated: user.isAuthenticated,
+    currentUser: user.currentUser
   };
 };
 

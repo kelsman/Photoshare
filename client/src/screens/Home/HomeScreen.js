@@ -50,7 +50,7 @@ const HomeScreen = ({ currentUser, isAuthenticated }) => {
         <h3></h3>
         <h2 style={{ textAlign: "center" }} className="logo" onClick={() => history.push(Routes.Dashboard)}> Photogram</h2>
       </MobileHeader>
-      <NavigationHeader />
+      {/*  <NavigationHeader /> */}
       {/* main */}
       <main className="main">
         {
@@ -69,7 +69,7 @@ const HomeScreen = ({ currentUser, isAuthenticated }) => {
           <SideBar />
         </div>
       </main>
-      <MobileTabMenu />
+      {/* <MobileTabMenu /> */}
     </div>
   );
 }
