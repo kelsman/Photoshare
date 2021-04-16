@@ -8,6 +8,8 @@ import * as Routes from '../routes';
 import Loader from '../Loader';
 import { BiHide, BiShowAlt } from 'react-icons/bi';
 import MobileHeader from '../NavigationHeader/MobileHeader';
+import { changePassword } from '../../api/profile.api';
+
 
 function ChangePasswordForm() {
   const user = useSelector(({ user }) => user.currentUser);
@@ -21,11 +23,21 @@ function ChangePasswordForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      if (newPassword !== confirmNewPassword) {
+        return cogoToast.info('password do not match')
+      }
       setIsLoading(true)
-      await cogoToast.info('button has been clicked')
+      await changePassword({ oldPassword, newPassword, confirmNewPassword })
+      setOldPassword('')
+      setNewPassword('');
+      setConfirmNewPassword('')
       setIsLoading(false)
     } catch (error) {
-      console.log(error);
+
+      console.log(error.msg);
+      setOldPassword('')
+      setNewPassword('');
+      setConfirmNewPassword('')
     }
   };
   return (
@@ -34,7 +46,7 @@ function ChangePasswordForm() {
       <MobileHeader backArrow>
         <h5 style={{ textAlign: "center" }}> Change Password</h5>
       </MobileHeader>
-      <form action="" onSubmit={handleSubmit} className="newPassword__form">
+      <form action="" method="put" onSubmit={handleSubmit} className="newPassword__form">
         <div className="profile__header">
           <img src={user ? user.avatar : Avatar} alt="" />
           <div className="profile__avatar__wrapper">
@@ -83,7 +95,7 @@ function ChangePasswordForm() {
         </div>
         <div className="group__wrapper">
           <label></label>
-          <button type="submit" id="submit__btn" style={{ height: "2rem" }}>
+          <button type="submit" id="submit__btn" style={{ height: "2rem", position: "relative" }}>
             Change password
           {isLoading && <Loader />}
           </button>

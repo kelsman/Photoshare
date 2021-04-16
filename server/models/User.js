@@ -17,6 +17,10 @@ const userSchema = new mongoose.Schema({
         minlength: 3,
         unique: true,
     },
+    bio: {
+        type: String
+
+    },
     email: {
         type: String,
         required: [true, "please provide an email "],
@@ -35,7 +39,6 @@ const userSchema = new mongoose.Schema({
         type: String,
     },
     cloudinary_id: String,
-
     resetPasswordToken: String,
     resetPasswordExpire: Date,
     DateCreated: {
@@ -50,14 +53,32 @@ userSchema.pre('save', async function (next) {
     try {
 
         // hash password before saving to database
-        const salt = await bcrypt.genSalt(10);
-        this.password = await bcrypt.hash(this.password, salt);
+        if (this.isModified('password')) {
+            const salt = await bcrypt.genSalt(10);
+            this.password = await bcrypt.hash(this.password, salt);
+        }
     } catch (error) {
         console.log(error)
         next()
     }
 
 });
+userSchema.pre('save', async function () {
+    if (this.isNew) {
+        try {
+            const document = await User.findOne({ email: this.email });
+            if (document) {
+                throw new Error('user alredy exists')
+            }
+            await mongoose.model('Followers').create({ _user: this._id })
+            await mongoose.model('Following').create({ _user: this._id })
+
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+})
 
 userSchema.methods.matchPasswords = async function (password) {
     return await bcrypt.compare(password, this.password);

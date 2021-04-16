@@ -44,26 +44,14 @@ const CommentList = ({
 
     onSuccess: (data) => {
 
-      if (queryClient.getQueryData(['fetchsinglePost', `${userpost._id}`])) {
-        queryClient.invalidateQueries(['fetchsinglePost', `${userpost._id}`]);
 
-      }
+      queryClient.invalidateQueries(['fetchsinglePost', `${userpost._id}`]);
+      queryClient.invalidateQueries('fetchfeeds')
 
-      // if (queryClient.getQueryData('fetchfeeds')) {
-      //   queryClient.setQueryData('fetchsinglePost', prev => {
-      //     return {
-      //       ...prev,
-      //       comments: [...prev.comments]
-      //     }
-      //   })
-      // }
-      // queryClient.invalidateQueries('fetchfeeds');
 
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries('fetchfeeds');
-      queryClient.invalidateQueries('fetchsinglePost');
+
     }
+
   })
 
   const deleteCommentFunc = async () => {
@@ -74,12 +62,14 @@ const CommentList = ({
       <div className="commentContainer">
         {commentImage && (
           <div className="profile-icon">
-            <img
+            {/*   <img
+              style={{ cursor: "pointer" }}
               src={commentImage ? commentImage : require('../../assets/default-avatar.png')}
               alt="image"
               aria-label="poster-iamge"
-              onClick={() => history.push(Routes.ProfilePage + `/${accountName}`)}
-            />
+            // onClick={() => history.push(Routes.ProfilePage + `/${accountName}`)}
+            /> */}
+            <ProfileIcon image={commentImage} authorUsername={accountName} iconSize={"small"} />
           </div>
         )}
         <div className="accountName">{accountName}</div>

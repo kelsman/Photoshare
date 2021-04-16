@@ -67,3 +67,55 @@ export const editProfile = async (info) => {
         console.log(error)
     }
 }
+
+export const forgetPassword = async (data) => {
+    const config = {
+        header: {
+            "Content-Type": "application/json"
+        }
+    }
+    try {
+        const res = await axios.post(`${baseUrl}/api/route/user/forgetpassword`, data, config)
+        cogoToast.success('Email Sent')
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+export const resetPassword = async (resetToken, data) => {
+    const config = {
+        header: {
+            "Content-Type": "application/json"
+        }
+    }
+    try {
+        const res = await axios.put(`${baseUrl}/api/route/user/resetpassword/${resetToken}`, data, config)
+        if (res) {
+            cogoToast.success(`${res.data.msg}`)
+
+        }
+    } catch (error) {
+        if (error.response) {
+            cogoToast.error(`${error.response.data.msg}`)
+        }
+        console.log(error)
+    }
+
+}
+
+export const changePassword = async (data) => {
+    const config = {
+        header: {
+            "Content-Type": "application/json"
+        }
+    }
+    try {
+        const res = await axios.put(`${baseUrl}/api/route/profile/changePassword/`, data, config)
+        cogoToast.success(`${res.data.msg}`)
+    } catch (error) {
+        if (error.response) {
+            cogoToast.error(`${error.response.data.msg}`)
+        }
+        console.log(error)
+    }
+}

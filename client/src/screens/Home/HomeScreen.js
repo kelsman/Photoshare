@@ -4,12 +4,10 @@ import './style.scss';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { loaduser } from '../../redux/Actions/userActions';
-import { useQuery, useQueryClient, useQueries } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import * as Routes from '../../component/routes'
 
 // import Header from '../../component/Header';
-import Menu from '../../component/MenuButtons';
-import NavigationHeader from '../../component/NavigationHeader';
 import SideBar from '../../component/SideBar';
 import Cards from '../../component/Cards';
 import Loader from '../../component/Loader';
@@ -18,16 +16,14 @@ import { getSuggestedUsers } from '../../api/suggestedusers.api';
 import SuggestionCard from '../../component/SuggestionsFollow/suggestionCard';
 import { loadUser } from '../../api/auth.api';
 import MobileHeader from '../../component/NavigationHeader/MobileHeader';
-import MobileTabMenu from '../../component/MobileTabMenu';
 
-import LogoText from '../../component/NavigationHeader/MobileHeader';
+
 const token = localStorage.getItem('authToken');
 
 const HomeScreen = ({ currentUser, isAuthenticated }) => {
 
   const history = useHistory();
   const queryClient = useQueryClient()
-  const [isLoadingUser, setIsLoadingUser] = useState(false)
   const { data, isLoading, isError, isSuccess, isFetching } = useQuery(['fetchfeeds'], () => retrieveFeedPosts(history), {
     staleTime: 60 * 2000,
   });

@@ -20,7 +20,7 @@ import * as Routes from '../../routes';
 import { useHistory } from 'react-router-dom';
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string().email().required('please provide a valid email'),
+  usernameoremail: Yup.string().required('please provide a valid email or username'),
   password: Yup.string().required(`password can't be empty`),
 });
 
@@ -33,7 +33,7 @@ const LogInForm = ({ signin, isAuthenticated, currentUser }) => {
       setIsSubmitting(true);
       await signin(values);
       setIsSubmitting(false);
-      values.email = '';
+      values.usernameoremail = '';
       values.password = '';
 
 
@@ -43,7 +43,7 @@ const LogInForm = ({ signin, isAuthenticated, currentUser }) => {
   };
   const formik = useFormik({
     initialValues: {
-      email: '',
+      usernameoremail: '',
       password: '',
     },
     validationSchema,
@@ -71,20 +71,20 @@ const LogInForm = ({ signin, isAuthenticated, currentUser }) => {
             <input
               className="email-input"
               id="email"
-              type="email"
-              name="email"
-              value={formik.values.email}
+              type="text"
+              name="usernameoremail"
+              value={formik.values.usernameoremail}
               onChange={handleChange}
               required
               autoComplete="off"
-              placeholder="email"
+              placeholder="username or email"
             />
 
           </div>
-          {errors.email && (
+          {errors.usernameoremail && (
             <small className="error" style={{ color: 'red', opacity: 0.7 }}>
               {' '}
-              {errors.email}
+              {errors.usernameoremail}
             </small>
           )}
         </div>
@@ -110,7 +110,7 @@ const LogInForm = ({ signin, isAuthenticated, currentUser }) => {
             </small>
           )}
         </div>
-        <Link className="password-reset-link" to="/accounts/password/reset">
+        <Link className="password-reset-link" to={Routes.ForgotPassword}>
           Forgot your password?{''}
         </Link>
 

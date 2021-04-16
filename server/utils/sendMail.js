@@ -1,17 +1,18 @@
 const nodemailer = require('nodemailer');
-
+const sibTransport = require('nodemailer-sendinblue-transport');
 
 
 const sendEmail = (options) => {
 
     const transporter = nodemailer.createTransport({
-        service: process.env.EMAIL_SERVICE,
+        host: process.env.EMAIL_SERVICE,
+        Port: 587,
+        secure: true,
         auth: {
             user: process.env.EMAIL,
             pass: process.env.EMAIL_PASSWORD
         }
-
-    });
+    })
 
     const mailOptions = {
         from: "photoshare@example.com",
@@ -22,7 +23,7 @@ const sendEmail = (options) => {
     }
     transporter.sendMail(mailOptions, (err, info) => {
         if (err) {
-            console.log(err.message);
+            return console.log(err.message);
         }
         console.log(info)
     })

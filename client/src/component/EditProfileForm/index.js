@@ -5,9 +5,11 @@ import cogoToast from 'cogo-toast';
 import Avatar from '../../assets/default-avatar.png';
 import Loader from '../Loader';
 import { changeAvatar, editProfile } from '../../api/profile.api';
-import { useMutation, useQueryClient } from 'react-query'
-import LoaderSpinner from '../LoaderSpinner';
-import MobileHeader from '../NavigationHeader/MobileHeader'
+import { useMutation, useQueryClient } from 'react-query';
+import { loaduser } from '../../redux/Actions/userActions'
+import MobileHeader from '../NavigationHeader/MobileHeader';
+import { useDispatch } from 'react-redux';
+
 function EditProFileForm() {
 
     const user = useSelector(({ user }) => user.currentUser);
@@ -18,7 +20,8 @@ function EditProFileForm() {
     const [profileImg, setProfileImg] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
 
-    const queryClient = useQueryClient()
+    const queryClient = useQueryClient();
+    const dispatch = useDispatch()
     useEffect(() => {
         document.title = 'Edit Profile • Photoshare';
     }, []);
@@ -47,16 +50,23 @@ function EditProFileForm() {
         try {
             await setProfileImg(event.target.files[0]);
             if (profileImg) {
-                const data = new FormData;
-                await data.append('avatar', profileImg)
-                await mutateAsync(data)
+
+                console.log(profileImg)
+
+
             }
 
         } catch (error) {
             console.log(error)
         }
     }
-
+    if (profileImg)
+        (async function () {
+            const data = new FormData;
+            await data.append('avatar', profileImg)
+            await mutateAsync(data)
+            dispatch(loaduser());
+        }());
 
     return (
         <div className="Edit__profile__form__wrapper">
@@ -66,7 +76,7 @@ function EditProFileForm() {
             <form action="" className="Edit_profile_form" onSubmit={(e) => { e.preventDefault(); handleFormSubmit() }}>
                 <div className="profile__header">
                     <div className="avatar__container">
-                        <img src={user ? user.avatar : Avatar} alt="avatar" />
+                        <img src={user.avatar ? user.avatar : Avatar} alt="avatar" />
                         {changingAvatar && <Loader />}
                     </div>
                     <div className="profile__avatar__wrapper">

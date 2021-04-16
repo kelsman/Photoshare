@@ -33,7 +33,8 @@ const NewPostPage = lazy(() => import('./screens/NewPost'));
 const EditProfilePage = lazy(() => import('./screens/SettingsScreen'));
 const PostPage = lazy(() => import('./screens/PostPage'));
 const ProfilePage = lazy(() => import('./screens/ProfilePage'));
-
+const ForgotPasswordPage = lazy(() => import('./screens/ForgetPassword'));
+const ResetPasswordPage = lazy(() => import('./screens/ResetPassword'))
 // lazy load component
 
 
@@ -69,7 +70,9 @@ function App({ loaduser, connectSocketIo, currentUser }) {
         <div className="App">
           {pathname !== Routes.Login &&
             pathname !== Routes.SignUp &&
-            <NavigationHeader />}
+            pathname !== "/passwordreset/:resetToken" &&
+            pathname !== Routes.ForgotPassword &&
+            < NavigationHeader />}
           <Switch>
             <Route exact path={Routes.Login} render={() => <LogInScreen />} />
             <Route exact path={Routes.SignUp} render={() => <SignUpScreen />} />
@@ -79,11 +82,14 @@ function App({ loaduser, connectSocketIo, currentUser }) {
             <Route exact path={`${Routes.PostPage}/:postId`} component={PostPage} />
             <Route exact path={`${Routes.ProfilePage}/:username`} component={ProfilePage} />
             <Route path={Routes.SettingsPage} component={EditProfilePage} />
+            <Route exact path="/passwordreset/:resetToken" component={ResetPasswordPage} />
+            <Route exact path={Routes.ForgotPassword} component={ForgotPasswordPage} />
             <Route component={ErrorPage} />
           </Switch>
 
           {
             pathname !== Routes.SignUp &&
+            pathname !== "/passwordreset/:resetToken" &&
             pathname !== Routes.Login &&
             currentUser &&
             <MobileTabMenu />}

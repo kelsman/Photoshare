@@ -137,7 +137,7 @@ const ProfilePage = () => {
 
         <InfiniteScroll
           dataLength={userProfile.posts.length}
-          next={(() => queryClient.refetchQueries(['profile', `${username}`]))}
+          // next={(() => queryClient.refetchQueries(['profile', `${username}`]))}
           // hasMore={true}
           className="posts__gallery"
           loader={

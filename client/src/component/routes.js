@@ -8,3 +8,4 @@ export const PostPage = `/post`; // + /postId
 export const ProfilePage = `/profile`;
 export const NewPostPage = `/new`;
 export const SettingsPage = '/settings/edit';
+export const ForgotPassword = "/forgotpassword";

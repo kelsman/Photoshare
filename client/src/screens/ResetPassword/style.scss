@@ -1,0 +1,48 @@
+.main__div{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    form{
+
+        // height: 300px;
+        height: 300px;
+        min-width:  300px;
+   
+        max-width: 400px;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         flex-direction: column;
+        
+
+     h5{
+         text-align: center;
+         font-weight: 300;
+        width: 400px;
+     }
+     input{
+         width: 200px;
+         height: 30px;
+         padding: 0px 10px;
+         margin: 10px 0px;
+     }
+
+     button{
+         width: 200px;
+         height: 30px;
+         background-color: blue;
+         color: white;
+         border: 0;
+         border-radius: 3px;
+         margin: 15px 0px;
+         &:focus{
+             outline: 0
+         }
+     }
+    }
+
+}

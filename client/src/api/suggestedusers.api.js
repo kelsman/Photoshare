@@ -12,8 +12,9 @@ export const getSuggestedUsers = async () => {
     }
     try {
         const res = await axios.get(`${baseUrl}/api/route/user/suggestedUsers`);
-        return res.data
+        if (res)
+            return res.data
     } catch (error) {
-        console.log(error)
+        console.log(error.message)
     }
 }

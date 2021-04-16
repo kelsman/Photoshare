@@ -423,7 +423,7 @@ exports.retrieveFeedPosts = async (req, res, next) => {
                     $or: [{ postedBy: { $in: following } }, { postedBy: ObjectId(req.user.id) }]
                 }
             },
-            { $sort: { date: -1 } },
+
             {
                 $lookup: {
                     from: 'users',
@@ -469,6 +469,7 @@ exports.retrieveFeedPosts = async (req, res, next) => {
 
                 }
             },
+            { $sort: { date: -1 } },
 
             { $unset: [...unwantedFields] }
         ])

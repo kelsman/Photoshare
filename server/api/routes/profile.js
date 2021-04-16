@@ -8,5 +8,5 @@ const router = express.Router();
 // change avatar route 
 router.put('/change-avatar', [authMiddleWare, upload.single('avatar')], profileController.changeAvatar)
 router.put('/edit-profile', authMiddleWare, profileController.editProfile);
-
+router.put('/changePassword', authMiddleWare, profileController.changePassword);
 module.exports = router;

@@ -1,13 +1,14 @@
 const User = require('../models/User');
 const PostLikes = require('../models/Likepost');
-
+const bcrypt = require('bcryptjs');
 const { cloudinary } = require('../utils/cloudinary');
 
 // const Post = require('../models/Post')
 // const Notification = require('../models/Notification');
 // const Following = require('../models/Following');
 // const PostComments = require('../models/Comment');
-const ObjectId = require('mongoose').Types.ObjectId
+const ObjectId = require('mongoose').Types.ObjectId;
+const { id } = require('../validation');
 
 
 exports.getUserProfile = async (req, res, next) => {
@@ -85,6 +86,10 @@ exports.changeAvatar = async (req, res, next) => {
     const file = req.file.path
     //  make sure logged in user is the one uploading
     try {
+        if (!req.file) {
+            res.status(400)
+                .send({ msg: 'Please provide the image to upload.' });
+        }
         if (file) {
             console.log(req.file)
             const user = await User.findOne({ _id: req.user.id });
@@ -129,23 +134,32 @@ exports.editProfile = async (req, res, next) => {
     try {
         //  get the user
         const user = await User.findById(req.user.id);
-        if (!user) res.status(400).json({ msg: "unauthorised user" });
-        switch ({ name, email, bio, username }) {
-            case name:
+        console.log(user)
+        if (name) {
+            if (name !== user.name) {
                 user.name = name
-                break;
-            case email:
-                user.email = email
-                break;
-            case username:
+
+            }
+        }
+        if (username) {
+            if (username !== user.username) {
+                const existingUser = await User.findOne({ username: username });
+                if (existingUser) return res.status(400).json({ msg: 'username is taken' });
                 user.username = username
-                break;
-            default:
-                null;
-                break;
+            }
+        }
+        if (bio) {
+            user.bio = bio
+        }
+        if (email) {
+            if (email !== user.email) {
+                const existingUser = await User.findOne({ email });
+                if (existingUser) return res.status(400).json({ msg: 'email is taken' });
+                user.email = email
+            }
         }
         await user.save();
-        res.json({ msg: "updated" })
+        res.json({ msg: "Profile updated" })
 
     } catch (error) {
         console.log(error.message)
@@ -154,3 +168,27 @@ exports.editProfile = async (req, res, next) => {
     }
 
 }
+
+exports.changePassword = async (req, res, next) => {
+    const { oldPassword, newPassword } = req.body;
+    let currentPassword = undefined;
+
+    try {
+        const userDocument = await User.findById(req.user.id);
+        currentPassword = userDocument.password;
+
+        const result = await bcrypt.compare(oldPassword, currentPassword);
+        if (!result) {
+            return res.status('401').send({
+                msg: 'Your old password was entered incorrectly, please try again.',
+            });
+        }
+
+        userDocument.password = newPassword;
+        await userDocument.save();
+        return res.send({ msg: 'password updated succesfully' });
+    } catch (err) {
+        console.log(err)
+        return next(err);
+    }
+};

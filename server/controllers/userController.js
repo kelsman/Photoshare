@@ -59,10 +59,10 @@ exports.signUp = async (req, res, next) => {
 // @sign in a user
 
 exports.signIn = async (req, res, next) => {
-    const { email, password } = req.body;
+    const { usernameoremail, password } = req.body;
     try {
         //check if user exists 
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ $or: [{ email: usernameoremail }, { username: usernameoremail }] });
         if (!user) {
             return res.status(404).json({ success: false, msg: 'invalid credentials' })
         };
@@ -70,7 +70,7 @@ exports.signIn = async (req, res, next) => {
         // check if password matches 
         const isMatch = await user.matchPasswords(password);
         if (!isMatch) {
-            return res.status(404).json({ success: false, msg: "Invalid Credentials" });
+            return res.status(404).json({ success: false, msg: "invalid credentials" });
         };
         // create a jwt token 
         const jwtToken = await user.generateToken();
@@ -149,22 +149,21 @@ exports.forgetPassword = async (req, res, next) => {
     try {
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(404).json({ success: false, response: "no account found with this email" })
+            return res.status(404).json({ success: false, msg: "no account found with this email" })
         };
         // set up url that will include the resetpassword token;
         const resetToken = user.getPasswordResetToken();
 
         await user.save();
-
-        const resetUrl = `http://localhost:9000/${resetToken}`
+        const client_url = process.env.CLIENT_URL
+        const resetUrl = `${client_url}/passwordreset/${resetToken}`
         const message = `
         <h1> You have requested a password reset </h1>
         <p> please click on the link below </p>
-        <a href= ${resetUrl}> ${resetUrl}</a>
+        <a href= ${resetUrl} clicktracking=off > ${resetUrl}</a>
         `
 
         await sendEmail({
-
             to: email,
             subject: 'password reset',
             text: message
@@ -184,7 +183,6 @@ exports.resetPassword = async (req, res, next) => {
     // compare token from the url 
     const resetPasswordToken = crypto.createHash("sha256").update(req.params.resetToken).digest("hex");
 
-
     try {
         const user = await User.findOne({
             resetPasswordToken,
@@ -192,7 +190,7 @@ exports.resetPassword = async (req, res, next) => {
 
         });
         if (!user) {
-            return res.status(400).json({ success: false, error: "invalid Token" });
+            return res.status(400).json({ success: false, msg: "invalid reset token " });
         };
         user.password = req.body.newPassword;
         user.resetPasswordToken = undefined;
@@ -352,8 +350,9 @@ exports.getSuggestedUsers = async (req, res, next) => {
         "DateCreated",
 
     ]
-    try {
 
+    try {
+        const user = await User.findById(req.user.id)
         const users = await User.aggregate([
             {
                 $match: {
@@ -378,20 +377,25 @@ exports.getSuggestedUsers = async (req, res, next) => {
                     avatar: true,
                     name: true,
                     username: true,
-                    // isFollowing: { $in: [ObjectId(req.user.id), '$followers._followers.user'] }
+                    isFollowing: { $in: [req.user.id, '$followers._followers.user'] },
+
                 }
             },
+            {
+                $match: { isFollowing: false },
+            },
+
             { $sample: { size: 6 } },
-            // { $match: { isFollowing: false } },
 
             { $unset: [...unwantedFields] }
 
         ]);
         if (!users) {
             return res.status(400).json({ msg: "users not found" })
-        }
-
+        };
         return res.json({ users })
+
+
     } catch (error) {
         console.log(error)
         return res.status(500).json({ msg: 'server error' });
