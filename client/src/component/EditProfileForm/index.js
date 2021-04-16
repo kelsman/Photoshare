@@ -49,24 +49,17 @@ function EditProFileForm() {
     const handleAvatarChange = async (event) => {
         try {
             await setProfileImg(event.target.files[0]);
-            if (profileImg) {
-
-                console.log(profileImg)
-
-
+            if (profileImg !== null) {
+                const data = new FormData;
+                await data.append('avatar', profileImg)
+                await mutateAsync(data)
+                setProfileImg(null)
             }
 
         } catch (error) {
             console.log(error)
         }
     }
-    if (profileImg)
-        (async function () {
-            const data = new FormData;
-            await data.append('avatar', profileImg)
-            await mutateAsync(data)
-            dispatch(loaduser());
-        }());
 
     return (
         <div className="Edit__profile__form__wrapper">
