@@ -30,7 +30,6 @@ import copy from 'copy-to-clipboard'
 
 function Card(props) {
   const [commentText, setCommentText] = useState('');
-  const [isLiked, setIsLiked] = React.useState(undefined);
   const [showModal, setShowModal] = useState(false);
 
   const closeModal = () => {
@@ -56,6 +55,8 @@ function Card(props) {
     invalidate
   } = props;
 
+  const [isLiked, setIsLiked] = React.useState(feed.hasLiked);
+
   // check if user has liked the post before;
   let hasUserLiked;
   if (feed && feed.likes && currentUser) {
@@ -67,7 +68,30 @@ function Card(props) {
 
   const likeMutation = useMutation(() => likePost(feed._id), {
 
+    // onMutate: async () => {
+    //   await queryClient.cancelQueries('feedsData')
+
+    //   // Snapshot the previous value
+    //   const previousFeeds = queryClient.getQueryData('feedsData')
+
+    //   // queryClient.setQueryData('feedsData', prev => {
+    //   //   return {
+    //   //     ...prev,
+    //   //     pages: prev.pages.map(page => ({
+    //   //       ...page,
+    //   //       posts: page.posts.map(post => post._id === feed._id ? { ...post, hasLiked: isLiked ? false : true,  } : post)
+    //   //     }))
+    //   //   }
+
+    //   // })
+    //   return { previousFeeds }
+    // },
+    // onError: (err, newData, context) => {
+    //   queryClient.setQueryData('todos', context.previousFeeds)
+    // },
+
     onSuccess: (data) => {
+      console.log(data)
       if (data === "like success") {
         setIsLiked(true)
       }
@@ -111,7 +135,7 @@ function Card(props) {
     },
 
 
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       setCommentText('')
       queryClient.setQueryData('feedsData', prev => ({
         ...prev,

@@ -57,6 +57,7 @@ exports.likePost = async (req, res, next) => {
         const isLiked = await PostLikes.findOne(
             { $and: [{ _post: req.params.postid }, { likes: { $elemMatch: { _user: req.user.id } } }] }
         );
+        console.log(isLiked)
         if (isLiked) {
             await PostLikes.updateOne(
                 { _post: req.params.postid },
@@ -70,9 +71,11 @@ exports.likePost = async (req, res, next) => {
                     }
                 },
                 { upsert: true, new: true }
-            ).exec()
-            //  send theupdated postlike count
+            ).exec((err) => {
+                if (!err) console.log('removed like')
+            })
 
+            //  send theupdated postlike count
             let postUpdate = await PostLikes.findOne({ _post: req.params.postid })
 
             // socket.emit('unlikeUpdate', { postUpdate })
@@ -97,7 +100,7 @@ exports.likePost = async (req, res, next) => {
             let postUpdate = await PostLikes.findOne({ _post: req.params.postid })
 
             // socket.emit('likeUpdate', { postUpdate })
-            return res.status(200).json({ msg: " like success", data: postUpdate })
+            return res.status(200).json({ msg: "like success", data: postUpdate })
         }
 
     } catch (error) {
@@ -479,8 +482,8 @@ exports.retrieveFeedPosts = async (req, res, next) => {
                     postMedia: 1,
                     hasUserLiked: 1,
                     likes: '$postLikes.likes',
-                    comments: '$postComments.comments'
-
+                    comments: '$postComments.comments',
+                    hasLiked: { $in: [ObjectId(req.user.id), '$postLikes.likes._user'] }
                 }
             },
 
