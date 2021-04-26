@@ -133,6 +133,7 @@ exports.editProfile = async (req, res, next) => {
         if (name) {
             if (name !== user.name) {
                 user.name = name
+                
 
             }
         }
