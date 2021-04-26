@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 import * as Routes from '../../routes'
 import HorizontalScroll from 'react-scroll-horizontal';
 import Avatar from '../../../assets/default-avatar.png';
+
 const SuggestionCard = () => {
 
     const queryClient = useQueryClient();
@@ -26,8 +27,7 @@ const SuggestionCard = () => {
 
                 queryClient.getQueryData('fetchsuggestedusers') ?
                     (
-
-                        data.users.map((user) => (
+                        queryClient.getQueryData('fetchsuggestedusers').users.map((user) => (
                             <div key={uuidv4()} className="card__wrapper">
                                 {/*  <Profile
                                     key={user._id}

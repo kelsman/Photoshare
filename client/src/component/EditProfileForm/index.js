@@ -11,7 +11,6 @@ import MobileHeader from '../NavigationHeader/MobileHeader';
 import { useDispatch } from 'react-redux';
 
 function EditProFileForm() {
-
     const user = useSelector(({ user }) => user.currentUser);
     const [name, setName] = useState(user && user.name ? user.name : '');
     const [username, setUsername] = useState(user && user.username ? user.username : '')
@@ -35,6 +34,7 @@ function EditProFileForm() {
 
         onSucces: () => {
             queryClient.invalidateQueries(['profile', `${user.username}`])
+            dispatch(loaduser())
         }
     })
     const handleFormSubmit = async () => {
@@ -47,18 +47,18 @@ function EditProFileForm() {
     }
 
     const handleAvatarChange = async (event) => {
-        try {
-            await setProfileImg(event.target.files[0]);
-            if (profileImg !== null) {
-                const data = new FormData;
-                await data.append('avatar', profileImg)
-                await mutateAsync(data)
-                setProfileImg(null)
-            }
+        console.log(event.target.files[0])
+        await setProfileImg(event.target.files[0])
 
-        } catch (error) {
-            console.log(error)
-        }
+    }
+    const changePicture = async () => {
+        const data = new FormData();
+        data.append('avatar', profileImg)
+        await mutateAsync(data)
+        setProfileImg(null)
+    }
+    if (profileImg) {
+        changePicture();
     }
 
     return (
@@ -74,13 +74,15 @@ function EditProFileForm() {
                     </div>
                     <div className="profile__avatar__wrapper">
                         <h4> {user && user.username}</h4>
+                        <label className="change__photo__link" htmlFor="avatar">Change Profile Photo</label>
                         <input
                             id="avatar"
                             type="file" accept="image/*"
-                            style={{ display: "none" }}
-                            onChange={handleAvatarChange}
+                            style={{ dislay: "none" }}
+                            onChange={(event) => {
+                                handleAvatarChange(event)
+                            }}
                         />
-                        <label className="change__photo__link" htmlFor="avatar">Change Profile Photo</label>
                     </div>
 
 

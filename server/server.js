@@ -19,15 +19,9 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cors());
 
 if (process.env.NODE_ENV !== "production") {
-    app.use(morgan('tiny'));
-
+    app.use(morgan('dev'));
 }
-// if (process.env.NODE_ENV === "production") {
-//     app.use(express.static(path.join(__dirname, 'client/build')))
-//     app.get('*', function (req, res) {
-//         res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'))
-//     })
-// }
+
 
 //@ connect to mongodb 
 connectDb();
@@ -44,6 +38,8 @@ const server = app.listen(PORT, (err) => {
 app.use('/api/route/user', require('./api/routes/user'));
 app.use('/api/route/post', require('./api/routes/post'));
 app.use('/api/route/profile', require('./api/routes/profile'));
+app.use('/api/route/story', require('./api/routes/stories'));
+
 
 app.get('/', (req, res) => {
 

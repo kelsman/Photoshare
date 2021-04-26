@@ -20,12 +20,12 @@ const NewPostButton = ({ iconName, children, style }) => {
   return (
     <Fragment>
       <form encType="multipart/form-data">
-        <label style={style} htmlFor="file-upload">{!iconName ? <Icon.Camera className="icon" /> : iconName}</label>
+        <label style={style} htmlFor="file__upload">{!iconName ? <Icon.Camera className="icon" /> : iconName}</label>
         <input
           ref={fileinput}
           name="postfile"
           type="file"
-          id="file-upload"
+          id="file__upload"
           accept="image/*"
           className="file__input"
           onChange={(event) => setFileSelected(event.target.files[0])}

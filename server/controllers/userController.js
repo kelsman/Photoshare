@@ -377,7 +377,7 @@ exports.getSuggestedUsers = async (req, res, next) => {
                     avatar: true,
                     name: true,
                     username: true,
-                    isFollowing: { $in: [req.user.id, '$followers._followers.user'] },
+                    isFollowing: { $in: [ObjectId(req.user.id), '$followers._followers.user'] },
 
                 }
             },
@@ -387,7 +387,7 @@ exports.getSuggestedUsers = async (req, res, next) => {
 
             { $sample: { size: 6 } },
 
-            { $unset: [...unwantedFields] }
+            { $unset: [...unwantedFields, "isFollowing"] }
 
         ]);
         if (!users) {

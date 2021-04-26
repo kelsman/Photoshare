@@ -34,15 +34,15 @@ export const getProfile = async (username) => {
 };
 
 export const changeAvatar = async (file) => {
+    if (localStorage.getItem('authToken')) {
+        setToken(localStorage.getItem('authToken'))
+    }
+    const config = {
+        header: {
+            "Content-Type": "multipart/form-data"
+        }
+    }
     try {
-        if (localStorage.authToken) {
-            setToken(localStorage.authToken)
-        }
-        const config = {
-            header: {
-                "Content-Type": "multipart/form-data"
-            }
-        }
         const { data } = await axios.put(`${baseUrl}/api/route/profile/change-avatar`, file, config)
         cogoToast.success(`${data.msg}`)
     } catch (error) {

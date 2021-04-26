@@ -37,11 +37,6 @@ function SignUpForm({ history, signup }) {
 
     try {
       setIsSubmitting(true)
-      // const data = await new FormData();
-      // await data.append('name', values.name);
-      // await data.append('username', values.username);
-      // await data.append('email', values.email);
-      // await data.append('password', values.password);
       await signup(values, history);
       setIsSubmitting(false)
     } catch (error) {
@@ -114,23 +109,7 @@ function SignUpForm({ history, signup }) {
           )}
         </div>
         {errors.password && <small className="error">{errors.password}</small>}
-        {/*  <div className="file-input">
-          <label htmlFor="avatar" className="avatar-label">
 
-            <span>select Avatar <Icons.Image /></span>
-          </label>
-          <input
-            type="file"
-            name="avatar"
-            id="avatar"
-            onChange={(event) => setFieldValue('avatar', event.target.files[0])}
-            style={{ display: "none" }}
-            placeholder="select avatar"
-          />
-          <span></span>
-
-        </div> */}
-        {errors.file && <small className="error">{errors.file}</small>}
         <button
           type="submit"
           className="signup-btn"

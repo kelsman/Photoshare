@@ -4,7 +4,12 @@
 .cards{
     width: 600px;
     height: 100%;
-   
+    scroll-behavior: smooth;
+    // display: flex;
+    // flex-direction: column;
+    // height: fit-content;
+  
+    
 //    background: $background-grey;
     .feed__bottom{
         text-align: center;
@@ -21,6 +26,39 @@
         }
         
     }
+
+    .load__more__btn__wrapper{
+        // border: 1px solid red;
+        height: 70px;
+        width:  100%;
+        display: grid;
+        position: relative;
+        place-items: center;
+        @media screen and (max-width: 640px){
+            margin-bottom: 40px;
+        }
+
+    }
+    .load__more__btn{
+        // visibility: hidden;
+        background: transparent;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: none;
+        outline: none;
+       position: absolute;
+       top: -20px;
+        width: 120px;
+        margin-bottom:  auto;
+        color: $link-color;
+        &:focus{
+            outline: 0;
+        }
+        @media screen and (max-width:640px){
+            margin-bottom: 2.6rem;
+            
+        }
+    } 
 }
 @media screen and (max-width: 640px){
     .cards{
@@ -28,6 +66,11 @@
         &:nth-child(1){
             margin-top: 25px;
         }
+        &:last-child{
+           margin-bottom: 25px; 
+        }
+
+       
     }
 }
 @media screen and (min-width: 768px){

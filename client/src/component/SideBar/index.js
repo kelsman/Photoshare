@@ -5,6 +5,7 @@ import './style.scss';
 import { connect } from 'react-redux';
 import Suggestions from '../SuggestionsFollow';
 import Footer from '../Footer';
+import Avatar from '../../assets/default-avatar.png'
 
 const SideBar = ({ user }) => {
   return (
@@ -16,7 +17,7 @@ const SideBar = ({ user }) => {
         <div className="profile">
           <ProfileIcon
             iconSize="big"
-            image={user && user.avatar}
+            image={user.avatar ? user.avatar : Avatar}
             authorUsername={user && user.username}
           />
           <div className="text-container">

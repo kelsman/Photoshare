@@ -126,7 +126,7 @@ export const deleteComment = async (postid, commentid) => {
     }
 }
 
-export const retrieveFeedPosts = async (history) => {
+export const retrieveFeedPosts = async ({ pageParam: offset = 0 }) => {
     const config = {
         headers: {
             'Content-Type': 'application/json',
@@ -136,8 +136,14 @@ export const retrieveFeedPosts = async (history) => {
         setToken(token);
     }
     try {
-        const res = await axios.get(`${baseUrl}/api/route/post/retrieveFeedPosts`, config);
-        return res.data.posts
+        const res = await axios.get(`${baseUrl}/api/route/post/retrieveFeedPosts/?offset=${offset}`, config);
+
+
+        return {
+            posts: res.data.posts,
+            next: res.data.next === null ? false : res.data.next
+        }
+
 
     } catch (error) {
         if (error.response) {
@@ -148,7 +154,7 @@ export const retrieveFeedPosts = async (history) => {
                 error.response.data.msg === 'jwt expired' ||
                 error.response.data.msg === `you're not authorised`
             ) {
-                history.push('/');
+                window.location.replace('/');
                 localStorage.removeItem('authToken');
             }
         }

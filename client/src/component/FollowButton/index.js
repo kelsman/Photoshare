@@ -30,7 +30,7 @@ const FollowButton = ({ userId, avatar, username, following }) => {
       const response = await axios.post(`${baseUrl}/api/route/user/unfollow/${userId}`);
       if (response) {
         cogoToast.success(`${response.data.msg}`);
-        queryClient.invalidateQueries(['profile', `${username}`])
+
       }
     } catch (error) {
       if (error.response) {
@@ -57,15 +57,15 @@ const FollowButton = ({ userId, avatar, username, following }) => {
     }
   };
   const unFollowMutation = useMutation(handleUnfollow, {
-    onSuccess: () => {
-      setIsFollowing(false)
-      queryClient.invalidateQueries('getProfileData')
+    onSuccess: async () => {
+      await setIsFollowing(false)
+      queryClient.invalidateQueries(['profile', `${username}`])
     }
   });
   const followMutation = useMutation(handleFollow, {
-    onSuccess: () => {
-      setIsFollowing(true)
-      queryClient.invalidateQueries('getProfileData')
+    onSuccess: async () => {
+      await setIsFollowing(true)
+      queryClient.invalidateQueries(['profile', `${username}`])
     }
   })
   //  functions

@@ -37,7 +37,7 @@ const ProfilePage = () => {
   const [showOptionsModal, setShowOptionsModal] = useState(false);
   const [showFollowersModal, setShowFollowersModal] = useState(false);
   const [showFollowingModal, setShowFollowingModal] = useState(false)
-
+  //  const [following, setFollowing]= useState(currentUser)
   const { username } = useParams();
   const currentUser = useSelector(({ user }) => user.currentUser);
   const history = useHistory();
@@ -87,7 +87,7 @@ const ProfilePage = () => {
                   userId={userProfile && userProfile._id}
                   avatar={userProfile.avatar}
                   username={userProfile.username}
-                  following={currentUser.following && currentUser.following.find((id) => id.user === userProfile._id ? true : false)}
+                  following={currentUser.following && currentUser.following.some((id) => id.user === userProfile._id ? true : false)}
                 />
               ) : (
                 <Fragment>
@@ -172,7 +172,6 @@ const ProfilePage = () => {
         <ul className="settings__options">
           <li onClick={async () => {
             await dispatch(LogOut(history))
-            queryClient.clear()
 
           }
           }>Log Out</li>
@@ -209,13 +208,13 @@ const ProfilePage = () => {
                         userId={follower.user}
                         avatar={follower.avatar}
                         username={follower.username}
-                        following={userProfile.following.find((id) => id.user === follower.user) ? true : false}
+                        following={userProfile.following.some((id) => id.user === follower.user) ? true : false}
                       /> :
                       <FollowButton
                         userId={follower.user}
                         avatar={follower.avatar}
                         username={follower.username}
-                        following={currentUser.following && currentUser.following.find((id) => id.user === follower.user) ? true : false}
+                        following={currentUser.following && currentUser.following.some((id) => id.user === follower.user) ? true : false}
                       />
                   }
 
@@ -234,7 +233,7 @@ const ProfilePage = () => {
           <h5 style={{ textAlign: "center", padding: "5px", fontWeight: "150" }}>Following</h5>
           <Divider />
           {
-            userProfile.following && userProfile.following.length > 0 ?
+            userProfile.following && userProfile.following.length ?
               userProfile.following.map((following) => (
                 <li key={uuidv4()}>
                   {/*   <img src={follower.avatar} alt="" /> */}
@@ -254,13 +253,13 @@ const ProfilePage = () => {
                         userId={following.user}
                         avatar={following.avatar}
                         username={following.username}
-                        following={userProfile.following && userProfile.following.find((id) => id.user === following.user) ? true : false}
+                        following={currentUser.following && currentUser.following.find((id) => id.user === following.user) ? true : false}
                       /> :
                       <FollowButton
                         userId={following.user}
                         avatar={following.avatar}
                         username={following.username}
-                        following={currentUser.following && currentUser.following.find((id) => id.user === following.user) ? true : false}
+                        following={userProfile.following && userProfile.following.find((id) => id.user === following.user) ? true : false}
                       />
                   }
 

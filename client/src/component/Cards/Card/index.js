@@ -76,38 +76,64 @@ function Card(props) {
       }
 
     },
-
     onSettled: () => {
-      queryClient.invalidateQueries('fetchfeeds')
+      queryClient.invalidateQueries('feedsData')
     }
 
   });
 
   const commentPostMutation = useMutation(() => CommentPost(feed._id, commentText), {
 
-    onSuccess: (data) => {
+    onMutate: async (comment) => {
+      // cancel any outgoing refetces
+      await queryClient.cancelQueries('feedsData')
 
-      queryClient.setQueryData('fetchfeeds', prev => {
-        const post = prev.find(d => d._id === feed._id)
-        if (post) {
-          return prev.map(postItem => postItem._id === feed._id ? { ...postItem, comments: [...postItem.comments, data.newComment] } : postItem)
-        }
+      // SNASHOT OF PREVIOUS VALUE
+      const previousFeed = queryClient.getQueryData('feedsData');
+      // optimisically update the feed
+      const newComment = {
+        commentData: new Date(),
+        _id: uuidv4(),
+        _user: currentUser._id,
+        commentText: comment,
+        username: currentUser.username,
+        avatar: currentUser.avatar
+      };
 
-      })
+
+
+      return { previousFeed }
 
     },
+    onError: (err, newTodo, context) => {
+      console.log(err)
+      queryClient.setQueryData('feedsData', context.previousFeed)
+    },
+
+
+    onSuccess: (data) => {
+      setCommentText('')
+      queryClient.setQueryData('feedsData', prev => ({
+        ...prev,
+        pages: prev.pages.map(page => ({
+          ...page,
+          posts: page.posts.map(post => post._id === feed._id ? { ...post, comments: [...post.comments, data.newComment] } : post)
+        }))
+      }))
+
+    },
+
     onSettled: (data, error, variables) => {
       // invalidate the query 
-      queryClient.invalidateQueries('fetchfeeds');
+      queryClient.invalidateQueries('feedsData');
     }
-  });
+
+  })
+
   const { mutateAsync: deletePostAsync, isLoading: deleteLoading } = useMutation(deletePost, {
 
-
-
-    omSucces: () => {
-      queryClient.refetchQueries('fetchfeeds')
-
+    onSucces: () => {
+      queryClient.invalidateQueries('feedsData')
     }
   })
   const likeFunc = async () => {
@@ -147,7 +173,7 @@ function Card(props) {
     return <Loader />;
   }
   return (
-    <div className="card">
+    <div className="card" >
       <header>
         <Profile
           iconSize="medium"
@@ -158,11 +184,12 @@ function Card(props) {
         />
         <CardButton className="cardButton" onClick={() => setShowModal(true)} />
       </header>
-      <LazyLoadImage
+      <img
         src={image}
         alt={"cardcontent"}
         className="cardImage"
-        effect="blur"
+        lazy="true"
+      // effect="blur"
       />
 
       <ExploreCardMenu hasUserLiked={hasUserLiked} setIsLiked={setIsLiked} isLiked={isLiked} focus={focus} likeFunc={likeFunc} userpost={feed} />
@@ -235,7 +262,7 @@ function Card(props) {
           <li style={{ color: "tomato" }} onClick={closeModal}>Cancel</li>
         </ul>
       </ModalComponent>
-    </div>
+    </div >
   );
 }
 

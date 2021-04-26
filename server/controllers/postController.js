@@ -92,6 +92,8 @@ exports.likePost = async (req, res, next) => {
                 },
                 { upsert: true, new: true }
             ).exec();
+
+
             let postUpdate = await PostLikes.findOne({ _post: req.params.postid })
 
             // socket.emit('likeUpdate', { postUpdate })
@@ -390,6 +392,8 @@ exports.getPosts = async (req, res, next) => {
 //  get post feeds
 
 exports.retrieveFeedPosts = async (req, res, next) => {
+
+    const { offset, } = req.query;
     try {
 
         const user = await User.findById(req.user.id);
@@ -417,6 +421,12 @@ exports.retrieveFeedPosts = async (req, res, next) => {
             '__v'
 
         ]
+        const postsCount = await Post.aggregate([{
+            $match: {
+                $or: [{ postedBy: { $in: following } }, { postedBy: ObjectId(req.user.id) }]
+            }
+        }]);
+
         const posts = await Post.aggregate([
             {
                 $match: {
@@ -424,6 +434,9 @@ exports.retrieveFeedPosts = async (req, res, next) => {
                 }
             },
 
+            { $sort: { date: -1 } },
+            { $skip: Number(offset) },
+            { $limit: 10 },
             {
                 $lookup: {
                     from: 'users',
@@ -464,19 +477,25 @@ exports.retrieveFeedPosts = async (req, res, next) => {
                     'author': 1,
                     'date': 1,
                     postMedia: 1,
+                    hasUserLiked: 1,
                     likes: '$postLikes.likes',
                     comments: '$postComments.comments'
 
                 }
             },
-            { $sort: { date: -1 } },
 
             { $unset: [...unwantedFields] }
         ])
         if (!posts) {
             return res.status(400).json({ success: false, msg: 'posts not found' })
         }
-        return res.json({ success: true, posts })
+        return res.json({
+            success: true,
+            posts,
+            postCounts: postsCount.length,
+            next: Number(offset) < postsCount.length ? Number(offset) + 10 : null
+
+        })
     } catch (error) {
         console.log(error);
         return res.status(500).json({ msg: "server error" })

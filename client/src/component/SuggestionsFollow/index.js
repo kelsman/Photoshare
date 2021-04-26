@@ -5,6 +5,7 @@ import Profile from '../Profile';
 import axios from 'axios';
 import { useQuery, useQueryClient } from 'react-query';
 import FollowButton from '../FollowButton';
+import Avatar from '../../assets/default-avatar.png'
 
 const token = localStorage.getItem('authToken');
 const baseUrl = process.env.REACT_APP_BASE_URL;
@@ -13,7 +14,8 @@ const Suggestions = () => {
   const dispatch = useDispatch();
   const queryClient = useQueryClient()
 
-  const data = queryClient.getQueryData('fetchsuggestedusers');
+
+
 
 
   return (
@@ -23,7 +25,9 @@ const Suggestions = () => {
       </div>
 
       {
-        data && data.users.map((user) => {
+        queryClient.getQueryData("fetchsuggestedusers")
+        &&
+        queryClient.getQueryData("fetchsuggestedusers").users.map((user) => {
           return (
             <div key={user._id} style={{ display: 'flex', width: '100%' }}>
               <Profile
@@ -35,7 +39,7 @@ const Suggestions = () => {
                 iconSize="medium"
                 captionSize="small"
                 storyBorder={true}
-                image={user.avatar}
+                image={user.avatar ? user.avatar : Avatar}
                 authorUsername={user.username}
               />
 

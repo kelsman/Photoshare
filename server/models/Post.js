@@ -10,6 +10,7 @@ const postSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Users"
     },
+    hasUserLiked: Boolean,
     postMedia: {
         type: String,
         required: true

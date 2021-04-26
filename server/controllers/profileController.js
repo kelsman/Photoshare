@@ -86,40 +86,35 @@ exports.changeAvatar = async (req, res, next) => {
     const file = req.file.path
     //  make sure logged in user is the one uploading
     try {
+        const user = await User.findOne({ _id: req.user.id });
         if (!req.file) {
             res.status(400)
-                .send({ msg: 'Please provide the image to upload.' });
+                .send({ msg: 'Please provide the image to upload.' })
         }
-        if (file) {
-            console.log(req.file)
-            const user = await User.findOne({ _id: req.user.id });
-            if (!user) {
-                return res.json({ msg: "not authorised" })
-            }
-            const upload = await cloudinary.uploader.upload(file, {
-                use_filename: true,
-                folder: "photoshare_post",
-                resource_type: 'auto'
-            });
-            if (upload) {
-                await User.findOneAndUpdate({
-                    _id: req.user.id
-                },
-                    {
-                        avatar: upload.secure_url
-                    },
-                    { upsert: true, new: true }
-                ).exec()
-                return res.status(200).json({ msg: "avatar changed succesfully" })
 
-            } else {
-                return res.status(500).json({ msg: "failed to change profile picture" })
-            }
-
-
-
-
+        console.log(req.file)
+        if (!user) {
+            return res.json({ msg: "not authorised" })
         }
+        await cloudinary.uploader.destroy(user.cloudinary_id, (result) => {
+            console.log(result)
+        });
+        const upload = await cloudinary.uploader.upload(file, {
+            use_filename: true,
+            folder: "photoshare_post",
+            resource_type: 'auto'
+        });
+
+        user.cloudinary_id = upload.public_id;
+        user.avatar = upload.secure_url;
+        await user.save();
+
+
+        return res.status(201).json({ msg: "avatar changed sucessfully" })
+
+
+
+
     } catch (error) {
         console.log(error);
         return res.status(500).json({ msg: "server error" })

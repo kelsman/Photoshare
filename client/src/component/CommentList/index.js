@@ -38,16 +38,26 @@ const CommentList = ({
     history,
     location: { pathname },
   } = useHistory();
+  // console.log(pathname)
   const queryClient = useQueryClient();
 
   const { mutateAsync, isLoading } = useMutation(() => deleteComment(userpost._id, commentId), {
 
     onSuccess: (data) => {
 
+      queryClient.setQueryData('feedsData', prev => ({
+        ...prev,
+        pages: prev.pages.map(page => ({
+          ...page,
+          posts: page.posts.map(post => post._id === userpost._id ? {
+            ...post,
+            comments: post.comments.filter(d => d._id !== commentId)
+          } : post)
+        }))
+      }))
 
       queryClient.invalidateQueries(['fetchsinglePost', `${userpost._id}`]);
       queryClient.invalidateQueries('fetchfeeds')
-
 
 
     }

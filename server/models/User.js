@@ -92,7 +92,7 @@ userSchema.methods.generateToken = async function () {
                 id: this._id
             }
         };
-        const token = await jwt.sign(payload, process.env.JwtSecret, { expiresIn: 36000 });
+        const token = await jwt.sign(payload, process.env.JwtSecret, { expiresIn: 360000 });
         return token;
     } catch (error) {
         console.log(error)
