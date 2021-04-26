@@ -91,7 +91,7 @@ function Card(props) {
     // },
 
     onSuccess: (data) => {
-      console.log(data)
+
       if (data === "like success") {
         setIsLiked(true)
       }
