@@ -58,7 +58,7 @@ export const signin = (data) => {
   };
 };
 
-export const loaduser = () => {
+export const loaduser = (history) => {
   return async (dispatch) => {
     if (localStorage.authToken) {
       setToken(localStorage.authToken)
@@ -78,6 +78,7 @@ export const loaduser = () => {
         ) {
           cogoToast.info('session expired');
           localStorage.removeItem('authToken');
+          history.push(Routes.Login)
         }
       }
     }

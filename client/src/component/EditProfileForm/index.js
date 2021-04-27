@@ -9,6 +9,8 @@ import { useMutation, useQueryClient } from 'react-query';
 import { loaduser } from '../../redux/Actions/userActions'
 import MobileHeader from '../NavigationHeader/MobileHeader';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom'
+import LoaderSpinner from '../../component/LoaderSpinner';
 
 function EditProFileForm() {
     const user = useSelector(({ user }) => user.currentUser);
@@ -16,9 +18,9 @@ function EditProFileForm() {
     const [username, setUsername] = useState(user && user.username ? user.username : '')
     const [bio, setBio] = useState(user && user.bio ? user.bio : '')
     const [email, setEmail] = useState(user && user.email ? user.email : '');
-    const [profileImg, setProfileImg] = useState(null)
+    const [profileImg, setProfileImg] = useState(undefined)
     const [isLoading, setIsLoading] = useState(false)
-
+    const history = useHistory();
     const queryClient = useQueryClient();
     const dispatch = useDispatch()
     useEffect(() => {
@@ -34,7 +36,7 @@ function EditProFileForm() {
 
         onSucces: () => {
             queryClient.invalidateQueries(['profile', `${user.username}`])
-            dispatch(loaduser())
+            dispatch(loaduser(history))
         }
     })
     const handleFormSubmit = async () => {
@@ -47,7 +49,6 @@ function EditProFileForm() {
     }
 
     const handleAvatarChange = async (event) => {
-        console.log(event.target.files[0])
         await setProfileImg(event.target.files[0])
 
     }
@@ -57,10 +58,11 @@ function EditProFileForm() {
         await mutateAsync(data)
         setProfileImg(null)
     }
-    if (profileImg) {
-        changePicture();
-    }
-
+    useEffect(async () => {
+        if (profileImg) {
+            await changePicture();
+        }
+    }, [profileImg])
     return (
         <div className="Edit__profile__form__wrapper">
             <MobileHeader backArrow>
@@ -70,19 +72,20 @@ function EditProFileForm() {
                 <div className="profile__header">
                     <div className="avatar__container">
                         <img src={user.avatar ? user.avatar : Avatar} alt="avatar" />
-                        {changingAvatar && <Loader />}
+                        {changingAvatar && <div className="image__loader__spinner"><LoaderSpinner /></div>}
                     </div>
                     <div className="profile__avatar__wrapper">
                         <h4> {user && user.username}</h4>
+
                         <label className="change__photo__link" htmlFor="avatar">Change Profile Photo</label>
                         <input
                             id="avatar"
+                            accept="image/*"
                             type="file" accept="image/*"
-                            style={{ dislay: "none" }}
-                            onChange={(event) => {
-                                handleAvatarChange(event)
-                            }}
+                            style={{ display: "none" }}
+                            onChange={handleAvatarChange}
                         />
+
                     </div>
 
 
