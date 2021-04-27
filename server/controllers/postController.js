@@ -500,7 +500,7 @@ exports.retrieveFeedPosts = async (req, res, next) => {
 
         })
     } catch (error) {
-        console.log(error);
+        console.log(error.message);
         return res.status(500).json({ msg: "server error" })
     }
 }

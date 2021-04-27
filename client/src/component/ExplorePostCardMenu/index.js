@@ -11,7 +11,7 @@ import Heart from 'react-animated-heart'
 
 
 const ExploreCardMenu = ({ focus, likeFunc, userpost, user, isLiked, setIsLiked, hasUserLiked }) => {
-  const [isLiked, setIsLiked] = React.useState(feed.hasLiked);
+
 
   useEffect(() => {
     let sub = true;
@@ -47,7 +47,7 @@ const ExploreCardMenu = ({ focus, likeFunc, userpost, user, isLiked, setIsLiked,
         <Icon.MessageCircle className="icon" onClick={focus} size={30} />
         {/*   <Icon.Share className="icon" size={30} /> */}
       </div>
-      {/*  <Icon.Bookmark className="icon" /> */}
+      {/* <Icon.Bookmark className="icon" /> */}
     </div>
   );
 };

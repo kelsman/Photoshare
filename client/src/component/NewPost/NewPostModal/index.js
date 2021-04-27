@@ -60,7 +60,7 @@ const NewPostModal = ({ file }) => {
     {
 
       onSuccess: async () => {
-        queryClient.invalidateQueries('fetchfeeds')
+        queryClient.invalidateQueries('feedsData')
         cogoToast.success('post created')
 
       },
