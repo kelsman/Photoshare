@@ -58,7 +58,7 @@ export const signin = (data) => {
   };
 };
 
-export const loaduser = (history) => {
+export const loaduser = () => {
   return async (dispatch) => {
     if (localStorage.authToken) {
       setToken(localStorage.authToken)
@@ -76,9 +76,10 @@ export const loaduser = (history) => {
           error.response.data.msg === 'jwt expired' ||
           error.response.data.msg === `you're not authorised`
         ) {
-          cogoToast.info('session expired');
+          // cogoToast.info('session expired');
           localStorage.removeItem('authToken');
-          history.push(Routes.Login)
+          window.location.replace(Routes.Login);
+
         }
       }
     }

@@ -56,7 +56,7 @@ function App({ loaduser, connectSocketIo, currentUser }) {
   useEffect(() => {
     // check for token in localStoagre
     if (localStorage.authToken) {
-      loaduser(history);
+      loaduser();
     }
 
     return () => null;

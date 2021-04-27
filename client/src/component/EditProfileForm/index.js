@@ -36,7 +36,7 @@ function EditProFileForm() {
 
         onSucces: () => {
             queryClient.invalidateQueries(['profile', `${user.username}`])
-            dispatch(loaduser(history))
+            dispatch(loaduser())
         }
     })
     const handleFormSubmit = async () => {
