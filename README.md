@@ -1,6 +1,6 @@
-## Photshare
+## Photoshare
 
-An instagram clone  developed using NodeJS,Express,MongoDB, React, React-router 
+A Full stack instagram clone developed using NodeJS,Express,MongoDB, React, 
 
 Functionalities include:
 
@@ -10,3 +10,12 @@ Functionalities include:
 * The ability for users to follow and unfollow other others
 * The ability for an authenticated user to delete a post 
 
+## Tech
+
+* Frontend: React
+* State management: Redux
+* Server state: React- query
+* Routing: React Router
+* Backend: Express
+* Database: MongoDB
+* Image hosting: Cloudinary
