@@ -20,6 +20,8 @@ Functionalities include:
 * **Database**: MongoDB
 * **Image hosting**: Cloudinary
 
+## Demo
+https://photoshare.vercel.app
 
 ## Installation
 
@@ -44,5 +46,5 @@ To run this project, you will need to add the following environment variables to
 - CLOUDINARY_CLOUD_NAME= // Cloudinary cloud name
 - EMAIL_SERVICE= // Smtp-relay.example.com
 - EMAIL_PASSWORD= // Password
-- Base_URL= // http://localhost:3000
+- Base_URL= // localhost
 
