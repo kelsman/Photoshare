@@ -28,21 +28,11 @@ Clone the project
 ```bash
   git clone https://github.com/kelwaffi/Photoshare
 ```
-Install dependencies
+## setup
+ # Install dependencies
 run this command in both the client and server directory
-
 ```bash
   npm install
 ```
-Start the client
-cd into the client directory and run
-```bash
-  npm run start
-```
 
-Start the server
-cd into the server directory and run
-```bash
-  npm run start
-```
 
