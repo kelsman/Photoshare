@@ -1,4 +1,4 @@
-# photshare
+## Photshare
 
 An instagram clone  developed using NodeJS,Express,MongoDB, React, React-router 
 
