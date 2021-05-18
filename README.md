@@ -12,10 +12,12 @@ Functionalities include:
 
 ## Tech
 
-* Frontend: React
-* State management: Redux
-* Server state: React- query
-* Routing: React Router
-* Backend: Express
-* Database: MongoDB
-* Image hosting: Cloudinary
+* **Frontend**: React
+* **State management**: Redux
+* **Server state**: React- query
+* **Routing**: React Router
+* **Backend**: Express
+* **Database**: MongoDB
+* **Image hosting**: Cloudinary
+
+#Installation
