@@ -29,7 +29,7 @@ Clone the project
   git clone https://github.com/kelwaffi/Photoshare
 ```
 ## setup
- # Install dependencies
+ ### Install dependencies
 run this command in both the client and server directory
 ```bash
   npm install
