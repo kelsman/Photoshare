@@ -1,15 +1,12 @@
-import React, { Fragment, useState } from 'react';
-import { Link } from 'react-router-dom';
-import './style.scss';
-import { signup } from '../../../redux/Actions/userActions';
-import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import * as Icons from 'react-feather';
+import React, { useState } from 'react';
 import { BiHide, BiShowAlt } from 'react-icons/bi';
-import { IconContext } from 'react-icons';
+import { connect } from 'react-redux';
+import { Link, withRouter } from 'react-router-dom';
+import * as Yup from 'yup';
 import { ReactComponent as LoaderSpinner } from '../../../assets/loader.svg';
+import { signup } from '../../../redux/Actions/userActions';
+import './style.scss';
 
 
 
@@ -54,7 +51,7 @@ function SignUpForm({ history, signup }) {
     onSubmit: handleFormSubmit,
   });
 
-  const { values, errors, handleChange, handleSubmit, setFieldValue } = formik;
+  const { values, errors, handleChange, handleSubmit, touched, setFieldValue } = formik;
   return (
     <div className="sign_up_form_container">
       <form className="sign__up__form" onSubmit={handleSubmit}>
@@ -64,11 +61,11 @@ function SignUpForm({ history, signup }) {
             name="name"
             type="text"
             placeholder="Full Name"
-            value={values.fullName}
+            value={values.name}
             onChange={handleChange('name')}
           />
         </div>
-        {errors.fullName && <small className="error">{errors.fullName}</small>}
+        {errors.name && touched.name && <small className="error">{errors.fullName}</small>}
         <div className="username-input">
           <input
             type="text"
@@ -78,7 +75,7 @@ function SignUpForm({ history, signup }) {
             onChange={handleChange('username')}
           />
         </div>
-        {errors.username && <small className="error">{errors.username}</small>}
+        {errors.username && touched.username && <small className="error">{errors.username}</small>}
         <div className="email-input">
           <input
             type="email"
@@ -88,7 +85,7 @@ function SignUpForm({ history, signup }) {
             onChange={handleChange('email')}
           />
         </div>
-        {errors.email && <small className="error">{errors.email}</small>}
+        {errors.email && touched.email && <small className="error">{errors.email}</small>}
         <div className="password-input">
           <input
             type={showPassword ? 'text' : 'password'}
@@ -108,7 +105,7 @@ function SignUpForm({ history, signup }) {
             </button>
           )}
         </div>
-        {errors.password && <small className="error">{errors.password}</small>}
+        {errors.password && touched.password && <small className="error">{errors.password}</small>}
 
         <button
           type="submit"

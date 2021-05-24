@@ -1,23 +1,19 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import './style.scss';
-import * as Yup from 'yup';
-import * as Icon from 'react-feather'
-
-
-import { Link, Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { signin, loaduser } from '../../../redux/Actions/userActions';
 // import { Formik } from 'formik';
 import { useFormik } from 'formik';
-import { AiOutlineLock, AiOutlineMail } from 'react-icons/ai';
-import { IconContext } from 'react-icons';
+import React, { useState } from 'react';
+import * as Icon from 'react-feather';
+import { connect } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
+import * as Yup from 'yup';
 import { ReactComponent as LoaderSpinner } from '../../../assets/loader.svg';
+import { loaduser, signin } from '../../../redux/Actions/userActions';
 // import cogoToast from 'cogo-toast';
-
 // Routes
 import * as Routes from '../../routes';
+import './style.scss';
 
-import { useHistory } from 'react-router-dom';
+
+
 
 const validationSchema = Yup.object().shape({
   usernameoremail: Yup.string().required('please provide a valid email or username'),
@@ -56,7 +52,7 @@ const LogInForm = ({ signin, isAuthenticated, currentUser }) => {
     window.location.href = Routes.Dashboard
   }
 
-  const { values, errors, handleChange, handleSubmit } = formik;
+  const { values, errors, handleChange, touched, handleSubmit } = formik;
 
   return (
     <div>
@@ -81,7 +77,7 @@ const LogInForm = ({ signin, isAuthenticated, currentUser }) => {
             />
 
           </div>
-          {errors.usernameoremail && (
+          {errors.usernameoremail && touched.usernameoremail && (
             <small className="error" style={{ color: 'red', opacity: 0.7 }}>
               {' '}
               {errors.usernameoremail}
@@ -103,7 +99,7 @@ const LogInForm = ({ signin, isAuthenticated, currentUser }) => {
             />
 
           </div>
-          {errors.password && (
+          {errors.password && touched.password && (
             <small className="error" style={{ color: 'red', opacity: 0.7 }}>
               {' '}
               {errors.password}
