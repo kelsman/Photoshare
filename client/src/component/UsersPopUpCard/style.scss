@@ -1,25 +1,25 @@
 @import '../../Sass/variables';
 
-.pop__up__card{
+.pop__up__card {
+  position: absolute;
+  top: 100%;
+  border: none;
+  min-width: 15rem;
+  background: $background-white;
+  max-height: 25rem;
+  overflow: scroll;
+  box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.3);
+
+  &::before {
+    content: '';
     position: absolute;
-    top: 100%;
-    border: none;
-    min-width: 15rem;
-    background: $background-white;
-    max-height: 25rem;
-    box-shadow: 0px 5px 15px 0px rgba(0,0,0,0.3);
 
-    &::before {
-        content: '';
-        position: absolute;
-        
-        left: 50%;
-        width: 20px;
-        height: 20px;
-        bottom: 100%;
-        background-color: white;
-      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-      box-shadow: 1px 1px 20px 0px rgba(0,0,0,0.6);
-      }
-
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    bottom: 100%;
+    background-color: white;
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    box-shadow: 1px 1px 20px 0px rgba(0, 0, 0, 0.6);
+  }
 }
