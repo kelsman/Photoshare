@@ -4,11 +4,14 @@ A Full stack instagram clone developed using NodeJS,Express,MongoDB, React,
 
 Functionalities include:
 
-* The ability for users to create a post
-* The ability for users to like a post
-* The ability for users to comment on a post
-* The ability for users to follow and unfollow other others
-* The ability for an authenticated user to delete a post 
+* Login/Signup
+* Edit Profile/Channge password
+* Create a post
+* Like a post
+* Comment on a post
+* Follow other users
+* Unfollow other users
+* Delete a post
 
 ## Tech
 
