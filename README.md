@@ -1,4 +1,4 @@
-## Photoshare
+# Photoshare
 
 A Full stack instagram clone developed using NodeJS,Express,MongoDB, React, 
 
