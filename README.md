@@ -24,7 +24,8 @@ Functionalities include:
 * **Image hosting**: Cloudinary
 
 ## Demo
-https://photoshare.vercel.app
+<a href="https://photoshare.vercel.app" style="textAlign:center">Demo </a>
+
 
 ## Installation
 
